@@ -205,6 +205,14 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 											   'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
+		'dateOfBirth' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_submission']['dateOfBirth'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('datepicker' => true, 'rgxp' => 'date', 'tl_class' => 'w50 wizard'),
+			'sql'                     => "varchar(10) NOT NULL default ''"
+		),
 		'street' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_submission']['street'],

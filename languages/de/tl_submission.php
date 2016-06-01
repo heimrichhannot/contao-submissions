@@ -11,6 +11,7 @@ $arrLang['gender'] = array('Geschlecht', 'Geben Sie hier das Geschlecht ein.');
 $arrLang['academicTitle'] = array('Akademischer Titel', 'Geben Sie hier den akademischen Titel ein.');
 $arrLang['firstname'] = array('Vorname', 'Geben Sie hier den Vornamen ein.');
 $arrLang['lastname'] = array('Nachname', 'Geben Sie hier den Nachnamen ein.');
+$arrLang['dateOfBirth'] = array('Geburtsdatum', 'Geben Sie hier das Geburtsdatum ein.');
 $arrLang['street'] = array('Straße', 'Geben Sie hier die Straße ein.');
 $arrLang['postal'] = array('Postleitzahl', 'Geben Sie hier die Postleitzahl ein.');
 $arrLang['city'] = array('Ort', 'Geben Sie hier den Ort ein.');
