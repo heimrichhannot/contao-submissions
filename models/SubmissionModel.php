@@ -4,6 +4,7 @@ namespace HeimrichHannot\Submissions;
 
 use Contao\DC_Table;
 use HeimrichHannot\Haste\Dca\General;
+use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
 use NotificationCenter\Model\Notification;
@@ -203,7 +204,7 @@ class SubmissionModel extends \Model
 	{
 		$strLabel = isset($arrData['label'][0]) ? $arrData['label'][0] : $strName;
 
-		$strOutput = General::getFormattedValueByDca($varValue, $arrData, $objDc);
+		$strOutput = FormSubmission::prepareSpecialValueForPrint($varValue, $arrData, 'tl_submission', $objDc);
 
 		$varValue = deserialize($varValue);
 
