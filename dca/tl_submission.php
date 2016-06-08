@@ -1,7 +1,5 @@
 <?php
 
-use HeimrichHannot\Submissions\SubmissionModel;
-
 $GLOBALS['TL_DCA']['tl_submission'] = array
 (
 	'config'   => array
@@ -316,7 +314,7 @@ class tl_submission extends \Backend
 	{
 		$strTitle = $arrRow['id'];
 
-		if (($objSubmission = SubmissionModel::findByPk($arrRow['id'])) !== null &&
+		if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($arrRow['id'])) !== null &&
 			($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null)
 		{
 			$strTitle = preg_replace_callback('@%([^%]+)%@i', function ($arrMatches) use ($objSubmission) {

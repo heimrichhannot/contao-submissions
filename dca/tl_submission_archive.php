@@ -214,8 +214,6 @@ $GLOBALS['TL_DCA']['tl_submission_archive'] = array
 	)
 );
 
-use HeimrichHannot\Submissions\SubmissionArchiveModel;
-
 class tl_submission_archive extends \Backend
 {
 
@@ -230,7 +228,7 @@ class tl_submission_archive extends \Backend
 		$arrOptions = array();
 
 		if ($objDc->activeRecord->parentTable && $objDc->activeRecord->parentField && ($objSubmissionArchives =
-				SubmissionArchiveModel::findByParentTable($objDc->activeRecord->parentTable)) !== null)
+				\HeimrichHannot\Submissions\SubmissionArchiveModel::findByParentTable($objDc->activeRecord->parentTable)) !== null)
 		{
 			$arrUsedPids = $objSubmissionArchives->fetchEach('pid');
 
