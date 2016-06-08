@@ -67,7 +67,7 @@ class Submissions extends \Controller
 
 	public static function getNotificationsAsOptions()
 	{
-		return NotificationCenterPlus::getNotificationsAsOptions(Submissions::NOTIFICATION_TYPE_SUBMISSIONS);
+		return NotificationCenterPlus::getNotificationsAsOptions(Submissions::NOTIFICATION_TYPE_FORM_SUBMISSION);
 	}
 
 	public static function getConfirmationNotificationsAsOptions()
