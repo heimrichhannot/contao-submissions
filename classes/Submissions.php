@@ -13,6 +13,8 @@ use NotificationCenter\Model\Notification;
 class Submissions extends \Controller
 {
 	const NOTIFICATION_TYPE_SUBMISSIONS		= 'submissions';
+
+	const NOTIFICATION_TYPE_FORM_SUBMISSION	= 'submission_form';
 	const NOTIFICATION_TYPE_CONFIRMATION	= 'submission_confirmation';
 
 	public static function getFieldsAsOptions(\DataContainer $objDc)

@@ -17,8 +17,8 @@ $GLOBALS['BE_MOD']['content']['submission'] = array(
 $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] = array_merge_recursive(
 	(array) $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'],
 	array(
-		'submissions' => array(
-			'form' => array(
+		\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_SUBMISSIONS => array(
+			\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_FORM_SUBMISSION => array(
 				'recipients'           => array('form_value_*', 'form_plain_*', 'admin_email'),
 				'email_subject'        => array('form_value_*', 'form_plain_*', 'admin_email'),
 				'email_text'           => array('formsubmission', 'formsubmission_all', 'form_submission_*',
@@ -33,6 +33,27 @@ $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] = array_merge_recursive(
 				'email_recipient_bcc'  => array('form_value_*', 'form_plain_*', 'admin_email'),
 				'email_replyTo'        => array('form_value_*', 'form_plain_*', 'admin_email'),
 				'attachment_tokens'    => array('form_value_*', 'form_plain_*'),
+			)
+		),
+		\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_SUBMISSIONS => array(
+			\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_CONFIRMATION => array(
+				'recipients'           => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'email_subject'        => array('event_*', 'event_date', 'event_datime', 'form_value_*',
+					'form_plain_*', 'admin_email'),
+				'email_text'           => array('event_date', 'event_datime', 'event_*', 'formsubmission',
+					'formsubmission_all', 'form_submission_*', 'form_value_*', 'form_plain_*',
+					'salutation_submission', 'admin_email'),
+				'email_html'           => array('event_*', 'event_date', 'event_datime', 'formsubmission',
+					'formsubmission_all', 'form_submission_*', 'form_value_*', 'form_plain_*',
+					'salutation_submission', 'admin_email'),
+				'file_name'            => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'file_content'         => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'email_sender_name'    => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'email_sender_address' => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'email_recipient_cc'   => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'email_recipient_bcc'  => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'email_replyTo'        => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
+				'attachment_tokens'    => array('confirmation_pdf', 'event_*', 'form_value_*', 'form_plain_*'),
 			)
 		)
 	)
