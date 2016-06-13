@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 		'sorting'           => array
 		(
 			'mode'                  => 4,
-			'fields'                => array('dateAdded'),
+			'fields'                => array('dateAdded DESC'),
 			'headerFields'          => array('title'),
 			'panelLayout'           => 'filter;search,limit',
 			'child_record_callback' => array('tl_submission', 'listChildren')
