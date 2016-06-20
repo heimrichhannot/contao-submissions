@@ -88,13 +88,11 @@ $GLOBALS['TL_DCA']['tl_submission_archive'] = array
 	),
 	'palettes' => array
 	(
-		'__selector__' => array('addCleaner'),
+		'__selector__' => array(),
 		'default' => '{general_legend},title,parentTable,parentField,pid;{fields_legend},submissionFields,titlePattern;' .
-			'{notification_legend},nc_submission,nc_confirmation;{clean_legend},addCleaner;'
+			'{notification_legend},nc_submission,nc_confirmation;;'
 	),
-	'subpalettes' => array(
-		'addCleaner' => 'cleanerMaxAge,cleanerPeriod'
-	),
+	'subpalettes' => array(),
 	'fields'   => array
 	(
 		'id' => array
@@ -184,32 +182,6 @@ $GLOBALS['TL_DCA']['tl_submission_archive'] = array
 			'options_callback'          => array('HeimrichHannot\Submissions\Submissions', 'getConfirmationNotificationsAsOptions'),
 			'eval'                      => array('includeBlankOption'=>true, 'chosen'=>true, 'tl_class'=>'w50'),
 			'sql'                       => "int(10) unsigned NOT NULL default '0'"
-		),
-		'addCleaner' => array(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_submission_archive']['addCleaner'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange' => true, 'tl_class' => 'w50'),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
-		'cleanerMaxAge' => array(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_submission_archive']['cleanerMaxAge'],
-			'exclude'                 => true,
-			'inputType'               => 'timePeriod',
-			'options'                 => array('m', 'h', 'd'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_submission_archive']['cleanerMaxAge'],
-			'eval'                    => array('mandatory'=> true, 'tl_class' => 'w50 clr'),
-			'sql'                     => "blob NULL"
-		),
-		'cleanerPeriod' => array
-		(
-			'label'                     => &$GLOBALS['TL_LANG']['tl_submission_archive']['cleanerPeriod'],
-			'exclude'                   => true,
-			'inputType'                 => 'select',
-			'options'                   => array('minutely', 'hourly', 'daily', 'weekly', 'monthly'),
-			'reference'                 => &$GLOBALS['TL_LANG']['tl_submission_archive']['cleanerPeriod'],
-			'eval'                      => array('mandatory' => true, 'includeBlankOption'=>true, 'tl_class'=>'w50'),
-			'sql'                       => "varchar(32) NOT NULL default ''"
 		)
 	)
 );

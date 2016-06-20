@@ -25,7 +25,6 @@ ClassLoader::addClasses(array
 (
 	// Classes
 	'HeimrichHannot\Submissions\Submissions'            => 'system/modules/submissions/classes/Submissions.php',
-	'HeimrichHannot\Submissions\SubmissionsCleaner'     => 'system/modules/submissions/classes/SubmissionsCleaner.php',
 
 	// Models
 	'HeimrichHannot\Submissions\SubmissionModel'        => 'system/modules/submissions/models/SubmissionModel.php',

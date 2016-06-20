@@ -13,18 +13,6 @@ $arrLang['submissionFields'] = array('Felder', 'Wählen Sie hier die Felder aus,
 $arrLang['titlePattern'] = array('Titelmuster', 'Geben Sie hier ein Muster für die Titel der Einsendungen in der Form "%field1% %field2%" ein.');
 $arrLang['nc_submission'] = array('Benachrichtigung versenden', 'Wählen Sie hier eine Benachrichtigung aus, die nach dem erfolgreichen Einsenden verschickt werden soll.');
 $arrLang['nc_confirmation'] = array('Benachrichtigung zur Bestätigung versenden', 'Wählen Sie hier die Benachrichtigung aus, die als Bestätigung an den Autoren der Einsendung verschickt werden soll.');
-$arrLang['addCleaner'] = array('Inaktive Einsendungen periodisch entfernen', 'Wählen Sie diese Option, wenn die inaktive Einsendungen in diesem Archiv periodisch entfernt werden sollen.');
-$arrLang['cleanerMaxAge'] = array('Maximales Alter inaktiver Einsendungen', 'Wählen Sie hier aus, wie alt eine inaktive Einsendung höchstens sein darf, bevor sie gelöscht wird.');
-$arrLang['cleanerMaxAge']['m'] = 'Minute(n)';
-$arrLang['cleanerMaxAge']['h'] = 'Stunde(n)';
-$arrLang['cleanerMaxAge']['d'] = 'Tag(e)';
-$arrLang['cleanerPeriod'] = array('Zeitintervall', 'Wählen Sie hier, wie oft die Säuberung ausgeführt werden soll. Dabei wird Contaos Poor Man\'s Cron (TL_CRON) verwendet.');
-$arrLang['cleanerPeriod']['minutely'] = 'Jede Minute';
-$arrLang['cleanerPeriod']['hourly'] = 'Jede Stunde';
-$arrLang['cleanerPeriod']['daily'] = 'Jeden Tag';
-$arrLang['cleanerPeriod']['weekly'] = 'Jede Woche';
-$arrLang['cleanerPeriod']['monthly'] = 'Jeden Monat';
-
 
 /**
  * Legends

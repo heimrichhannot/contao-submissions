@@ -24,7 +24,8 @@
 		"heimrichhannot/contao-exporter": "2.*"
     },
 	"suggest": {
-		"heimrichhannot/contao-frontendedit": "Offers full CRUD (create, read, update, delete) functionality which could be used for submissions."
+		"heimrichhannot/contao-frontendedit": "Offers full CRUD (create, read, update, delete) functionality which could be used for submissions.",
+		"heimrichhannot/contao-entity_cleaner": "This module adds cleaner functionality for periodically removing arbitrary entities fulfilling a certain condition (using TL_CRON or your server's cron)."
 	},
     "autoload": {
         "classmap": [""]

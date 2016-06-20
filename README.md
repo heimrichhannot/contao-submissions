@@ -25,8 +25,8 @@ Works great with [heimrichhannot/frontendedit](https://github.com/heimrichhannot
 - every archive can specify its own submission field list
 - rich interfaces (e.g. SubmissionModel)
 - handling for notification center messages ([terminal42/contao-notification_center](https://github.com/terminal42/contao-notification_center))
-- easily export submissions as CSV and Excel file (using [heimrichhannot/exporter](https://github.com/heimrichhannot/contao-exporter))
-- optional cleaner support for periodically removing unpublished (aka inactive) submissions (using TL_CRON or your server's cron)
+- easily export submissions as CSV and Excel file (using [heimrichhannot/contao-exporter](https://github.com/heimrichhannot/contao-exporter))
+- optional cleaner support for periodically removing unpublished (aka inactive) submissions (using TL_CRON or your server's cron, using [heimrichhannot/contao-entity_cleaner](https://github.com/heimrichhannot/contao-entity_cleaner))
 - specify a member (frontend) or a user (backend) to be the author of the submission
 
 ### Fields
@@ -52,9 +52,6 @@ submissionFields | Specifies the fields visible in the forms of submissions of t
 titlePattern | Specifies a pattern for the archive's submission's label (e.g. "%title% %someotherfield%")
 nc_submission | Specifies a notification being sent when submitting a submission (sorry for the poor expression ^^). Could be used for informing some customer that a submission had been made.
 nc_confirmation | Specifies a notification being sent to the author of the submission. Can be resent in the list view of the archive via backend.
-addCleaner | Adds a cleaner to the archive removing unpublished submissions in a certain time interval
-cleanerMaxAge | Specifies the max age of an unpublished submission before it gets removed by an optional cleaner
-cleanerPeriod | Specifies the cleaner's time interval
 
 ### Hooks
 

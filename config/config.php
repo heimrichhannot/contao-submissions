@@ -58,15 +58,6 @@ $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] = array_merge_recursive(
 );
 
 /**
- * Crons
- */
-$GLOBALS['TL_CRON']['minutely']['runMinutelyCleaner']	= array('HeimrichHannot\Submissions\SubmissionsCleaner', 'runMinutelyCleaner');
-$GLOBALS['TL_CRON']['hourly']['runHourlyCleaner']		= array('HeimrichHannot\Submissions\SubmissionsCleaner', 'runHourlyCleaner');
-$GLOBALS['TL_CRON']['daily']['runDailyCleaner']			= array('HeimrichHannot\Submissions\SubmissionsCleaner', 'runDailyCleaner');
-$GLOBALS['TL_CRON']['weekly']['runWeeklyCleaner']		= array('HeimrichHannot\Submissions\SubmissionsCleaner', 'runWeeklyCleaner');
-$GLOBALS['TL_CRON']['monthly']['runMonthlyCleaner']		= array('HeimrichHannot\Submissions\SubmissionsCleaner', 'runMonthlyCleaner');
-
-/**
  * Models
  */
 $GLOBALS['TL_MODELS']['tl_submission'] = '\HeimrichHannot\Submissions\SubmissionModel';
