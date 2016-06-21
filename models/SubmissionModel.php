@@ -136,7 +136,7 @@ class SubmissionModel extends \Model
 
 			// salutation
 			$arrTokens['salutation_submission'] = NotificationCenterPlus::createSalutation($GLOBALS['TL_LANGUAGE'], array(
-				'gender' => $arrTokens['form_value_gender'],
+				'gender' => $arrTokens['form_plain_gender'],
 				'title' => $arrTokens['form_value_title'],
 				'lastname' => $arrTokens['form_value_lastname']
 			));
@@ -145,7 +145,7 @@ class SubmissionModel extends \Model
 		return $arrTokens;
 	}
 
-	public static function prepareData(\Model $objSubmission, array $arrDca, $objDc, $arrFields=array())
+	public static function prepareData(\Model $objSubmission, $strTable, array $arrDca, $objDc, $arrFields=array())
 	{
 		$arrSubmissionData = array();
 		$arrRow = $objSubmission->row();
@@ -160,7 +160,7 @@ class SubmissionModel extends \Model
 
 			$arrData = $arrDca['fields'][$strName];
 
-			$arrFieldData = static::prepareDataField($strName, $varValue, $arrData, $objDc);
+			$arrFieldData = static::prepareDataField($strName, $varValue, $arrData, $strTable, $objDc);
 
 			$arrSubmissionData[$strName] = $arrFieldData;
 			$strSubmission = $arrFieldData['submission'];
@@ -179,7 +179,7 @@ class SubmissionModel extends \Model
 
 					foreach ($arrSet as $strSetName => $strSetValue) {
 						$arrSetData   = $arrData['eval']['columnFields'][$strSetName];
-						$arrFieldData = static::prepareDataField($strSetName, $strSetValue, $arrSetData, $objDc);
+						$arrFieldData = static::prepareDataField($strSetName, $strSetValue, $arrSetData, $strTable, $objDc);
 						// intend new line
 						$strSubmission .= "\t" . $arrFieldData['submission'];
 					}
@@ -200,11 +200,11 @@ class SubmissionModel extends \Model
 		return $arrSubmissionData;
 	}
 
-	public static function prepareDataField($strName, $varValue, $arrData, $objDc)
+	public static function prepareDataField($strName, $varValue, $arrData, $strTable, $objDc)
 	{
 		$strLabel = isset($arrData['label'][0]) ? $arrData['label'][0] : $strName;
 
-		$strOutput = FormSubmission::prepareSpecialValueForPrint($varValue, $arrData, 'tl_submission', $objDc);
+		$strOutput = FormSubmission::prepareSpecialValueForPrint($varValue, $arrData, $strTable ?: 'tl_submission', $objDc);
 
 		$varValue = deserialize($varValue);
 
@@ -213,12 +213,77 @@ class SubmissionModel extends \Model
 		return array('value' => $varValue, 'output' => $strOutput, 'submission' => $strSubmission);
 	}
 
+	public static function tokenizeData(array $arrSubmissionData = array())
+	{
+		$arrTokens = array();
+
+		foreach($arrSubmissionData as $strName => $arrData)
+		{
+			if(!is_array($arrData))
+			{
+				continue;
+			}
+
+			foreach($arrData as $strType => $varValue)
+			{
+				$value = $varValue;
+
+				if(!is_array($varValue) && \Validator::isBinaryUuid($varValue))
+				{
+					$varValue = \StringUtil::binToUuid($varValue);
+					$value = $varValue;
+
+					$objFile = \FilesModel::findByUuid($varValue);
+
+					if($objFile !== null)
+					{
+						$value = $objFile->path;
+					}
+				}
+
+				switch($strType)
+				{
+					case 'output':
+						$arrTokens['form_' . $strName] = $value;
+						$arrTokens['form_plain_' . $strName] =
+							\HeimrichHannot\Haste\Util\StringUtil::convertToText(\StringUtil::decodeEntities($value), true);
+						break;
+					case 'value':
+						$arrTokens['form_value_' . $strName] = $varValue;
+						break;
+					case 'submission':
+						$arrTokens['form_submission_' . $strName] = rtrim($value, "\n");
+						break;
+				}
+			}
+		}
+
+		// token: ##formsubmission_all##
+		if(isset($arrSubmissionData['submission_all']))
+		{
+			$arrTokens['formsubmission_all'] = $arrSubmissionData['submission_all'];
+		}
+
+		// token: ##formsubmission##
+		if(isset($arrSubmissionData['submission']))
+		{
+			$arrTokens['formsubmission'] = $arrSubmissionData['submission'];
+		}
+
+		return $arrTokens;
+	}
+
+	public static function generateEntityTokens(\Model $objEntity, array $arrDca, $objDc, $arrFields=array())
+	{
+		return static::tokenizeData(static::prepareData($objEntity, $arrDca, $objDc, $arrFields));
+	}
+
 	/**
 	 * Creates a new submission in a certain archive and assigns a logged in member (if existing)
 	 * @param $intPid
 	 * @param $intMember
 	 *
-	 * @return \SubmissionModel
+	 * @return SubmissionModel
 	 */
 	public static function create($intPid, $intMember = null)
 	{
