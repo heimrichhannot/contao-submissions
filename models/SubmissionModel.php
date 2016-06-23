@@ -4,6 +4,7 @@ namespace HeimrichHannot\Submissions;
 
 use Contao\DC_Table;
 use HeimrichHannot\Haste\Dca\General;
+use HeimrichHannot\Haste\Util\Arrays;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
@@ -151,7 +152,7 @@ class SubmissionModel extends \Model
 		$arrRow = $objSubmission->row();
 
 		if (empty($arrFields))
-			$arrFields = $arrRow;
+			$arrFields = array_keys($arrRow);
 
 		foreach ($arrFields as $strName)
 		{
@@ -208,12 +209,21 @@ class SubmissionModel extends \Model
 
 		$varValue = deserialize($varValue);
 
+		if (is_array($varValue))
+		{
+			$varValue = Arrays::flattenArray($varValue);
+
+			$varValue = array_filter($varValue); // remove empty elements
+
+			$varValue = implode(', ', $varValue);
+		}
+
 		$strSubmission = $strLabel . ": " . $strOutput . "\n";
 
 		return array('value' => $varValue, 'output' => $strOutput, 'submission' => $strSubmission);
 	}
 
-	public static function tokenizeData(array $arrSubmissionData = array())
+	public static function tokenizeData(array $arrSubmissionData = array(), $strPrefix = 'form')
 	{
 		$arrTokens = array();
 
@@ -244,15 +254,15 @@ class SubmissionModel extends \Model
 				switch($strType)
 				{
 					case 'output':
-						$arrTokens['form_' . $strName] = $value;
-						$arrTokens['form_plain_' . $strName] =
+						$arrTokens[$strPrefix . '_' . $strName] = $value;
+						$arrTokens[$strPrefix . '_plain_' . $strName] =
 							\HeimrichHannot\Haste\Util\StringUtil::convertToText(\StringUtil::decodeEntities($value), true);
 						break;
 					case 'value':
-						$arrTokens['form_value_' . $strName] = $varValue;
+						$arrTokens[$strPrefix . '_value_' . $strName] = $varValue;
 						break;
 					case 'submission':
-						$arrTokens['form_submission_' . $strName] = rtrim($value, "\n");
+						$arrTokens[$strPrefix . '_submission_' . $strName] = rtrim($value, "\n");
 						break;
 				}
 			}
