@@ -6,7 +6,7 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_submission_archive'];
  * Fields
  */
 $arrLang['title'] = array('Titel', 'Geben Sie hier bitte den Titel ein.');
-$arrLang['parentTable'] = array('Elterntabelle', 'Geben Sie hier bitte den Titel ein.');
+$arrLang['parentTable'] = array('Elterntabelle', 'Wählen Sie hier eine Elterntabelle aus.');
 $arrLang['parentField'] = array('Beschriftungsfeld', 'Wählen Sie hier ein Feld der Elterntabelle aus, das als Beschriftungsfeld dienen soll.');
 $arrLang['pid'] = array('Elternentität', 'Wählen Sie hier eine Elternentität aus.');
 $arrLang['submissionFields'] = array('Felder', 'Wählen Sie hier die Felder aus, die Einsendungen dieses Archiv erhalten sollen.');
