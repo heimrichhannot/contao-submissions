@@ -5,8 +5,10 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_submission'];
 /**
  * Fields
  */
-$arrLang['userAuthor'] = array('Autor (Benutzer)', 'Wählen Sie hier den Autoren der Einsendung aus.');
-$arrLang['memberAuthor'] = array('Autor (Mitglied)', 'Wählen Sie hier den Autoren der Einsendung aus.');
+$arrLang['authorType'] = array('Autorentyp', 'Wählen Sie hier den Typ des Autoren aus.');
+$arrLang['authorType'][\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_MEMBER] = 'Mitglied (Frontend)';
+$arrLang['authorType'][\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER] = 'Benutzer (Backend)';
+$arrLang['author'] = array('Autor', 'Dieses Feld beinhaltet den Autoren der Einsendung.');
 $arrLang['gender'] = array('Geschlecht', 'Geben Sie hier das Geschlecht ein.');
 $arrLang['academicTitle'] = array('Akademischer Titel', 'Geben Sie hier den akademischen Titel ein.');
 $arrLang['firstname'] = array('Vorname', 'Geben Sie hier den Vornamen ein.');

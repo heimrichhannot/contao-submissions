@@ -100,7 +100,9 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 		)
 	),
 	'palettes' => array(
-		'default' => '{general_legend},userAuthor,memberAuthor;{submission_legend},submissionFields;{publish_legend},published;'
+		'default' => '{general_legend},authorType,author;' .
+			'{submission_legend},gender,academicTitle,firstname,lastname,dateOfBirth,street,' .
+			'postal,city,country,email,phone,notes,captcha;{publish_legend},published;'
 	),
 	'fields'   => array
 	(
@@ -126,31 +128,26 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'eval'                    => array('rgxp' => 'datim', 'doNotCopy' => true),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
-		'userAuthor' => array
-		(
-			'label'      => &$GLOBALS['TL_LANG']['tl_submission']['userAuthor'],
-			'default'    => BackendUser::getInstance()->id,
+		'authorType' => array(
+			'label'      => &$GLOBALS['TL_LANG']['tl_submission']['authorType'],
 			'exclude'    => true,
-			'search'     => true,
 			'filter'     => true,
-			'sorting'    => true,
-			'flag'       => 11,
+			'default'    => \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_MEMBER,
 			'inputType'  => 'select',
-			'foreignKey' => 'tl_user.name',
-			'eval'       => array('doNotCopy' => true, 'chosen' => true, 'includeBlankOption' => true,
-								  'tl_class'  => 'w50 clr'
+			'options'    => array(
+				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_MEMBER,
+				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER
 			),
-			'sql'        => "int(10) unsigned NOT NULL default '0'",
-			'relation'   => array('type' => 'hasOne', 'load' => 'eager')
+			'reference'  => $GLOBALS['TL_LANG']['tl_submission']['authorType'],
+			'eval'       => array('doNotCopy' => true, 'submitOnChange' => true, 'mandatory' => true, 'tl_class'  => 'w50 clr'),
+			'sql'        => "varchar(255) NOT NULL default 'member'",
 		),
-		'memberAuthor' => array
+		'author' => array
 		(
-			'label'            => &$GLOBALS['TL_LANG']['tl_submission']['memberAuthor'],
+			'label'            => &$GLOBALS['TL_LANG']['tl_submission']['author'],
 			'exclude'          => true,
 			'search'           => true,
 			'filter'           => true,
-			'sorting'          => true,
-			'flag'             => 11,
 			'inputType'        => 'select',
 			'options_callback' => array('HeimrichHannot\Haste\Dca\General', 'getMembersAsOptions'),
 			'eval'             => array('doNotCopy' => true, 'chosen' => true, 'includeBlankOption' => true,
@@ -518,12 +515,17 @@ class tl_submission extends \Backend
 
 		if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) !== null)
 		{
+			if ($objSubmission->authorType == \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER)
+			{
+				$arrDca['fields']['author']['options_callback'] = array('HeimrichHannot\Haste\Dca\User', 'getUsersAsOptions');
+			}
+
 			if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null)
 			{
 				$arrDca['palettes']['defaultBackup'] = $arrDca['palettes']['default'];
 
 				$arrDca['palettes']['default'] = str_replace('submissionFields', implode(',',
-						deserialize($objSubmissionArchive->submissionFields, true)), $arrDca['palettes']['default']);
+						deserialize($objSubmissionArchive->submissionFields, true)), \HeimrichHannot\Submissions\Submissions::PALETTE_DEFAULT);
 			}
 		}
 	}

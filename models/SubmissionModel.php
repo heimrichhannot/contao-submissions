@@ -231,7 +231,15 @@ class SubmissionModel extends \Model
 		{
 			if(!is_array($arrData))
 			{
-				continue;
+				if ($strName != 'submission' && $strName != 'submission_all' && !is_object($arrData))
+				{
+					$arrTokens[$strName] = $arrData;
+					continue;
+				}
+				else
+				{
+					continue;
+				}
 			}
 
 			foreach($arrData as $strType => $varValue)

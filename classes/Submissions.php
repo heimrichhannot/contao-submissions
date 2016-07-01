@@ -17,6 +17,11 @@ class Submissions extends \Controller
 	const NOTIFICATION_TYPE_FORM_SUBMISSION	= 'submission_form';
 	const NOTIFICATION_TYPE_CONFIRMATION	= 'submission_confirmation';
 
+	const PALETTE_DEFAULT = '{general_legend},authorType,author;{submission_legend},submissionFields;{publish_legend},published;';
+
+	const AUTHOR_TYPE_MEMBER = 'member';
+	const AUTHOR_TYPE_USER = 'user';
+
 	public static function getFieldsAsOptions(\DataContainer $objDc)
 	{
 		return static::getFields();
