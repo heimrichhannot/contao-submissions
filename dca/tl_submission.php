@@ -163,7 +163,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'options'                 => array('male', 'female'),
 			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
 			'eval'                    => array('mandatory' => true, 'includeBlankOption' => true,
-											   'autoCompletionHiddenField' => true, 'tl_class' => 'w50 clr'),
+											   'tl_class' => 'w50 clr'),
 			'sql'                     => "varchar(32) NOT NULL default ''"
 		),
 		'academicTitle' => array
@@ -173,7 +173,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'inputType'               => 'select',
 			'options'                 => array('Dr.', 'Prof.'),
 			'eval'                    => array('maxlength' => 255, 'includeBlankOption' => true,
-											   'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
+											   'tl_class' => 'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'firstname' => array
@@ -185,7 +185,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory' => true, 'maxlength' => 255,
-											   'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
+											   'tl_class' => 'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'lastname' => array
@@ -197,7 +197,18 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory' => true, 'maxlength' => 255,
-											   'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
+											   'tl_class' => 'w50'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
+		'company' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_submission']['company'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength' => 255, 'tl_class' => 'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'dateOfBirth' => array
@@ -214,7 +225,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength' => 255, 'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
+			'eval'                    => array('maxlength' => 255, 'tl_class' => 'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'postal' => array
@@ -223,7 +234,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>32, 'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
+			'eval'                    => array('maxlength'=>32, 'tl_class' => 'w50'),
 			'sql'                     => "varchar(32) NOT NULL default ''"
 		),
 		'city' => array
@@ -234,7 +245,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'search'                  => true,
 			'sorting'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength' => 255, 'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
+			'eval'                    => array('maxlength' => 255, 'tl_class' => 'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'country' => array
@@ -267,7 +278,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'search'                  => true,
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>64, 'rgxp' => 'phone', 'decodeEntities' => true,
-											   'autoCompletionHiddenField' => true, 'tl_class' => 'w50'),
+											   'tl_class' => 'w50'),
 			'sql'                     => "varchar(64) NOT NULL default ''"
 		),
 		'notes' => array
