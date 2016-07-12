@@ -288,6 +288,9 @@ class SubmissionModel extends \Model
 			$arrTokens['formsubmission'] = $arrSubmissionData['submission'];
 		}
 
+		// prepare attachments
+
+
 		return $arrTokens;
 	}
 

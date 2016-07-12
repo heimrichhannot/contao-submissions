@@ -132,15 +132,16 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'label'      => &$GLOBALS['TL_LANG']['tl_submission']['authorType'],
 			'exclude'    => true,
 			'filter'     => true,
-			'default'    => \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_MEMBER,
+			'default'    => \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_NONE,
 			'inputType'  => 'select',
 			'options'    => array(
+				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_NONE,
 				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_MEMBER,
 				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER
 			),
 			'reference'  => $GLOBALS['TL_LANG']['tl_submission']['authorType'],
 			'eval'       => array('doNotCopy' => true, 'submitOnChange' => true, 'mandatory' => true, 'tl_class'  => 'w50 clr'),
-			'sql'        => "varchar(255) NOT NULL default 'member'",
+			'sql'        => "varchar(255) NOT NULL default 'none'",
 		),
 		'author' => array
 		(
@@ -526,6 +527,11 @@ class tl_submission extends \Backend
 
 		if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) !== null)
 		{
+			if ($objSubmission->authorType == \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_NONE)
+			{
+				unset($arrDca['fields']['author']);
+			}
+
 			if ($objSubmission->authorType == \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER)
 			{
 				$arrDca['fields']['author']['options_callback'] = array('HeimrichHannot\Haste\Dca\User', 'getUsersAsOptions');

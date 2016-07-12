@@ -19,6 +19,7 @@ class Submissions extends \Controller
 
 	const PALETTE_DEFAULT = '{general_legend},authorType,author;{submission_legend},submissionFields;{publish_legend},published;';
 
+	const AUTHOR_TYPE_NONE = 'none';
 	const AUTHOR_TYPE_MEMBER = 'member';
 	const AUTHOR_TYPE_USER = 'user';
 
