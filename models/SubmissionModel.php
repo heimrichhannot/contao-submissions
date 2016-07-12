@@ -267,7 +267,11 @@ class SubmissionModel extends \Model
 							\HeimrichHannot\Haste\Util\StringUtil::convertToText(\StringUtil::decodeEntities($value), true);
 						break;
 					case 'value':
-						$arrTokens[$strPrefix . '_value_' . $strName] = $varValue;
+						// check for values causing notification center's json_encode call to fail (unprintable characters like binary!)
+						if (ctype_print($varValue))
+						{
+							$arrTokens[$strPrefix . '_value_' . $strName] = $varValue;
+						}
 						break;
 					case 'submission':
 						$arrTokens[$strPrefix . '_submission_' . $strName] = rtrim($value, "\n");
