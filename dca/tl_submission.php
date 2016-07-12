@@ -163,8 +163,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 			'inputType'               => 'select',
 			'options'                 => array('male', 'female'),
 			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-			'eval'                    => array('mandatory' => true, 'includeBlankOption' => true,
-											   'tl_class' => 'w50 clr'),
+			'eval'                    => array('mandatory' => true, 'tl_class' => 'w50 clr'),
 			'sql'                     => "varchar(32) NOT NULL default ''"
 		),
 		'academicTitle' => array
