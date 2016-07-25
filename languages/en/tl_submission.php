@@ -21,6 +21,7 @@ $arrLang['country'] = array('Country', 'Type in the country.');
 $arrLang['email'] = array('Email address', 'Type in the email address.');
 $arrLang['phone'] = array('Phobnbe', 'Type in the phone number.');
 $arrLang['notes'] = array('Notes', 'Type in the notes.');
+$arrLang['company'] = array('Company', 'Type in the company.');
 $arrLang['published'] = array('Activated', 'Choose this option to activate the submission.');
 
 
