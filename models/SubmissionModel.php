@@ -2,9 +2,10 @@
 
 namespace HeimrichHannot\Submissions;
 
-use Contao\DC_Table;
+use HeimrichHannot\FormHybrid\DC_Hybrid;
 use HeimrichHannot\Haste\Dca\General;
 use HeimrichHannot\Haste\Util\Arrays;
+use HeimrichHannot\Haste\Util\Environment;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
@@ -84,7 +85,7 @@ class SubmissionModel extends \Model
 		}
 	}
 
-	public static function generateTokens($intSubmission)
+	public static function generateTokens($intSubmission, $arrFields = array())
 	{
 		$arrTokens = array();
 		\Controller::loadDataContainer('tl_submission');
@@ -94,15 +95,15 @@ class SubmissionModel extends \Model
 
 		if (($objSubmission = SubmissionModel::findByPk($intSubmission)) !== null)
 		{
+			$objDc = new DC_Hybrid('tl_submission');
+			$objDc->activeRecord = $objSubmission;
+			
 			// fields
-			$arrFields = array();
-			$arrAllFields = array();
 			if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null)
 			{
 				\Controller::loadDataContainer('tl_submission');
-				$objDc = new DC_Table('tl_submission');
-				$objDc->activeRecord = $objSubmission;
-				$arrFields = deserialize($objSubmissionArchive->submissionFields, true);
+				
+				$arrFields = empty($arrFields) ? deserialize($objSubmissionArchive->submissionFields, true) : $arrFields;
 
 				if (isset($GLOBALS['TL_HOOKS']['preGenerateSubmissionTokens']) &&
 					is_array($GLOBALS['TL_HOOKS']['preGenerateSubmissionTokens'])) {
@@ -110,34 +111,15 @@ class SubmissionModel extends \Model
 						\System::importStatic($arrCallback[0])->$arrCallback[1]($objSubmission, $objSubmissionArchive, $arrFields);
 					}
 				}
-
-				$arrFields = static::prepareData($objSubmission, $GLOBALS['TL_DCA']['tl_submission'], $objDc,
-					deserialize($arrFields, true));
-
-				$arrAllFields = static::prepareData($objSubmission, $GLOBALS['TL_DCA']['tl_submission'], $objDc,
-					array_keys($arrDca['fields']));
-
-				unset($arrAllFields['submission']);
-				unset($arrAllFields['submission_all']);
 			}
-
-			// compound -> only the fields of the form
-			$arrTokens['formsubmission'] = $arrFields['submission'];
-			unset($arrFields['submission']);
-
-			$arrTokens['formsubmission_all'] = $arrFields['submission_all'];
-			unset($arrFields['submission_all']);
-
-			// remaining fields -> all fields available (e.g. for checks of fields not displayed in a form)
-			foreach ($arrAllFields as $strField => $arrValues) {
-				$arrTokens['form_value_' . lcfirst($strField)] = $arrValues['output'];
-				$arrTokens['form_plain_' . lcfirst($strField)] = $arrValues['value'];
-				$arrTokens['form_submission_' . lcfirst($strField)] = $arrValues['submission'];
-			}
-
+			
+			$arrSubmissionData = static::prepareData($objSubmission, 'tl_submission', $GLOBALS['TL_DCA']['tl_submission'], $objDc, $arrFields);
+			
+			$arrTokens = static::tokenizeData($arrSubmissionData);
+			
 			// salutation
 			$arrTokens['salutation_submission'] = NotificationCenterPlus::createSalutation($GLOBALS['TL_LANGUAGE'], array(
-				'gender' => $arrTokens['form_plain_gender'],
+				'gender' => $arrTokens['form_value_gender'],
 				'title' => $arrTokens['form_value_title'],
 				'lastname' => $arrTokens['form_value_lastname']
 			));
@@ -160,7 +142,7 @@ class SubmissionModel extends \Model
 			if(empty($varValue)) continue;
 
 			$arrData = $arrDca['fields'][$strName];
-
+			
 			$arrFieldData = static::prepareDataField($strName, $varValue, $arrData, $strTable, $objDc);
 
 			$arrSubmissionData[$strName] = $arrFieldData;
@@ -244,27 +226,12 @@ class SubmissionModel extends \Model
 
 			foreach($arrData as $strType => $varValue)
 			{
-				$value = $varValue;
-
-				if(!is_array($varValue) && \Validator::isBinaryUuid($varValue))
-				{
-					$varValue = \StringUtil::binToUuid($varValue);
-					$value = $varValue;
-
-					$objFile = \FilesModel::findByUuid($varValue);
-
-					if($objFile !== null)
-					{
-						$value = $objFile->path;
-					}
-				}
-
 				switch($strType)
 				{
 					case 'output':
-						$arrTokens[$strPrefix . '_' . $strName] = $value;
+						$arrTokens[$strPrefix . '_' . $strName] = $varValue;
 						$arrTokens[$strPrefix . '_plain_' . $strName] =
-							\HeimrichHannot\Haste\Util\StringUtil::convertToText(\StringUtil::decodeEntities($value), true);
+							\HeimrichHannot\Haste\Util\StringUtil::convertToText(\StringUtil::decodeEntities($varValue), true);
 						break;
 					case 'value':
 						// check for values causing notification center's json_encode call to fail (unprintable characters like binary!)
@@ -274,7 +241,7 @@ class SubmissionModel extends \Model
 						}
 						break;
 					case 'submission':
-						$arrTokens[$strPrefix . '_submission_' . $strName] = rtrim($value, "\n");
+						$arrTokens[$strPrefix . '_submission_' . $strName] = rtrim($varValue, "\n");
 						break;
 				}
 			}
@@ -283,13 +250,13 @@ class SubmissionModel extends \Model
 		// token: ##formsubmission_all##
 		if(isset($arrSubmissionData['submission_all']))
 		{
-			$arrTokens['formsubmission_all'] = $arrSubmissionData['submission_all'];
+			$arrTokens[$strPrefix . 'submission_all'] = $arrSubmissionData['submission_all'];
 		}
 
 		// token: ##formsubmission##
 		if(isset($arrSubmissionData['submission']))
 		{
-			$arrTokens['formsubmission'] = $arrSubmissionData['submission'];
+			$arrTokens[$strPrefix . 'submission'] = $arrSubmissionData['submission'];
 		}
 
 		// prepare attachments
@@ -300,7 +267,7 @@ class SubmissionModel extends \Model
 
 	public static function generateEntityTokens(\Model $objEntity, array $arrDca, $objDc, $arrFields=array())
 	{
-		return static::tokenizeData(static::prepareData($objEntity, $arrDca, $objDc, $arrFields));
+		return static::tokenizeData(static::prepareData($objEntity, 'tl_submission', $arrDca, $objDc, $arrFields));
 	}
 
 	/**
@@ -314,7 +281,7 @@ class SubmissionModel extends \Model
 	{
 		$objSubmission = new static();
 		$objSubmission->pid = $intPid;
-		$objSubmission->tstamp = $objSubmission->dateAdded = time();
+		$objSubmission->dateAdded = time();
 		$objSubmission->memberAuthor = $intMember;
 
 		$objSubmission->save();
