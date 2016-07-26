@@ -7,6 +7,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 		'dataContainer'     => 'Table',
 		'ptable'            => 'tl_submission_archive',
 		'enableVersioning'  => true,
+		'doNotCopyRecords'  => true,
 		'onload_callback'   => array
 		(
 			array('tl_submission', 'checkPermission'),
