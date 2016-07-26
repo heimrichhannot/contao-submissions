@@ -2,13 +2,7 @@
 
 namespace HeimrichHannot\Submissions;
 
-use Contao\DC_Table;
-use Haste\Util\Url;
-use HeimrichHannot\EventRegistration\EventRegistration;
-use HeimrichHannot\Haste\Dca\General;
-use HeimrichHannot\Haste\Util\Files;
 use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
-use NotificationCenter\Model\Notification;
 
 class Submissions extends \Controller
 {
@@ -35,7 +29,6 @@ class Submissions extends \Controller
 			'id',
 			'pid',
 			'published',
-			'captcha',
 			'formHybridBlob',
 			'tstamp',
 			'memberAuthor',
