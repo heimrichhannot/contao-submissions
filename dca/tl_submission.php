@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 	'palettes' => array(
 		'default' => '{general_legend},authorType,author;' .
 					 '{submission_legend},gender,academicTitle,firstname,lastname,dateOfBirth,street,' .
-					 'postal,city,country,email,phone,notes,captcha;{publish_legend},published;',
+					 'postal,city,country,email,phone,fax,notes,captcha;{publish_legend},published;',
 	),
 	'fields'   => array
 	(
@@ -302,6 +302,20 @@ $GLOBALS['TL_DCA']['tl_submission'] = array
 		'phone'          => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['phone'],
+			'exclude'   => true,
+			'search'    => true,
+			'inputType' => 'text',
+			'eval'      => array(
+				'maxlength'      => 64,
+				'rgxp'           => 'phone',
+				'decodeEntities' => true,
+				'tl_class'       => 'w50',
+			),
+			'sql'       => "varchar(64) NOT NULL default ''",
+		),
+		'fax'          => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['fax'],
 			'exclude'   => true,
 			'search'    => true,
 			'inputType' => 'text',

@@ -22,6 +22,7 @@ $arrLang['city'] = array('Ort', 'Geben Sie hier den Ort ein.');
 $arrLang['country'] = array('Land', 'Geben Sie hier das Land ein.');
 $arrLang['email'] = array('E-Mail-Adresse', 'Geben Sie hier die E-Mail-Adresse ein.');
 $arrLang['phone'] = array('Telefon', 'Geben Sie hier die Telefonnummer ein.');
+$arrLang['fax'] = array('Fax', 'Geben Sie hier die Faxnummer ein.');
 $arrLang['notes'] = array('Anmerkungen', 'Geben Sie hier Anmerkungen ein.');
 $arrLang['published'] = array('Aktiviert', 'Wählen Sie diese Option, um die Einsendung zu aktivieren.');
 
