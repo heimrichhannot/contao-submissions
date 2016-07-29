@@ -12,12 +12,12 @@ $arrDca = array
 		'doNotCopyRecords'  => true,
 		'onload_callback'   => array
 		(
+			array('HeimrichHannot\Haste\Dca\General', 'setDateAdded', true),
 			array('HeimrichHannot\Submissions\Backend\SubmissionBackend', 'checkPermission'),
 			array('HeimrichHannot\Submissions\Backend\SubmissionBackend', 'modifyPalette', true),
 		),
 		'onsubmit_callback' => array
 		(
-			array('HeimrichHannot\Haste\Dca\General', 'setDateAdded'),
 			array('HeimrichHannot\Submissions\Backend\SubmissionBackend', 'moveAttachments'),
 		),
 		'sql'               => array
