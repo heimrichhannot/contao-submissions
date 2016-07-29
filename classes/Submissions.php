@@ -26,7 +26,17 @@ class Submissions extends \Controller
 	{
 		$objFolder = new \Folder('files/submissions/uploads');
 		
-		return $blnReturnPath ? $objFolder->path : \StringUtil::binToUuid($objFolder->getModel()->uuid);
+		if($blnReturnPath)
+		{
+			return $objFolder->path;
+		}
+		
+		if(\Validator::isUuid($objFolder->getModel()->uuid))
+		{
+			return \StringUtil::binToUuid($objFolder->getModel()->uuid);
+		}
+		
+		return null;
 	}
 	
 	public static function getFieldsAsOptions(\DataContainer $objDc)
