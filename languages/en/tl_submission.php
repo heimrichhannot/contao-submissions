@@ -23,6 +23,7 @@ $arrLang['phone'] = array('Phone', 'Type in the phone number.');
 $arrLang['fax'] = array('Fax', 'Type in the fax number.');
 $arrLang['notes'] = array('Notes', 'Type in the notes.');
 $arrLang['company'] = array('Company', 'Type in the company.');
+$arrLang['attachments'] = array('Attachments', 'Add file attachments.');
 $arrLang['published'] = array('Activated', 'Choose this option to activate the submission.');
 
 

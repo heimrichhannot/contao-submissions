@@ -24,8 +24,8 @@ $arrLang['email'] = array('E-Mail-Adresse', 'Geben Sie hier die E-Mail-Adresse e
 $arrLang['phone'] = array('Telefon', 'Geben Sie hier die Telefonnummer ein.');
 $arrLang['fax'] = array('Fax', 'Geben Sie hier die Faxnummer ein.');
 $arrLang['notes'] = array('Anmerkungen', 'Geben Sie hier Anmerkungen ein.');
-$arrLang['published'] = array('Aktiviert', 'Wählen Sie diese Option, um die Einsendung zu aktivieren.');
 $arrLang['attachments'] = array('Anlagen', 'Laden Sie zusätzliche Anlagen hoch.');
+$arrLang['published'] = array('Aktiviert', 'Wählen Sie diese Option, um die Einsendung zu aktivieren.');
 
 
 /**

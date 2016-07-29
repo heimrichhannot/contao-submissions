@@ -17,7 +17,12 @@ class Submissions extends \Controller
 	const AUTHOR_TYPE_MEMBER = 'member';
 	const AUTHOR_TYPE_USER = 'user';
 
-	public static function getDefaultAttachementSRC($blnReturnPath = false)
+	public static function getDefaultAttachmentSubFolderPattern()
+	{
+		return '[dateAdded::date::Y]/[dateAdded::date::m]/[dateAdded::date::d]/[id]';
+	}
+	
+	public static function getDefaultAttachmentSRC($blnReturnPath = false)
 	{
 		$objFolder = new \Folder('files/submissions/uploads');
 		

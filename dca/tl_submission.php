@@ -18,6 +18,7 @@ $arrDca = array
 		'onsubmit_callback' => array
 		(
 			array('HeimrichHannot\Haste\Dca\General', 'setDateAdded'),
+			array('HeimrichHannot\Submissions\Backend\SubmissionBackend', 'moveAttachments'),
 		),
 		'sql'               => array
 		(
@@ -378,7 +379,7 @@ if (in_array('multifileupload', \ModuleLoader::getActive())) {
 			'fieldType'      => 'checkbox',
 			'extensions'     => \Config::get('uploadTypes'),
 			'maxUploadSize'  => 10,
-			'uploadFolder'   => \HeimrichHannot\Submissions\Submissions::getDefaultAttachementSRC(),
+			'uploadFolder'   => \HeimrichHannot\Submissions\Submissions::getDefaultAttachmentSRC(),
 			'addRemoveLinks' => true,
 			'multiple'       => true,
 		),

@@ -10,15 +10,17 @@
 
 namespace HeimrichHannot\Submissions\Backend;
 
+use HeimrichHannot\Submissions\SubmissionModel;
 use HeimrichHannot\Submissions\Submissions;
+use HeimrichHannot\Submissions\Util\Tokens;
 
 class SubmissionArchiveBackend extends \Backend
 {
-	public function getAttachementUploadFolder($varValue, \DataContainer $dc)
+	public function setAttachmentUploadFolder($varValue, \DataContainer $dc)
 	{
 		if ($varValue == '')
 		{
-			return Submissions::getDefaultAttachementSRC();
+			return Submissions::getDefaultAttachmentSRC();
 		}
 		
 		return $varValue;

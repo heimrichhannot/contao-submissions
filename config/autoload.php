@@ -28,6 +28,7 @@ ClassLoader::addClasses(array
 	'HeimrichHannot\Submissions\SubmissionArchiveModel'           => 'system/modules/submissions/models/SubmissionArchiveModel.php',
 
 	// Classes
+	'HeimrichHannot\Submissions\Util\Tokens'                      => 'system/modules/submissions/classes/util/Tokens.php',
 	'HeimrichHannot\Submissions\Submissions'                      => 'system/modules/submissions/classes/Submissions.php',
 	'HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend' => 'system/modules/submissions/classes/backend/SubmissionArchiveBackend.php',
 	'HeimrichHannot\Submissions\Backend\SubmissionBackend'        => 'system/modules/submissions/classes/backend/SubmissionBackend.php',

@@ -11,6 +11,8 @@
 namespace HeimrichHannot\Submissions\Backend;
 
 use HeimrichHannot\Haste\Util\Arrays;
+use HeimrichHannot\Haste\Util\Files;
+use HeimrichHannot\Submissions\Util\Tokens;
 
 class SubmissionBackend extends \Backend
 {
@@ -255,17 +257,66 @@ class SubmissionBackend extends \Backend
 			\HeimrichHannot\Submissions\Submissions::PALETTE_DEFAULT
 		);
 		
-		// overwrite attachement config with archive
+		// overwrite attachment config with archive
 		if(isset($arrDca['fields']['attachments']) && $objSubmissionArchive->addAttachmentConfig)
 		{
-			$arrConfig = Arrays::filterByPrefixes($objSubmissionArchive->row(), array('attachement'));
+			$arrConfig = Arrays::filterByPrefixes($objSubmissionArchive->row(), array('attachment'));
 			
 			foreach ($arrConfig as $strKey => $value)
 			{
-				$strKey = lcfirst(str_replace('attachement', '', $strKey));
+				$strKey = lcfirst(str_replace('attachment', '', $strKey));
 				
 				$arrDca['fields']['attachments']['eval'][$strKey] = $value;
 			}
+		}
+	}
+	
+	public function moveAttachments(\DataContainer $objDc)
+	{
+		if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)
+		{
+			return false;
+		}
+		
+		if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null)
+		{
+			return false;
+		}
+		
+		if(!$objSubmission->attachments)
+		{
+			return false;
+		}
+		
+		$strSubFolder = Tokens::replace($objSubmissionArchive->attachmentSubFolderPattern, $objSubmission);
+		$objFileModels = \FilesModel::findMultipleByUuids(deserialize($objSubmission->attachments, true));
+		
+		if($objFileModels === null || $strSubFolder == '')
+		{
+			return false;
+		}
+		
+		$strFolder = $objSubmissionArchive->attachmentUploadFolder;
+		
+		if(\Validator::isUuid($objSubmissionArchive->attachmentUploadFolder))
+		{
+			if(($strFolder = Files::getPathFromUuid($objSubmissionArchive->attachmentUploadFolder)) === null)
+			{
+				return false;
+			}
+		}
+		
+		$strTarget = rtrim($strFolder, '/') . '/' . ltrim($strSubFolder, '/');
+		
+		while($objFileModels->next())
+		{
+			if(!file_exists(TL_ROOT . '/' . $objFileModels->path))
+			{
+				continue;
+			}
+
+			$objFile = new \File($objFileModels->path, true);
+			$objFile->renameTo($strTarget . '/' . basename($objFile->value));
 		}
 	}
 }

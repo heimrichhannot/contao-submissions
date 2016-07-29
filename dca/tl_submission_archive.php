@@ -202,20 +202,20 @@ if (in_array('multifileupload', \ModuleLoader::getActive())) {
 	 * Palettes
 	 */
 	$arrDca['palettes']['__selector__'][] = 'addAttachmentConfig';
-	$arrDca['palettes']['default']        = str_replace('titlePattern;', 'titlePattern;{attachement_legend},addAttachmentConfig;', $arrDca['palettes']['default']);
+	$arrDca['palettes']['default']        = str_replace('titlePattern;', 'titlePattern;{attachment_legend},addAttachmentConfig;', $arrDca['palettes']['default']);
 	
 	
 	/**
 	 * Subpalettes
 	 */
-	$arrDca['subpalettes']['addAttachmentConfig'] = 'attachementUploadFolder,attachementMaxFiles,attachementMaxUploadSize,attachementExtensions,attachementFieldType';
+	$arrDca['subpalettes']['addAttachmentConfig'] = 'attachmentUploadFolder,attachmentMaxFiles,attachmentMaxUploadSize,attachmentExtensions,attachmentFieldType,attachmentSubFolderPattern';
 	
 	/**
 	 * Fields
 	 */
 	$arrFields = array
 	(
-		'addAttachmentConfig'      => array
+		'addAttachmentConfig'        => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['addAttachmentConfig'],
 			'exclude'   => true,
@@ -223,57 +223,64 @@ if (in_array('multifileupload', \ModuleLoader::getActive())) {
 			'eval'      => array('submitOnChange' => true),
 			'sql'       => "char(1) NOT NULL default ''",
 		),
-		'attachementUploadFolder'  => array
+		'attachmentUploadFolder'     => array
 		(
-			'label'         => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementUploadFolder'],
+			'label'         => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachmentUploadFolder'],
 			'exclude'       => true,
 			'inputType'     => 'fileTree',
-			'load_callback' => array
+			'save_callback' => array
 			(
-				array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'getAttachementUploadFolder'),
+				array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'setAttachmentUploadFolder'),
 			),
 			'eval'          => array('filesOnly' => false, 'fieldType' => 'radio', 'mandatory' => true),
 			'sql'           => "binary(16) NULL",
 		),
-		'attachementMaxFiles'      => array
+		'attachmentMaxFiles'         => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementMaxFiles'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachmentMaxFiles'],
 			'exclude'   => true,
 			'default'   => 5,
 			'inputType' => 'text',
 			'eval'      => array('rgxp' => 'digit', 'mandatory' => true, 'tl_class' => 'w50'),
 			'sql'       => "int(3) unsigned NOT NULL default '0'",
 		),
-		'attachementMaxUploadSize' => array
+		'attachmentMaxUploadSize'    => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementMaxUploadSize'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachmentMaxUploadSize'],
 			'exclude'   => true,
 			'default'   => 10,
 			'inputType' => 'text',
 			'eval'      => array('rgxp' => 'digit', 'mandatory' => true, 'tl_class' => 'w50'),
 			'sql'       => "int(10) unsigned NOT NULL default '0'",
 		),
-		'attachementExtensions'    => array
+		'attachmentExtensions'       => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementExtensions'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachmentExtensions'],
 			'exclude'   => true,
 			'default'   => \Config::get('uploadTypes'),
 			'inputType' => 'text',
 			'eval'      => array('mandatory' => true, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''",
 		),
-		'attachementFieldType'    => array
+		'attachmentFieldType'        => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementFieldType'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachmentFieldType'],
 			'exclude'   => true,
 			'default'   => 'checkbox',
 			'options'   => array('checkbox', 'radio'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_submission_archive']['reference']['attachementFieldType'],
+			'reference' => &$GLOBALS['TL_LANG']['tl_submission_archive']['reference']['attachmentFieldType'],
 			'inputType' => 'radio',
 			'eval'      => array('mandatory' => true, 'tl_class' => 'w50'),
 			'sql'       => "varchar(8) NOT NULL default ''",
 		),
-	
+		'attachmentSubFolderPattern' => array
+		(
+			'label'         => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachmentSubFolderPattern'],
+			'exclude'       => true,
+			'inputType'     => 'text',
+			'eval'          => array('maxlength' => 255, 'tl_class' => 'w50', 'preserveTags' => true),
+			'sql'           => "varchar(128) COLLATE utf8_bin NOT NULL default '" . HeimrichHannot\Submissions\Submissions::getDefaultAttachmentSubFolderPattern() . "'",
+		),
 	);
 	
 	$arrDca['fields'] = array_merge($arrDca['fields'], $arrFields);
