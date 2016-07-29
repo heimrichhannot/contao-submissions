@@ -1,152 +1,162 @@
 <?php
 
-$GLOBALS['TL_DCA']['tl_submission_archive'] = array
+$arrDca = &$GLOBALS['TL_DCA']['tl_submission_archive'];
+
+$arrDca = array
 (
-	'config' => array
+	'config'      => array
 	(
 		'dataContainer'     => 'Table',
 		'ctable'            => array('tl_submission'),
-		'switchToEdit'                => true,
+		'switchToEdit'      => true,
 		'enableVersioning'  => true,
-		'onload_callback' => array
+		'onload_callback'   => array
 		(
-			array('tl_submission_archive', 'checkPermission')
+			array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'checkPermission'),
 		),
 		'onsubmit_callback' => array
 		(
 			array('HeimrichHannot\Haste\Dca\General', 'setDateAdded'),
 		),
-		'sql' => array
+		'sql'               => array
 		(
 			'keys' => array
 			(
-				'id' => 'primary'
-			)
-		)
+				'id' => 'primary',
+			),
+		),
 	),
-	'list' => array
+	'list'        => array
 	(
-		'label' => array
+		'label'             => array
 		(
 			'fields' => array('title'),
-			'format' => '%s'
+			'format' => '%s',
 		),
 		'sorting'           => array
 		(
-			'mode'                  => 1,
-			'fields'                => array('title'),
-			'headerFields'          => array('title'),
-			'panelLayout'           => 'filter;search,limit'
+			'mode'         => 1,
+			'fields'       => array('title'),
+			'headerFields' => array('title'),
+			'panelLayout'  => 'filter;search,limit',
 		),
 		'global_operations' => array
 		(
-			'all'    => array
+			'all' => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
 				'href'       => 'act=select',
 				'class'      => 'header_edit_all',
-				'attributes' => 'onclick="Backend.getScrollOffset();"'
+				'attributes' => 'onclick="Backend.getScrollOffset();"',
 			),
 		),
-		'operations' => array
+		'operations'        => array
 		(
-			'edit' => array
+			'edit'       => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_submission_archive']['edit'],
-				'href'                => 'table=tl_submission',
-				'icon'                => 'edit.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_submission_archive']['edit'],
+				'href'  => 'table=tl_submission',
+				'icon'  => 'edit.gif',
 			),
 			'editheader' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_submission_archive']['editheader'],
-				'href'                => 'act=edit',
-				'icon'                => 'header.gif',
-				'button_callback'     => array('tl_submission_archive', 'editHeader')
+				'label'           => &$GLOBALS['TL_LANG']['tl_submission_archive']['editheader'],
+				'href'            => 'act=edit',
+				'icon'            => 'header.gif',
+				'button_callback' => array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'editHeader'),
 			),
-			'copy' => array
+			'copy'       => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_submission_archive']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif',
-				'button_callback'     => array('tl_submission_archive', 'copyArchive')
+				'label'           => &$GLOBALS['TL_LANG']['tl_submission_archive']['copy'],
+				'href'            => 'act=copy',
+				'icon'            => 'copy.gif',
+				'button_callback' => array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'copyArchive'),
 			),
-			'delete' => array
+			'delete'     => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_submission_archive']['copy'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
-				'button_callback'     => array('tl_submission_archive', 'deleteArchive')
+				'label'           => &$GLOBALS['TL_LANG']['tl_submission_archive']['copy'],
+				'href'            => 'act=delete',
+				'icon'            => 'delete.gif',
+				'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'button_callback' => array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'deleteArchive'),
 			),
-			'show' => array
+			'show'       => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_submission_archive']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'label' => &$GLOBALS['TL_LANG']['tl_submission_archive']['show'],
+				'href'  => 'act=show',
+				'icon'  => 'show.gif',
 			),
-		)
+		),
 	),
-	'palettes' => array
+	'palettes'    => array
 	(
 		'__selector__' => array(),
-		'default' => '{general_legend},title,parentTable,parentField,pid;{fields_legend},submissionFields,titlePattern;' .
-			'{notification_legend},nc_submission,nc_confirmation;;'
+		'default'      => '{general_legend},title,parentTable,parentField,pid;{fields_legend},submissionFields,titlePattern;' .
+						  '{notification_legend},nc_submission,nc_confirmation;',
 	),
 	'subpalettes' => array(),
-	'fields'   => array
+	'fields'      => array
 	(
-		'id' => array
+		'id'               => array
 		(
-			'sql'                     => "int(10) unsigned NOT NULL auto_increment"
+			'sql' => "int(10) unsigned NOT NULL auto_increment",
 		),
-		'parentTable' => array
+		'parentTable'      => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['parentTable'],
 			'inputType'        => 'select',
 			'options_callback' => array('\HeimrichHannot\Haste\Dca\General', 'getDataContainers'),
 			'sql'              => "varchar(255) NOT NULL default ''",
-			'eval'             => array('tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true,
-										'includeBlankOption' => true)
+			'eval'             => array(
+				'tl_class'           => 'w50',
+				'chosen'             => true,
+				'submitOnChange'     => true,
+				'includeBlankOption' => true,
+			),
 		),
-		'parentField' => array
+		'parentField'      => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['parentField'],
 			'inputType'        => 'select',
-			'options_callback' => array('tl_submission_archive', 'getParentFields'),
+			'options_callback' => array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'getParentFields'),
 			'sql'              => "varchar(255) NOT NULL default ''",
-			'eval'             => array('tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true,
-										'includeBlankOption' => true)
+			'eval'             => array(
+				'tl_class'           => 'w50',
+				'chosen'             => true,
+				'submitOnChange'     => true,
+				'includeBlankOption' => true,
+			),
 		),
-		'pid' => array
+		'pid'              => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['pid'],
 			'inputType'        => 'select',
-			'options_callback' => array('tl_submission_archive', 'getParentEntitiesAsOptions'),
+			'options_callback' => array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'getParentEntitiesAsOptions'),
 			'sql'              => "int(10) unsigned NOT NULL default '0'",
-			'eval'             => array('tl_class' => 'w50', 'chosen' => true, 'includeBlankOption' => true)
+			'eval'             => array('tl_class' => 'w50', 'chosen' => true, 'includeBlankOption' => true),
 		),
-		'tstamp' => array
+		'tstamp'           => array
 		(
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+			'sql' => "int(10) unsigned NOT NULL default '0'",
 		),
-		'dateAdded' => array
+		'dateAdded'        => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
-			'sorting'                 => true,
-			'flag'                    => 6,
-			'eval'                    => array('rgxp'=>'datim', 'doNotCopy' => true),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+			'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
+			'sorting' => true,
+			'flag'    => 6,
+			'eval'    => array('rgxp' => 'datim', 'doNotCopy' => true),
+			'sql'     => "int(10) unsigned NOT NULL default '0'",
 		),
-		'title' => array
+		'title'            => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_submission_archive']['title'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory' => true, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['title'],
+			'exclude'   => true,
+			'search'    => true,
+			'sorting'   => true,
+			'flag'      => 1,
+			'inputType' => 'text',
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''",
 		),
 		'submissionFields' => array
 		(
@@ -155,211 +165,116 @@ $GLOBALS['TL_DCA']['tl_submission_archive'] = array
 			'inputType'        => 'checkboxWizard',
 			'options_callback' => array('HeimrichHannot\Submissions\Submissions', 'getFieldsAsOptions'),
 			'eval'             => array('multiple' => true, 'tl_class' => 'w50 clr'),
-			'sql'              => "blob NULL"
+			'sql'              => "blob NULL",
 		),
-		'titlePattern' => array
+		'titlePattern'     => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_submission_archive']['titlePattern'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class' => 'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['titlePattern'],
+			'exclude'   => true,
+			'inputType' => 'text',
+			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''",
 		),
-		'nc_submission' => array
+		'nc_submission'    => array
 		(
-			'label'                     => &$GLOBALS['TL_LANG']['tl_submission_archive']['nc_submission'],
-			'exclude'                   => true,
-			'inputType'                 => 'select',
-			'options_callback'          => array('HeimrichHannot\Submissions\Submissions', 'getNotificationsAsOptions'),
-			'eval'                      => array('includeBlankOption'=>true, 'chosen'=>true, 'tl_class'=>'w50'),
-			'sql'                       => "int(10) unsigned NOT NULL default '0'"
+			'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['nc_submission'],
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options_callback' => array('HeimrichHannot\Submissions\Submissions', 'getNotificationsAsOptions'),
+			'eval'             => array('includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'),
+			'sql'              => "int(10) unsigned NOT NULL default '0'",
 		),
-		'nc_confirmation' => array
+		'nc_confirmation'  => array
 		(
-			'label'                     => &$GLOBALS['TL_LANG']['tl_submission_archive']['nc_confirmation'],
-			'exclude'                   => true,
-			'inputType'                 => 'select',
-			'options_callback'          => array('HeimrichHannot\Submissions\Submissions', 'getConfirmationNotificationsAsOptions'),
-			'eval'                      => array('includeBlankOption'=>true, 'chosen'=>true, 'tl_class'=>'w50'),
-			'sql'                       => "int(10) unsigned NOT NULL default '0'"
-		)
-	)
+			'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['nc_confirmation'],
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options_callback' => array('HeimrichHannot\Submissions\Submissions', 'getConfirmationNotificationsAsOptions'),
+			'eval'             => array('includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'),
+			'sql'              => "int(10) unsigned NOT NULL default '0'",
+		),
+	),
 );
 
-class tl_submission_archive extends \Backend
-{
-
-	public static function getParentFields(\DataContainer $objDc)
-	{
-		if ($objDc->activeRecord->parentTable)
-			return \HeimrichHannot\Haste\Dca\General::getFields($objDc->activeRecord->parentTable, false, 'text');
-	}
-
-	public static function getParentEntitiesAsOptions(\DataContainer $objDc)
-	{
-		$arrOptions = array();
-
-		if ($objDc->activeRecord->parentTable && $objDc->activeRecord->parentField && ($objSubmissionArchives =
-				\HeimrichHannot\Submissions\SubmissionArchiveModel::findByParentTable($objDc->activeRecord->parentTable)) !== null)
-		{
-			$arrUsedPids = $objSubmissionArchives->fetchEach('pid');
-
-			if ($intPosition = array_search($objDc->activeRecord->pid, $arrUsedPids))
-				unset($arrUsedPids[$intPosition]);
-
-			$strWhere = '';
-
-			if (!empty($arrUsedPids))
-			{
-				$strWhere = ' WHERE id NOT IN (' . implode(',', $arrUsedPids) . ')';
-			}
-
-			$objItems = \Database::getInstance()->execute('SELECT id, ' . $objDc->activeRecord->parentField . ' FROM ' .
-				$objDc->activeRecord->parentTable . $strWhere);
-
-			$arrOptions = array_combine($objItems->fetchEach('id'), $objItems->fetchEach($objDc->activeRecord->parentField));
-		}
-
-		return $arrOptions;
-	}
-
-	public function checkPermission()
-	{
-		$objUser = \BackendUser::getInstance();
-		$objSession = \Session::getInstance();
-		$objDatabase = \Database::getInstance();
-
-		if ($objUser->isAdmin)
-		{
-			return;
-		}
-
-		// Set root IDs
-		if (!is_array($objUser->submissionss) || empty($objUser->submissionss))
-		{
-			$root = array(0);
-		}
-		else
-		{
-			$root = $objUser->submissionss;
-		}
-
-		$GLOBALS['TL_DCA']['tl_submission_archive']['list']['sorting']['root'] = $root;
-
-		// Check permissions to add archives
-		if (!$objUser->hasAccess('create', 'submissionsp'))
-		{
-			$GLOBALS['TL_DCA']['tl_submission_archive']['config']['closed'] = true;
-		}
-
-		// Check current action
-		switch (\Input::get('act'))
-		{
-			case 'create':
-			case 'select':
-				// Allow
-				break;
-
-			case 'edit':
-				// Dynamically add the record to the user profile
-				if (!in_array(\Input::get('id'), $root))
-				{
-					$arrNew = $objSession->get('new_records');
-
-					if (is_array($arrNew['tl_submission_archive']) && in_array(\Input::get('id'), $arrNew['tl_submission_archive']))
-					{
-						// Add permissions on user level
-						if ($objUser->inherit == 'custom' || !$objUser->groups[0])
-						{
-							$objUser = $objDatabase->prepare("SELECT submissionss, submissionsp FROM tl_user WHERE id=?")
-									->limit(1)
-									->execute($objUser->id);
-
-							$arrModulep = deserialize($objUser->submissionsp);
-
-							if (is_array($arrModulep) && in_array('create', $arrModulep))
-							{
-								$arrModules = deserialize($objUser->submissionss);
-								$arrModules[] = \Input::get('id');
-
-								$objDatabase->prepare("UPDATE tl_user SET submissionss=? WHERE id=?")
-										->execute(serialize($arrModules), $objUser->id);
-							}
-						}
-
-						// Add permissions on group level
-						elseif ($objUser->groups[0] > 0)
-						{
-							$objGroup = $objDatabase->prepare("SELECT submissionss, submissionsp FROM tl_user_group WHERE id=?")
-									->limit(1)
-									->execute($objUser->groups[0]);
-
-							$arrModulep = deserialize($objGroup->submissionsp);
-
-							if (is_array($arrModulep) && in_array('create', $arrModulep))
-							{
-								$arrModules = deserialize($objGroup->submissionss);
-								$arrModules[] = \Input::get('id');
-
-								$objDatabase->prepare("UPDATE tl_user_group SET submissionss=? WHERE id=?")
-										->execute(serialize($arrModules), $objUser->groups[0]);
-							}
-						}
-
-						// Add new element to the user object
-						$root[] = \Input::get('id');
-						$objUser->submissionss = $root;
-					}
-				}
-			// No break;
-
-			case 'copy':
-			case 'delete':
-			case 'show':
-				if (!in_array(\Input::get('id'), $root) || (\Input::get('act') == 'delete' && !$objUser->hasAccess('delete', 'submissionsp')))
-				{
-					$this->log('Not enough permissions to '.\Input::get('act').' submission_archive ID "'.\Input::get('id').'"', __METHOD__, TL_ERROR);
-					$this->redirect('contao/main.php?act=error');
-				}
-				break;
-
-			case 'editAll':
-			case 'deleteAll':
-			case 'overrideAll':
-				$session = $objSession->getData();
-				if (\Input::get('act') == 'deleteAll' && !$objUser->hasAccess('delete', 'submissionsp'))
-				{
-					$session['CURRENT']['IDS'] = array();
-				}
-				else
-				{
-					$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $root);
-				}
-				$objSession->setData($session);
-				break;
-
-			default:
-				if (strlen(\Input::get('act')))
-				{
-					$this->log('Not enough permissions to '.\Input::get('act').' submission_archive archives', __METHOD__, TL_ERROR);
-					$this->redirect('contao/main.php?act=error');
-				}
-				break;
-		}
-	}
-
-	public function editHeader($row, $href, $label, $title, $icon, $attributes)
-	{
-		return \BackendUser::getInstance()->canEditFieldsOf('tl_submission_archive') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
-	}
-
-	public function copyArchive($row, $href, $label, $title, $icon, $attributes)
-	{
-		return \BackendUser::getInstance()->hasAccess('create', 'submissionsp') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
-	}
-
-	public function deleteArchive($row, $href, $label, $title, $icon, $attributes)
-	{
-		return \BackendUser::getInstance()->hasAccess('delete', 'submissionsp') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
-	}
+// add attachment related config fields
+if (in_array('multifileupload', \ModuleLoader::getActive())) {
+	/**
+	 * Palettes
+	 */
+	$arrDca['palettes']['__selector__'][] = 'addAttachmentConfig';
+	$arrDca['palettes']['default']        = str_replace('titlePattern;', 'titlePattern;{attachement_legend},addAttachmentConfig;', $arrDca['palettes']['default']);
+	
+	
+	/**
+	 * Subpalettes
+	 */
+	$arrDca['subpalettes']['addAttachmentConfig'] = 'attachementUploadFolder,attachementMaxFiles,attachementMaxUploadSize,attachementExtensions,attachementFieldType';
+	
+	/**
+	 * Fields
+	 */
+	$arrFields = array
+	(
+		'addAttachmentConfig'      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['addAttachmentConfig'],
+			'exclude'   => true,
+			'inputType' => 'checkbox',
+			'eval'      => array('submitOnChange' => true),
+			'sql'       => "char(1) NOT NULL default ''",
+		),
+		'attachementUploadFolder'  => array
+		(
+			'label'         => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementUploadFolder'],
+			'exclude'       => true,
+			'inputType'     => 'fileTree',
+			'load_callback' => array
+			(
+				array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'getAttachementUploadFolder'),
+			),
+			'eval'          => array('filesOnly' => false, 'fieldType' => 'radio', 'mandatory' => true),
+			'sql'           => "binary(16) NULL",
+		),
+		'attachementMaxFiles'      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementMaxFiles'],
+			'exclude'   => true,
+			'default'   => 5,
+			'inputType' => 'text',
+			'eval'      => array('rgxp' => 'digit', 'mandatory' => true, 'tl_class' => 'w50'),
+			'sql'       => "int(3) unsigned NOT NULL default '0'",
+		),
+		'attachementMaxUploadSize' => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementMaxUploadSize'],
+			'exclude'   => true,
+			'default'   => 10,
+			'inputType' => 'text',
+			'eval'      => array('rgxp' => 'digit', 'mandatory' => true, 'tl_class' => 'w50'),
+			'sql'       => "int(10) unsigned NOT NULL default '0'",
+		),
+		'attachementExtensions'    => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementExtensions'],
+			'exclude'   => true,
+			'default'   => \Config::get('uploadTypes'),
+			'inputType' => 'text',
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''",
+		),
+		'attachementFieldType'    => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachementFieldType'],
+			'exclude'   => true,
+			'default'   => 'checkbox',
+			'options'   => array('checkbox', 'radio'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_submission_archive']['reference']['attachementFieldType'],
+			'inputType' => 'radio',
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50'),
+			'sql'       => "varchar(8) NOT NULL default ''",
+		),
+	
+	);
+	
+	$arrDca['fields'] = array_merge($arrDca['fields'], $arrFields);
 }

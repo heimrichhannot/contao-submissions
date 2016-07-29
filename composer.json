@@ -1,6 +1,6 @@
 {
     "name": "heimrichhannot/contao-submissions",
-    "description":"A generic module to store and handle submissions in Contao.", 
+    "description":"A generic module to store and handle submissions in contao.",
     "keywords":["contao", "submissions", "form", "module", "developer"],
     "type": "contao-module",
     "homepage":"https://github.com/heimrichhannot/contao-submissions",
