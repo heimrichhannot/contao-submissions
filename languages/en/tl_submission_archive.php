@@ -5,14 +5,22 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_submission_archive'];
 /**
  * Fields
  */
-$arrLang['title'] = array('Title', 'Geben Sie hier bitte den Titel ein.');
-$arrLang['parentTable'] = array('Parent table', 'Wählen Sie hier eine Elterntabelle aus.');
-$arrLang['parentField'] = array('Label field', 'Wählen Sie hier ein Feld der Elterntabelle aus, das als Beschriftungsfeld dienen soll.');
-$arrLang['pid'] = array('Parent entity', 'Wählen Sie hier eine Elternentität aus.');
-$arrLang['submissionFields'] = array('Fields', 'Wählen Sie hier die Felder aus, die Einsendungen dieses Archiv erhalten sollen.');
-$arrLang['titlePattern'] = array('Title pattern', 'Geben Sie hier ein Muster für die Titel der Einsendungen in der Form "%field1% %field2%" ein.');
-$arrLang['nc_submission'] = array('Send notification', 'Wählen Sie hier eine Benachrichtigung aus, die nach dem erfolgreichen Einsenden verschickt werden soll.');
-$arrLang['nc_confirmation'] = array('Send a confirmation notification', 'Wählen Sie hier die Benachrichtigung aus, die als Bestätigung an den Autoren der Einsendung verschickt werden soll.');
+$arrLang['title'] = array('Title', 'Enter a title.');
+$arrLang['parentTable'] = array('Parent table', 'Select a parent table.');
+$arrLang['parentField'] = array('Label field', 'Select a field in the parent table that serves as a label field.');
+$arrLang['pid'] = array('Parent entity', 'Select a parent entity.');
+$arrLang['submissionFields'] = array('Fields', 'Here you can select the fields that submissions will have.');
+$arrLang['titlePattern'] = array('Title pattern', 'Enter a pattern for the title of the submissions in the form of "%field1% %field2%".');
+
+$arrLang['addAttachmentConfig'] = array('Customize attachment settings', 'Adjust the settings for file attachments.');
+$arrLang['attachementUploadFolder'] = array('Select upload directory', 'Enter an individual upload directory where attachments will be stored.');
+$arrLang['attachementMaxFiles'] = array('Maximum number of attachments', 'Specify how many files can be submitted as an attachment.');
+$arrLang['attachementMaxUploadSize'] = array('Maximum file size of attachments (in MB)', 'Specify the file size of attachments.');
+$arrLang['attachementExtensions'] = array('Allowed file types', 'Specify a comma separated list of file types that can be uploaded.');
+$arrLang['attachementFieldType'] = array('Fieldtype of attachments', 'Select what type of field the attachment field has in the back end.');
+
+$arrLang['nc_submission'] = array('Send notification', 'Select an notification to be sent after the successful sending.');
+$arrLang['nc_confirmation'] = array('Send a confirmation notification', 'Select the notification that will be sent as an acknowledgment to the authors of the submission.');
 
 /**
  * Legends

@@ -17,6 +17,13 @@ class Submissions extends \Controller
 	const AUTHOR_TYPE_MEMBER = 'member';
 	const AUTHOR_TYPE_USER = 'user';
 
+	public static function getDefaultAttachementSRC($blnReturnPath = false)
+	{
+		$objFolder = new \Folder('files/submissions/uploads');
+		
+		return $blnReturnPath ? $objFolder->path : \StringUtil::binToUuid($objFolder->getModel()->uuid);
+	}
+	
 	public static function getFieldsAsOptions(\DataContainer $objDc)
 	{
 		return static::getFields();
