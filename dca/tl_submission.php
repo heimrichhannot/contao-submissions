@@ -111,7 +111,7 @@ $arrDca = array
 	'palettes' => array(
 		'default' => '{general_legend},authorType,author;' .
 					 '{submission_legend},gender,academicTitle,firstname,lastname,dateOfBirth,street,' .
-					 'postal,city,country,email,phone,fax,notes,captcha;{publish_legend},published;',
+					 'postal,city,country,email,phone,fax,notes,captcha,attachments;{publish_legend},published;',
 	),
 	'fields'   => array
 	(
@@ -365,7 +365,8 @@ $arrDca = array
 );
 
 // add attachment field
-if (in_array('multifileupload', \ModuleLoader::getActive())) {
+if (in_array('multifileupload', \ModuleLoader::getActive()))
+{
 	$arrDca['fields']['attachments'] = array
 	(
 		'label'     => &$GLOBALS['TL_LANG']['tl_submission']['attachments'],

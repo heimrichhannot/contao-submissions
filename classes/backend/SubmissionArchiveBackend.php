@@ -10,12 +10,28 @@
 
 namespace HeimrichHannot\Submissions\Backend;
 
+use HeimrichHannot\Submissions\SubmissionArchiveModel;
 use HeimrichHannot\Submissions\SubmissionModel;
 use HeimrichHannot\Submissions\Submissions;
 use HeimrichHannot\Submissions\Util\Tokens;
 
 class SubmissionArchiveBackend extends \Backend
 {
+	public function onCreate($strTable, $insertID, $arrSet, \DataContainer $dc)
+	{
+		if(($objModel = SubmissionArchiveModel::findByPk($insertID)) === null)
+		{
+			return;
+		}
+		
+		if(($uuid = Submissions::getDefaultAttachmentSRC()) !== null && \Validator::isUuid($uuid))
+		{
+			$objModel->attachmentUploadFolder = \StringUtil::uuidToBin($uuid);
+		}
+		
+		$objModel->save();
+	}
+	
 	public function setAttachmentUploadFolder($varValue, \DataContainer $dc)
 	{
 		if ($varValue == '')

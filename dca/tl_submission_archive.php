@@ -10,6 +10,10 @@ $arrDca = array
 		'ctable'            => array('tl_submission'),
 		'switchToEdit'      => true,
 		'enableVersioning'  => true,
+		'oncreate_callback' => array
+		(
+			array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'onCreate'),
+		),
 		'onload_callback'   => array
 		(
 			array('HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'checkPermission'),

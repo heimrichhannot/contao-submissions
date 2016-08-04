@@ -234,28 +234,33 @@ class SubmissionBackend extends \Backend
 			return false;
 		}
 		
-		$arrDca['palettes']['defaultBackup'] = $arrDca['palettes']['default'];
-		
-		$arrSubmissionFields = deserialize($objSubmissionArchive->submissionFields, true);
-		
-		// remove subpalette fields from arrSubmissionFields
-		if (is_array($arrDca['subpalettes'])) {
-			foreach ($arrDca['subpalettes'] as $key => $value) {
-				$arrSubpaletteFields = \HeimrichHannot\FormHybrid\FormHelper::getPaletteFields($objDc->table, $value);
-				
-				if (!is_array($arrSubpaletteFields)) {
-					continue;
+		// modify palette for backend view, based on archive submissionFields
+		if(!$blnFrontend)
+		{
+			$arrDca['palettes']['defaultBackup'] = $arrDca['palettes']['default'];
+			
+			$arrSubmissionFields = deserialize($objSubmissionArchive->submissionFields, true);
+			
+			// remove subpalette fields from arrSubmissionFields
+			if (is_array($arrDca['subpalettes'])) {
+				foreach ($arrDca['subpalettes'] as $key => $value) {
+					$arrSubpaletteFields = \HeimrichHannot\FormHybrid\FormHelper::getPaletteFields($objDc->table, $value);
+					
+					if (!is_array($arrSubpaletteFields)) {
+						continue;
+					}
+					
+					$arrSubmissionFields = array_diff($arrSubmissionFields, $arrSubpaletteFields);
 				}
-				
-				$arrSubmissionFields = array_diff($arrSubmissionFields, $arrSubpaletteFields);
 			}
+			
+			$arrDca['palettes']['default'] = str_replace(
+				'submissionFields',
+				implode(',', $arrSubmissionFields),
+				\HeimrichHannot\Submissions\Submissions::PALETTE_DEFAULT
+			);
 		}
 		
-		$arrDca['palettes']['default'] = str_replace(
-			'submissionFields',
-			implode(',', $arrSubmissionFields),
-			\HeimrichHannot\Submissions\Submissions::PALETTE_DEFAULT
-		);
 		
 		// overwrite attachment config with archive
 		if(isset($arrDca['fields']['attachments']) && $objSubmissionArchive->addAttachmentConfig)
