@@ -123,6 +123,8 @@ class SubmissionModel extends \Model
 				'title' => $arrTokens['form_value_title'],
 				'lastname' => $arrTokens['form_value_lastname']
 			));
+			
+			$arrTokens['tl_submission'] = $objSubmission->id;
 		}
 
 		return $arrTokens;
