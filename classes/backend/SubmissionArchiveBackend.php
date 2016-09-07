@@ -26,7 +26,7 @@ class SubmissionArchiveBackend extends \Backend
 		
 		if(($uuid = Submissions::getDefaultAttachmentSRC()) !== null && \Validator::isUuid($uuid))
 		{
-			$objModel->attachmentUploadFolder = \StringUtil::uuidToBin($uuid);
+			$objModel->attachmentUploadFolder = class_exists('Contao\StringUtil') ? \StringUtil::uuidToBin($uuid) : \String::uuidToBin($uuid);
 		}
 		
 		$objModel->save();

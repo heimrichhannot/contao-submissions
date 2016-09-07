@@ -33,7 +33,7 @@ class Submissions extends \Controller
 		
 		if(\Validator::isUuid($objFolder->getModel()->uuid))
 		{
-			return \StringUtil::binToUuid($objFolder->getModel()->uuid);
+			return class_exists('Contao\StringUtil') ? \StringUtil::binToUuid($objFolder->getModel()->uuid) : \String::binToUuid($objFolder->getModel()->uuid);
 		}
 		
 		return null;
