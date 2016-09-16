@@ -212,31 +212,22 @@ class SubmissionBackend extends \Backend
 	
 	public function modifyPalette(\DataContainer $objDc, $blnFrontend=false)
 	{
-		\Controller::loadDataContainer('tl_submission');
-		$arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
-		
-		if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)
-		{
-			return false;
-		}
-		
-		if ($objSubmission->authorType == \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_NONE)
-		{
-			unset($arrDca['fields']['author']);
-		}
-		
-		if ($objSubmission->authorType == \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER) {
-			$arrDca['fields']['author']['options_callback'] = array('HeimrichHannot\Haste\Dca\User', 'getUsersAsOptions');
-		}
-		
-		if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null)
-		{
-			return false;
-		}
-		
 		// modify palette for backend view, based on archive submissionFields
 		if(!$blnFrontend)
 		{
+			\Controller::loadDataContainer('tl_submission');
+			$arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
+
+			if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)
+			{
+				return false;
+			}
+
+			if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null)
+			{
+				return false;
+			}
+
 			$arrDca['palettes']['defaultBackup'] = $arrDca['palettes']['default'];
 			
 			$arrSubmissionFields = deserialize($objSubmissionArchive->submissionFields, true);
@@ -273,6 +264,29 @@ class SubmissionBackend extends \Backend
 				
 				$arrDca['fields']['attachments']['eval'][$strKey] = $value;
 			}
+		}
+	}
+
+	public static function addAuthorIDOnCreate($strTable, $intId, $arrRow, \DataContainer $dc)
+	{
+		$objModel = General::getModelInstance($strTable, $intId);
+
+		if ($objModel === null || !\Database::getInstance()->fieldExists(static::PROPERTY_SESSION_ID, $strTable))
+		{
+			return false;
+		}
+
+		if (TL_MODE == 'FE')
+		{
+			$objModel->{static::PROPERTY_AUTHOR_TYPE} = static::AUTHOR_TYPE_MEMBER;
+			$objModel->{static::PROPERTY_AUTHOR} = \FrontendUser::getInstance()->id;
+			$objModel->save();
+		}
+		else
+		{
+			$objModel->{static::PROPERTY_AUTHOR_TYPE} = static::AUTHOR_TYPE_USER;
+			$objModel->{static::PROPERTY_AUTHOR} = \BackendUser::getInstance()->id;
+			$objModel->save();
 		}
 	}
 	

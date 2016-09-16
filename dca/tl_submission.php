@@ -137,37 +137,6 @@ $arrDca = array
 			'eval'    => array('rgxp' => 'datim', 'doNotCopy' => true),
 			'sql'     => "int(10) unsigned NOT NULL default '0'",
 		),
-		'authorType'     => array(
-			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['authorType'],
-			'exclude'   => true,
-			'filter'    => true,
-			'default'   => \HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_NONE,
-			'inputType' => 'select',
-			'options'   => array(
-				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_NONE,
-				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_MEMBER,
-				\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER,
-			),
-			'reference' => $GLOBALS['TL_LANG']['tl_submission']['authorType'],
-			'eval'      => array('doNotCopy' => true, 'submitOnChange' => true, 'mandatory' => true, 'tl_class' => 'w50 clr'),
-			'sql'       => "varchar(255) NOT NULL default 'none'",
-		),
-		'author'         => array
-		(
-			'label'            => &$GLOBALS['TL_LANG']['tl_submission']['author'],
-			'exclude'          => true,
-			'search'           => true,
-			'filter'           => true,
-			'inputType'        => 'select',
-			'options_callback' => array('HeimrichHannot\Haste\Dca\General', 'getMembersAsOptions'),
-			'eval'             => array(
-				'doNotCopy'          => true,
-				'chosen'             => true,
-				'includeBlankOption' => true,
-				'tl_class'           => 'w50',
-			),
-			'sql'              => "int(10) unsigned NOT NULL default '0'",
-		),
 		'gender'         => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
@@ -360,7 +329,7 @@ $arrDca = array
 		'formHybridBlob' => array
 		(
 			'sql' => "blob NULL",
-		),
+		)
 	),
 );
 
@@ -387,3 +356,5 @@ if (in_array('multifileupload', \ModuleLoader::getActive()))
 		'sql'       => "blob NULL",
 	);
 }
+
+\HeimrichHannot\Haste\Dca\General::addAuthorFieldAndCallback('tl_submission');
