@@ -17,6 +17,24 @@ class SubmissionModel extends \Model
 
 	protected static $strTable = 'tl_submission';
 
+	public static function findSubmissionsByParent($strTable, $intPid, $blnPublishedOnly = false, array $arrOptions = array())
+	{
+		if (($objSubmissionArchives = SubmissionArchiveModel::findByParent($strTable, $intPid)) !== null)
+		{
+			if (!$blnPublishedOnly)
+			{
+				return static::findByPid($objSubmissionArchives->id, $arrOptions);
+			}
+			else
+			{
+				return static::findBy(
+					array('tl_submission.published=1', 'tl_submission.pid=?'), array($objSubmissionArchives->id), $arrOptions);
+			}
+		}
+
+		return null;
+	}
+
 	public static function getArchiveParent($intSubmission)
 	{
 		if (($objSubmissionArchive = static::getArchive($intSubmission)) !== null

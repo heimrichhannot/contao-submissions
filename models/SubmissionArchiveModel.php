@@ -12,20 +12,17 @@ class SubmissionArchiveModel extends \Model
 		return static::findBy(array('parentTable=?', 'pid=?'), array($strTable, $intPid));
 	}
 
+	/**
+	 * @deprecated use SubmissionModel::findSubmissionsByParent()
+	 * @param      $strTable
+	 * @param      $intPid
+	 * @param bool $blnPublishedOnly
+	 *
+	 * @return mixed
+	 */
 	public static function findSubmissionsByParent($strTable, $intPid, $blnPublishedOnly = false)
 	{
-		if (($objSubmissionArchives = static::findByParent($strTable, $intPid)) !== null)
-		{
-			if (!$blnPublishedOnly)
-			{
-				return SubmissionModel::findByPid($objSubmissionArchives->id);
-			}
-			else
-			{
-				return SubmissionModel::findBy(
-					array('tl_submission.published=1', 'tl_submission.pid=?'), array($objSubmissionArchives->id));
-			}
-		}
+		return SubmissionModel::findSubmissionsByParent($strTable, $intPid, $blnPublishedOnly);
 	}
 
 	public static function getSubmissionFieldsByParent($strTable, $intPid)
