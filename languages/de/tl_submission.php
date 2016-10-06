@@ -20,6 +20,8 @@ $arrLang['phone'] = array('Telefon', 'Geben Sie hier die Telefonnummer ein.');
 $arrLang['fax'] = array('Fax', 'Geben Sie hier die Faxnummer ein.');
 $arrLang['notes'] = array('Anmerkungen', 'Geben Sie hier Anmerkungen ein.');
 $arrLang['attachments'] = array('Anlagen', 'Laden Sie zusätzliche Anlagen hoch.');
+$arrLang['agreement'] = array('Teilnahmebedingungen akzeptieren', 'Wählen Sie diese Option, wenn der Nutzer die Teilnahmebedingungen akzeptiert hat.');
+$arrLang['privacy'] = array('Datenschutzbestimmungen akzeptieren', 'Wählen Sie diese Option, wenn der Nutzer die Datenschutzbestimmungen akzeptiert hat.');
 $arrLang['published'] = array('Aktiviert', 'Wählen Sie diese Option, um die Einsendung zu aktivieren.');
 
 

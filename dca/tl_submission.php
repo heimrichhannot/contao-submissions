@@ -307,6 +307,24 @@ $arrDca = array
 			'eval'      => array('tl_class' => 'long clr'),
 			'sql'       => "text NULL",
 		),
+		'agreement'      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['agreement'],
+			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'checkbox',
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true),
+			'sql'       => "char(1) NOT NULL default ''",
+		),
+		'privacy'      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['privacy'],
+			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'checkbox',
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true),
+			'sql'       => "char(1) NOT NULL default ''",
+		),
 		'published'      => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['published'],
