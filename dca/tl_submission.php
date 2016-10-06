@@ -218,6 +218,15 @@ $arrDca = array
 			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''",
 		),
+		'street2'         => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street2'],
+			'exclude'   => true,
+			'search'    => true,
+			'inputType' => 'text',
+			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''",
+		),
 		'postal'         => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['postal'],

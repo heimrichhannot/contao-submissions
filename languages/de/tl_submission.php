@@ -12,6 +12,7 @@ $arrLang['lastname'] = array('Nachname', 'Geben Sie hier den Nachnamen ein.');
 $arrLang['company'] = array('Firma', 'Geben Sie hier die Firma ein.');
 $arrLang['dateOfBirth'] = array('Geburtsdatum', 'Geben Sie hier das Geburtsdatum ein.');
 $arrLang['street'] = array('Straße', 'Geben Sie hier die Straße ein.');
+$arrLang['street2'] = array('Weitere Adressangaben', 'Geben Sie hier weitere Adressangaben ein.');
 $arrLang['postal'] = array('Postleitzahl', 'Geben Sie hier die Postleitzahl ein.');
 $arrLang['city'] = array('Ort', 'Geben Sie hier den Ort ein.');
 $arrLang['country'] = array('Land', 'Geben Sie hier das Land ein.');
