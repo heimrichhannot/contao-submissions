@@ -21,6 +21,7 @@ $arrLang['country'] = array('Country', 'Type in the country.');
 $arrLang['email'] = array('Email address', 'Type in the email address.');
 $arrLang['phone'] = array('Phone', 'Type in the phone number.');
 $arrLang['fax'] = array('Fax', 'Type in the fax number.');
+$arrLang['subject'] = array('Subject', 'Type in a subject here.');
 $arrLang['notes'] = array('Notes', 'Type in the notes.');
 $arrLang['company'] = array('Company', 'Type in the company.');
 $arrLang['attachments'] = array('Attachments', 'Add file attachments.');

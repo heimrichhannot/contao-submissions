@@ -21,6 +21,7 @@ $arrLang['country'] = array('Land', 'Geben Sie hier das Land ein.');
 $arrLang['email'] = array('E-Mail-Adresse', 'Geben Sie hier die E-Mail-Adresse ein.');
 $arrLang['phone'] = array('Telefon', 'Geben Sie hier die Telefonnummer ein.');
 $arrLang['fax'] = array('Fax', 'Geben Sie hier die Faxnummer ein.');
+$arrLang['subject'] = array('Betreff', 'Geben Sie hier einen Betreff ein.');
 $arrLang['notes'] = array('Anmerkungen', 'Geben Sie hier Anmerkungen ein.');
 $arrLang['attachments'] = array('Anlagen', 'Laden Sie zusätzliche Anlagen hoch.');
 $arrLang['agreement'] = array('Teilnahmebedingungen akzeptieren', 'Wählen Sie diese Option, wenn der Nutzer die Teilnahmebedingungen akzeptiert hat.');

@@ -325,6 +325,14 @@ $arrDca = array
 			),
 			'sql'       => "varchar(64) NOT NULL default ''",
 		),
+		'subject' => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_submission']['subject'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength' => 255, 'tl_class' => 'w50'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
 		'notes'          => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['notes'],
