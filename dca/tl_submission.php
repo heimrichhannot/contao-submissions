@@ -137,6 +137,15 @@ $arrDca = array
 			'eval'    => array('rgxp' => 'datim', 'doNotCopy' => true),
 			'sql'     => "int(10) unsigned NOT NULL default '0'",
 		),
+		'type' => array(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['type'],
+			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'select',
+			'reference' => &$GLOBALS['TL_LANG']['tl_submission']['reference']['type'],
+			'eval'      => array('includeBlankOption' => true, 'mandatory' => true, 'tl_class' => 'w50'),
+			'sql'       => "varchar(64) NOT NULL default ''"
+		),
 		'gender'         => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
@@ -159,6 +168,14 @@ $arrDca = array
 				'tl_class'           => 'w50',
 			),
 			'sql'       => "varchar(255) NOT NULL default ''",
+		),
+		'additionalTitle' => array(
+			'label'     => &$GLOBALS['TL_LANG']['tl_submission']['additionalTitle'],
+			'exclude'   => true,
+			'search'    => true,
+			'inputType' => 'text',
+			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'firstname'      => array
 		(
