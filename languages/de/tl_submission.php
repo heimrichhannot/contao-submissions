@@ -27,6 +27,7 @@ $arrLang['attachments'] = array('Anlagen', 'Laden Sie zusätzliche Anlagen hoch.
 $arrLang['agreement'] = array('Teilnahmebedingungen akzeptieren', 'Wählen Sie diese Option, wenn der Nutzer die Teilnahmebedingungen akzeptiert hat.');
 $arrLang['privacy'] = array('Datenschutzbestimmungen akzeptieren', 'Wählen Sie diese Option, wenn der Nutzer die Datenschutzbestimmungen akzeptiert hat.');
 $arrLang['published'] = array('Aktiviert', 'Wählen Sie diese Option, um die Einsendung zu aktivieren.');
+$arrLang['formHybridBlob'] = array('FormHybrid BLOB', 'Dieses Feld enthält Änderungen, die noch nicht final in den Datensatz gespeichert werden sollen. Wird bspw. bei Multistep-Formularen eingesetzt.');
 
 
 /**

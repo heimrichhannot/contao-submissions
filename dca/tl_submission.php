@@ -380,7 +380,8 @@ $arrDca = array
 		),
 		'formHybridBlob' => array
 		(
-			'sql' => "blob NULL",
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['formHybridBlob'],
+            'sql' => "blob NULL",
 		)
 	),
 );
