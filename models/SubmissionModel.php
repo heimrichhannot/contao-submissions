@@ -8,6 +8,7 @@ use HeimrichHannot\Haste\Dca\General;
 use HeimrichHannot\Haste\Util\Arrays;
 use HeimrichHannot\Haste\Util\Environment;
 use HeimrichHannot\Haste\Util\FormSubmission;
+use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
 use NotificationCenter\Model\Notification;
@@ -142,7 +143,7 @@ class SubmissionModel extends \Model
 			$arrTokens = static::tokenizeData($arrSubmissionData);
 
 			// salutation
-			$arrTokens['salutation_submission'] = NotificationCenterPlus::createSalutation(
+			$arrTokens['salutation_submission'] = Salutations::createSalutation(
 				$GLOBALS['TL_LANGUAGE'],
 				array(
 					'gender'   => $arrTokens['form_value_gender'],
