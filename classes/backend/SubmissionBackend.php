@@ -59,7 +59,7 @@ class SubmissionBackend extends \Backend
 		
 		// Set the root IDs
 		if (!is_array($objUser->submissionss) || empty($objUser->submissionss)) {
-			$root = array(0);
+			$root = [0];
 		} else {
 			$root = $objUser->submissionss;
 		}
@@ -256,7 +256,7 @@ class SubmissionBackend extends \Backend
 		// overwrite attachment config with archive
 		if(isset($arrDca['fields']['attachments']) && $objSubmissionArchive->addAttachmentConfig)
 		{
-			$arrConfig = Arrays::filterByPrefixes($objSubmissionArchive->row(), array('attachment'));
+			$arrConfig = Arrays::filterByPrefixes($objSubmissionArchive->row(), ['attachment']);
 			
 			foreach ($arrConfig as $strKey => $value)
 			{

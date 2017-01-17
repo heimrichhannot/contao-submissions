@@ -12,17 +12,17 @@
 /**
  * Register the namespaces
  */
-ClassLoader::addNamespaces(array
-(
-	'HeimrichHannot',
-));
+ClassLoader::addNamespaces(
+    [
+	'HeimrichHannot',]
+);
 
 
 /**
  * Register the classes
  */
-ClassLoader::addClasses(array
-(
+ClassLoader::addClasses(
+    [
 	// Models
 	'HeimrichHannot\Submissions\SubmissionModel'                  => 'system/modules/submissions/models/SubmissionModel.php',
 	'HeimrichHannot\Submissions\SubmissionArchiveModel'           => 'system/modules/submissions/models/SubmissionArchiveModel.php',
@@ -31,5 +31,5 @@ ClassLoader::addClasses(array
 	'HeimrichHannot\Submissions\Util\Tokens'                      => 'system/modules/submissions/classes/util/Tokens.php',
 	'HeimrichHannot\Submissions\Submissions'                      => 'system/modules/submissions/classes/Submissions.php',
 	'HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend' => 'system/modules/submissions/classes/backend/SubmissionArchiveBackend.php',
-	'HeimrichHannot\Submissions\Backend\SubmissionBackend'        => 'system/modules/submissions/classes/backend/SubmissionBackend.php',
-));
+	'HeimrichHannot\Submissions\Backend\SubmissionBackend'        => 'system/modules/submissions/classes/backend/SubmissionBackend.php',]
+);

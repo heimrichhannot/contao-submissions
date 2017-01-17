@@ -3,58 +3,68 @@
 /**
 * Backend modules
 */
-$GLOBALS['BE_MOD']['content']['submission'] = array(
-	'tables' => array('tl_submission_archive', 'tl_submission'),
-	'icon'   => 'system/modules/submissions/assets/img/icon_submission.png',
-	'send_confirmation' => array('HeimrichHannot\Submissions\SubmissionModel', 'sendConfirmationNotificationBe'),
-	'export_csv' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule(),
-	'export_xls' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule()
-);
+$GLOBALS['BE_MOD']['content']['submission'] = [
+    'tables' => ['tl_submission_archive', 'tl_submission'],
+    'icon'   => 'system/modules/submissions/assets/img/icon_submission.png',
+    'send_confirmation' => ['HeimrichHannot\Submissions\SubmissionModel', 'sendConfirmationNotificationBe'],
+    'export_csv' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule(),
+    'export_xls' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule()
+];
 
 /**
  * Notification Center Notification Types
  */
 $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] = array_merge_recursive(
-	(array) $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'],
-	array(
-		\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_SUBMISSIONS => array(
-			\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_FORM_SUBMISSION => array(
-				'recipients'           => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'email_subject'        => array('form_value_*', 'form_plain_*', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'),
-				'email_text'           => array('formsubmission', 'formsubmission_all', 'form_submission_*',
-												'form_value_*', 'form_plain_*', 'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'),
-				'email_html'           => array('formsubmission', 'formsubmission_all', 'form_submission_*',
-												'form_value_*', 'form_plain_*', 'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'),
-				'file_name'            => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'file_content'         => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'email_sender_name'    => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'email_sender_address' => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'email_recipient_cc'   => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'email_recipient_bcc'  => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'email_replyTo'        => array('form_value_*', 'form_plain_*', 'admin_email'),
-				'attachment_tokens'    => array('form_value_*', 'form_plain_*'),
-			),
-			\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_CONFIRMATION => array(
-					'recipients'           => array('form_value_*', 'form_plain_*', 'admin_email'),
-					'email_subject'        => array('form_value_*',
-													'form_plain_*', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'),
-					'email_text'           => array('formsubmission',
-													'formsubmission_all', 'form_submission_*', 'form_value_*', 'form_plain_*',
-													'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'),
-					'email_html'           => array('formsubmission',
-													'formsubmission_all', 'form_submission_*', 'form_value_*', 'form_plain_*',
-													'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'),
-					'file_name'            => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
-					'file_content'         => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
-					'email_sender_name'    => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
-					'email_sender_address' => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
-					'email_recipient_cc'   => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
-					'email_recipient_bcc'  => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
-					'email_replyTo'        => array('event_*', 'form_value_*', 'form_plain_*', 'admin_email'),
-					'attachment_tokens'    => array('confirmation_pdf', 'event_*', 'form_value_*', 'form_plain_*'),
-			)
-		)
-	)
+    (array) $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'],
+    [
+		\HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_SUBMISSIONS => [
+            \HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_FORM_SUBMISSION => [
+                'recipients'           => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'email_subject'        => ['form_value_*', 'form_plain_*', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'],
+                'email_text'           => [
+                    'formsubmission', 'formsubmission_all', 'form_submission_*',
+                    'form_value_*', 'form_plain_*', 'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'
+                ],
+                'email_html'           => [
+                    'formsubmission', 'formsubmission_all', 'form_submission_*',
+                    'form_value_*', 'form_plain_*', 'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'
+                ],
+                'file_name'            => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'file_content'         => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'email_sender_name'    => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'email_sender_address' => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'email_recipient_cc'   => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'email_recipient_bcc'  => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'email_replyTo'        => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'attachment_tokens'    => ['form_value_*', 'form_plain_*'],
+            ],
+            \HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_CONFIRMATION => [
+                'recipients'           => ['form_value_*', 'form_plain_*', 'admin_email'],
+                'email_subject'        => [
+                    'form_value_*',
+                    'form_plain_*', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'
+                ],
+                'email_text'           => [
+                    'formsubmission',
+                    'formsubmission_all', 'form_submission_*', 'form_value_*', 'form_plain_*',
+                    'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'
+                ],
+                'email_html'           => [
+                    'formsubmission',
+                    'formsubmission_all', 'form_submission_*', 'form_value_*', 'form_plain_*',
+                    'salutation_submission', 'admin_email', 'env_*', 'page_*', 'user_*', 'date', 'last_update'
+                ],
+                'file_name'            => ['event_*', 'form_value_*', 'form_plain_*', 'admin_email'],
+                'file_content'         => ['event_*', 'form_value_*', 'form_plain_*', 'admin_email'],
+                'email_sender_name'    => ['event_*', 'form_value_*', 'form_plain_*', 'admin_email'],
+                'email_sender_address' => ['event_*', 'form_value_*', 'form_plain_*', 'admin_email'],
+                'email_recipient_cc'   => ['event_*', 'form_value_*', 'form_plain_*', 'admin_email'],
+                'email_recipient_bcc'  => ['event_*', 'form_value_*', 'form_plain_*', 'admin_email'],
+                'email_replyTo'        => ['event_*', 'form_value_*', 'form_plain_*', 'admin_email'],
+                'attachment_tokens'    => ['confirmation_pdf', 'event_*', 'form_value_*', 'form_plain_*'],
+            ]
+        ]
+    ]
 );
 
 /**

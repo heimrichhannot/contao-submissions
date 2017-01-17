@@ -10,23 +10,19 @@ $GLOBALS['TL_DCA']['tl_user']['palettes']['custom'] = str_replace('fop;', 'fop;{
 /**
  * Add fields to tl_user_group
  */
-$GLOBALS['TL_DCA']['tl_user']['fields']['submissionss'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_user']['submissionss'],
-	'exclude'                 => true,
-	'inputType'               => 'checkbox',
-	'foreignKey'              => 'tl_submission_archive.title',
-	'eval'                    => array('multiple' => true),
-	'sql'                     => "blob NULL"
-);
+$GLOBALS['TL_DCA']['tl_user']['fields']['submissionss'] = [
+    'label'                   => &$GLOBALS['TL_LANG']['tl_user']['submissionss'],
+    'exclude'                 => true,
+    'inputType'               => 'checkbox',
+    'foreignKey'              => 'tl_submission_archive.title',
+    'eval'                    => ['multiple' => true],
+    'sql'                     => "blob NULL"];
 
-$GLOBALS['TL_DCA']['tl_user']['fields']['submissionsp'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_user']['submissionsp'],
-	'exclude'                 => true,
-	'inputType'               => 'checkbox',
-	'options'                 => array('create', 'delete'),
-	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-	'eval'                    => array('multiple' => true),
-	'sql'                     => "blob NULL"
-);
+$GLOBALS['TL_DCA']['tl_user']['fields']['submissionsp'] = [
+    'label'                   => &$GLOBALS['TL_LANG']['tl_user']['submissionsp'],
+    'exclude'                 => true,
+    'inputType'               => 'checkbox',
+    'options'                 => ['create', 'delete'],
+    'reference'               => &$GLOBALS['TL_LANG']['MSC'],
+    'eval'                    => ['multiple' => true],
+    'sql'                     => "blob NULL"];

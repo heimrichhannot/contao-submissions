@@ -3,4 +3,4 @@
 /**
  * Backend modules
  */
-$GLOBALS['TL_LANG']['MOD']['submission'] = array('Submissions', 'Manage form submissions');
+$GLOBALS['TL_LANG']['MOD']['submission'] = ['Submissions', 'Manage form submissions'];

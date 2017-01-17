@@ -18,7 +18,7 @@ class SubmissionModel extends \Model
 
 	protected static $strTable = 'tl_submission';
 
-	public static function findSubmissionsByParent($strTable, $intPid, $blnPublishedOnly = false, array $arrOptions = array())
+	public static function findSubmissionsByParent($strTable, $intPid, $blnPublishedOnly = false, array $arrOptions = [])
 	{
 		if (($objSubmissionArchives = SubmissionArchiveModel::findByParent($strTable, $intPid)) !== null)
 		{
@@ -29,7 +29,7 @@ class SubmissionModel extends \Model
 			else
 			{
 				return static::findBy(
-					array('tl_submission.published=1', 'tl_submission.pid=?'), array($objSubmissionArchives->id), $arrOptions);
+                    ['tl_submission.published=1', 'tl_submission.pid=?'], [$objSubmissionArchives->id], $arrOptions);
 			}
 		}
 
@@ -61,7 +61,7 @@ class SubmissionModel extends \Model
 		}
 	}
 
-	public static function sendSubmissionNotification($intSubmission, $arrTokens = array())
+	public static function sendSubmissionNotification($intSubmission, $arrTokens = [])
 	{
 		$intSubmission = $intSubmission ?: \Input::get('id');
 
@@ -81,11 +81,11 @@ class SubmissionModel extends \Model
 			static::sendConfirmationNotification($objSubmission->id);
 
 			\Message::addConfirmation($GLOBALS['TL_LANG']['MSC']['confirmationNotificationSent']);
-			\Controller::redirect(Url::addQueryString('id=' . $objSubmission->pid, Url::removeQueryString(array('key'))));
+			\Controller::redirect(Url::addQueryString('id=' . $objSubmission->pid, Url::removeQueryString(['key'])));
 		}
 	}
 
-	public static function sendConfirmationNotification($intSubmission, $arrTokens = array())
+	public static function sendConfirmationNotification($intSubmission, $arrTokens = [])
 	{
 		if (($objSubmissionArchive = SubmissionModel::getArchive($intSubmission)) !== null)
 		{
@@ -96,7 +96,7 @@ class SubmissionModel extends \Model
 		}
 	}
 
-	public static function sendNotification($intSubmission, $intNotification, $arrTokens = array())
+	public static function sendNotification($intSubmission, $intNotification, $arrTokens = [])
 	{
 		$arrTokens += static::generateTokens($intSubmission);
 
@@ -107,9 +107,9 @@ class SubmissionModel extends \Model
 		}
 	}
 
-	public static function generateTokens($intSubmission, $arrFields = array())
+	public static function generateTokens($intSubmission, $arrFields = [])
 	{
-		$arrTokens = array();
+		$arrTokens = [];
 		\Controller::loadDataContainer('tl_submission');
 		\System::loadLanguageFile('tl_submission');
 
@@ -145,11 +145,11 @@ class SubmissionModel extends \Model
 			// salutation
 			$arrTokens['salutation_submission'] = Salutations::createSalutation(
 				$GLOBALS['TL_LANGUAGE'],
-				array(
+                [
 					'gender'   => $arrTokens['form_value_gender'],
 					'title'    => $arrTokens['form_value_title'],
 					'lastname' => $arrTokens['form_value_lastname'],
-				)
+                ]
 			);
 
 			$arrTokens['tl_submission'] = $objSubmission->id;
@@ -168,7 +168,8 @@ class SubmissionModel extends \Model
 	 *
 	 * @return array
 	 */
-	public static function prepareData(\Model $objSubmission, $strTable, array $arrDca = array(), $objDc = null, array $arrFields = array(), array $arrSkipFields = array())
+	public static function prepareData(\Model $objSubmission, $strTable, array $arrDca = [], $objDc = null, array $arrFields = [], array $arrSkipFields = []
+    )
 	{
 		return FormSubmission::prepareData($objSubmission, $strTable, $arrDca, $objDc, $arrFields, $arrSkipFields);
 	}
@@ -196,12 +197,12 @@ class SubmissionModel extends \Model
 	 *
 	 * @return array
 	 */
-	public static function tokenizeData(array $arrSubmissionData = array(), $strPrefix = 'form')
+	public static function tokenizeData(array $arrSubmissionData = [], $strPrefix = 'form')
 	{
 		return FormSubmission::tokenizeData($arrSubmissionData, $strPrefix);
 	}
 
-	public static function generateEntityTokens(\Model $objEntity, array $arrDca, $objDc, $arrFields = array())
+	public static function generateEntityTokens(\Model $objEntity, array $arrDca, $objDc, $arrFields = [])
 	{
 		return static::tokenizeData(static::prepareData($objEntity, 'tl_submission', $arrDca, $objDc, $arrFields));
 	}

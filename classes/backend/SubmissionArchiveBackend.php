@@ -51,7 +51,7 @@ class SubmissionArchiveBackend extends \Backend
 	
 	public static function getParentEntitiesAsOptions(\DataContainer $objDc)
 	{
-		$arrOptions = array();
+		$arrOptions = [];
 		
 		if ($objDc->activeRecord->parentTable && $objDc->activeRecord->parentField
 			&& ($objSubmissionArchives =
@@ -92,7 +92,7 @@ class SubmissionArchiveBackend extends \Backend
 		
 		// Set root IDs
 		if (!is_array($objUser->submissionss) || empty($objUser->submissionss)) {
-			$root = array(0);
+			$root = [0];
 		} else {
 			$root = $objUser->submissionss;
 		}
@@ -170,7 +170,7 @@ class SubmissionArchiveBackend extends \Backend
 			case 'overrideAll':
 				$session = $objSession->getData();
 				if (\Input::get('act') == 'deleteAll' && !$objUser->hasAccess('delete', 'submissionsp')) {
-					$session['CURRENT']['IDS'] = array();
+					$session['CURRENT']['IDS'] = [];
 				} else {
 					$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $root);
 				}
