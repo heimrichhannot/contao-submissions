@@ -324,29 +324,6 @@ class SubmissionBackend extends \Backend
         }
     }
 
-    public static function addAuthorIDOnCreate($strTable, $intId, $arrRow, \DataContainer $dc)
-    {
-        $objModel = General::getModelInstance($strTable, $intId);
-
-        if ($objModel === null || !\Database::getInstance()->fieldExists(static::PROPERTY_SESSION_ID, $strTable))
-        {
-            return false;
-        }
-
-        if (TL_MODE == 'FE')
-        {
-            $objModel->{static::PROPERTY_AUTHOR_TYPE} = static::AUTHOR_TYPE_MEMBER;
-            $objModel->{static::PROPERTY_AUTHOR}      = \FrontendUser::getInstance()->id;
-            $objModel->save();
-        }
-        else
-        {
-            $objModel->{static::PROPERTY_AUTHOR_TYPE} = static::AUTHOR_TYPE_USER;
-            $objModel->{static::PROPERTY_AUTHOR}      = \BackendUser::getInstance()->id;
-            $objModel->save();
-        }
-    }
-
     public function moveAttachments(\DataContainer $objDc)
     {
         if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)

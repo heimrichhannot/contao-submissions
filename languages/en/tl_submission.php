@@ -6,10 +6,6 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_submission'];
  * Fields
  */
 $arrLang['type'] = ['Type', 'Choose the type of the submission here.'];
-$arrLang['authorType'] = ['Author type', 'Choose the type of author.'];
-$arrLang['authorType'][\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_MEMBER] = 'Member (frontend)';
-$arrLang['authorType'][\HeimrichHannot\Submissions\Submissions::AUTHOR_TYPE_USER] = 'User (backend)';
-$arrLang['author'] = ['Author', 'This field contains the author of the submission.'];
 $arrLang['gender'] = ['Gender', 'Choose the gender here.'];
 $arrLang['academicTitle'] = ['Academic title', 'Type in an academic title.'];
 $arrLang['additionalTitle'] = ['Additional title', 'Type in any additional title here.'];
