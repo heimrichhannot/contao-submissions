@@ -1,35 +1,43 @@
 {
     "name": "heimrichhannot/contao-submissions",
-    "description":"A generic module to store and handle submissions in contao.",
-    "keywords":["contao", "submissions", "form", "module", "developer"],
+    "description": "A generic module to store and handle submissions in contao.",
+    "keywords": [
+        "contao",
+        "submissions",
+        "form",
+        "module",
+        "developer"
+    ],
     "type": "contao-module",
-    "homepage":"https://github.com/heimrichhannot/contao-submissions",
-    "license":"LGPL-3.0+",
-    "authors":[
+    "homepage": "https://github.com/heimrichhannot/contao-submissions",
+    "license": "LGPL-3.0+",
+    "authors": [
         {
-            "name":"Heimrich & Hannot",
-            "email":"digitales@heimrich-hannot.de",
-            "homepage":"http://www.heimrich-hannot.de",
-            "role":"Developer"
+            "name": "Heimrich & Hannot",
+            "email": "digitales@heimrich-hannot.de",
+            "homepage": "http://www.heimrich-hannot.de",
+            "role": "Developer"
         }
     ],
-    "support":{
-        "issues":"https://github.com/heimrichhannot/contao-submissions/issues"
+    "support": {
+        "issues": "https://github.com/heimrichhannot/contao-submissions/issues"
     },
     "require": {
         "php": "~5.6 || ^7.0",
         "contao/core": ">=3.2,<4-dev",
         "heimrichhannot/contao-haste_plus": "~1.5",
         "terminal42/notification_center": ">=1.3.0",
-		"heimrichhannot/contao-notification_center_plus": ">=1.0.4",
-		"heimrichhannot/contao-exporter": "~3.0"
+        "heimrichhannot/contao-notification_center_plus": ">=1.0.4"
     },
-	"suggest": {
-		"heimrichhannot/contao-frontendedit": "Offers full CRUD (create, read, update, delete) functionality which could be used for submissions.",
-		"heimrichhannot/contao-entity_cleaner": "This module adds cleaner functionality for periodically removing arbitrary entities fulfilling a certain condition (using TL_CRON or your server's cron)."
-	},
+    "suggest": {
+        "heimrichhannot/contao-frontendedit": "Offers full CRUD (create, read, update, delete) functionality which could be used for submissions.",
+        "heimrichhannot/contao-exporter": "Offers exporter functionality.",
+        "heimrichhannot/contao-cleaner": "This module adds cleaner functionality for periodically removing arbitrary entities fulfilling a certain condition (using TL_CRON or your server's cron)."
+    },
     "autoload": {
-        "classmap": [""]
+        "classmap": [
+            ""
+        ]
     },
     "extra": {
         "contao": {

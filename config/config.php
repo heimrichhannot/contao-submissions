@@ -6,10 +6,14 @@
 $GLOBALS['BE_MOD']['content']['submission'] = [
     'tables' => ['tl_submission_archive', 'tl_submission'],
     'icon'   => 'system/modules/submissions/assets/img/icon_submission.png',
-    'send_confirmation' => ['HeimrichHannot\Submissions\SubmissionModel', 'sendConfirmationNotificationBe'],
-    'export_csv' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule(),
-    'export_xls' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule()
+    'send_confirmation' => ['HeimrichHannot\Submissions\SubmissionModel', 'sendConfirmationNotificationBe']
 ];
+
+if (in_array('exporter', \ModuleLoader::getActive()))
+{
+    $GLOBALS['BE_MOD']['content']['submission']['export_csv'] = \HeimrichHannot\Exporter\ModuleExporter::getBackendModule();
+    $GLOBALS['BE_MOD']['content']['submission']['export_xls'] = \HeimrichHannot\Exporter\ModuleExporter::getBackendModule();
+}
 
 /**
  * Notification Center Notification Types
