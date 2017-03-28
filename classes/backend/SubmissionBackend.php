@@ -253,22 +253,22 @@ class SubmissionBackend extends \Backend
 
     public function modifyPalette(\DataContainer $objDc, $blnFrontend = false)
     {
+        \Controller::loadDataContainer('tl_submission');
+        $arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
+
+        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)
+        {
+            return false;
+        }
+
+        if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null)
+        {
+            return false;
+        }
+
         // modify palette for backend view, based on archive submissionFields
         if (!$blnFrontend)
         {
-            \Controller::loadDataContainer('tl_submission');
-            $arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
-
-            if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)
-            {
-                return false;
-            }
-
-            if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null)
-            {
-                return false;
-            }
-
             if (isset(static::$arrSubmissionFieldsCache[$objSubmissionArchive->id])
                 && is_array(
                     static::$arrSubmissionFieldsCache[$objSubmissionArchive->id]
@@ -318,6 +318,11 @@ class SubmissionBackend extends \Backend
             foreach ($arrConfig as $strKey => $value)
             {
                 $strKey = lcfirst(str_replace('attachment', '', $strKey));
+
+                if($strKey == 'maxUploadSize')
+                {
+                    $value .= 'MiB';
+                }
 
                 $arrDca['fields']['attachments']['eval'][$strKey] = $value;
             }

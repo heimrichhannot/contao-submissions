@@ -356,7 +356,7 @@ if (in_array('multifileupload', \ModuleLoader::getActive()))
             'maxFiles'       => 5,
             'fieldType'      => 'checkbox',
             'extensions'     => \Config::get('uploadTypes'),
-            'maxUploadSize'  => 10,
+            'maxUploadSize'  => '10MiB',
             'uploadFolder'   => \HeimrichHannot\Submissions\Submissions::getDefaultAttachmentSRC(),
             'addRemoveLinks' => true,
             'multiple'       => true,
