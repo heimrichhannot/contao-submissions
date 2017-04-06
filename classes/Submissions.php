@@ -32,7 +32,7 @@ class Submissions extends \Controller
         {
             return class_exists('Contao\StringUtil')
                 ? \StringUtil::binToUuid($objFolder->getModel()->uuid)
-                : \String::binToUuid(
+                : \StringUtil::binToUuid(
                     $objFolder->getModel()->uuid
                 );
         }
