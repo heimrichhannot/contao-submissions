@@ -121,7 +121,7 @@ $arrDca = [
             'options'   => ['male', 'female'],
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true],
-            'sql'       => "varchar(32) NOT NULL default ''",
+            'sql'       => "varchar(10) NOT NULL default ''",
         ],
         'academicTitle'   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['academicTitle'],
@@ -129,20 +129,20 @@ $arrDca = [
             'inputType' => 'select',
             'options'   => ['Dr.', 'Prof.'],
             'eval'      => [
-                'maxlength'          => 255,
+                'maxlength'          => 20,
                 'includeBlankOption' => true,
                 'tl_class'           => 'w50',
                 'substituteField'    => true
             ],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'sql'       => "varchar(20) NOT NULL default ''",
         ],
         'additionalTitle' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['additionalTitle'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'substituteField' => true],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(128) NOT NULL default ''"
         ],
         'firstname'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['firstname'],
@@ -153,11 +153,11 @@ $arrDca = [
             'inputType' => 'text',
             'eval'      => [
                 'mandatory'       => true,
-                'maxlength'       => 255,
+                'maxlength'       => 64,
                 'tl_class'        => 'w50',
                 'substituteField' => true
             ],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'sql'       => "varchar(64) NOT NULL default ''",
         ],
         'lastname'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['lastname'],
@@ -168,11 +168,11 @@ $arrDca = [
             'inputType' => 'text',
             'eval'      => [
                 'mandatory'       => true,
-                'maxlength'       => 255,
+                'maxlength'       => 64,
                 'tl_class'        => 'w50',
                 'substituteField' => true
             ],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'sql'       => "varchar(64) NOT NULL default ''",
         ],
         'company'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['company'],
@@ -181,8 +181,8 @@ $arrDca = [
             'sorting'   => true,
             'flag'      => 1,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'substituteField' => true],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(128) NOT NULL default ''",
         ],
         'dateOfBirth'     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['dateOfBirth'],
@@ -196,24 +196,24 @@ $arrDca = [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'substituteField' => true],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(64) NOT NULL default ''",
         ],
         'street2'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street2'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'substituteField' => true],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(64) NOT NULL default ''",
         ],
         'postal'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['postal'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 32, 'tl_class' => 'w50', 'substituteField' => true],
-            'sql'       => "varchar(32) NOT NULL default ''",
+            'eval'      => ['maxlength' => 5, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(5) NOT NULL default ''",
         ],
         'city'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['city'],
@@ -222,8 +222,8 @@ $arrDca = [
             'search'    => true,
             'sorting'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'substituteField' => true],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'eval'      => ['maxlength' => 32, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(32) NOT NULL default ''",
         ],
         'country'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['country'],
@@ -249,14 +249,14 @@ $arrDca = [
             'save_callback' => [['HeimrichHannot\Haste\Dca\General', 'lowerCase']],
             'eval'          => [
                 'mandatory'                 => true,
-                'maxlength'                 => 255,
+                'maxlength'                 => 64,
                 'autoCompletionHiddenField' => true,
                 'rgxp'                      => 'email',
                 'decodeEntities'            => true,
                 'tl_class'                  => 'w50',
                 'substituteField'           => true
             ],
-            'sql'           => "varchar(255) NOT NULL default ''",
+            'sql'           => "varchar(64) NOT NULL default ''",
         ],
         'phone'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['phone'],
@@ -264,7 +264,7 @@ $arrDca = [
             'search'    => true,
             'inputType' => 'text',
             'eval'      => [
-                'maxlength'       => 64,
+                'maxlength'       => 32,
                 'rgxp'            => 'phone',
                 'decodeEntities'  => true,
                 'tl_class'        => 'w50',
@@ -278,7 +278,7 @@ $arrDca = [
             'search'    => true,
             'inputType' => 'text',
             'eval'      => [
-                'maxlength'       => 64,
+                'maxlength'       => 32,
                 'rgxp'            => 'phone',
                 'decodeEntities'  => true,
                 'tl_class'        => 'w50',
@@ -291,8 +291,8 @@ $arrDca = [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50'],
+            'sql'       => "varchar(128) NOT NULL default ''"
         ],
         'notes'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['notes'],

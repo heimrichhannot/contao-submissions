@@ -133,8 +133,8 @@ $arrDca = [
             'sorting'   => true,
             'flag'      => 1,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => true, 'tl_class' => 'w50'],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'eval'      => ['mandatory' => true, 'maxlength' => 128, 'tl_class' => 'w50'],
+            'sql'       => "varchar(128) NOT NULL default ''",
         ],
         'submissionFields' => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['submissionFields'],
@@ -148,8 +148,8 @@ $arrDca = [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['titlePattern'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50'],
+            'sql'       => "varchar(128) NOT NULL default ''",
         ],
         'nc_submission'    => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['nc_submission'],

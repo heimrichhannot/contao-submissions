@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.4] - 2017-04-28
+
+### Changed
+- varchar lengths to reduce db size
+
 ## [1.3.3] - 2017-04-12
 - created new tag
 
