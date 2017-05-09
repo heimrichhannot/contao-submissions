@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.5] - 2017-05-09
+
+### Changed
+- add all available fields to default palette, otherwise fields wont be rendered in frontend, due to `formhybridForcePaletteRelation`
+
 ## [1.3.4] - 2017-04-28
 
 ### Changed
