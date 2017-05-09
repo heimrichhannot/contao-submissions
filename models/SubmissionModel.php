@@ -147,7 +147,7 @@ class SubmissionModel extends \Model
                 {
                     foreach ($GLOBALS['TL_HOOKS']['preGenerateSubmissionTokens'] as $arrCallback)
                     {
-                        \System::importStatic($arrCallback[0])->$arrCallback[1]($objSubmission, $objSubmissionArchive, $arrFields);
+                        \System::importStatic($arrCallback[0])->{$arrCallback[1]}($objSubmission, $objSubmissionArchive, $arrFields);
                     }
                 }
             }
