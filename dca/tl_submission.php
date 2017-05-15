@@ -83,7 +83,7 @@ $arrDca = [
         ],
     ],
     'palettes' => [
-        'default' => '{general_legend},authorType,author;' . '{submission_legend},gender,academicTitle,additionalTitle,firstname,lastname,company,dateOfBirth,street,street2'
+        'default' => '{general_legend},authorType,author;' . '{submission_legend},gender,academicTitle,additionalTitle,firstname,lastname,company,dateOfBirth,street,street2,'
                      . 'postal,city,country,email,phone,fax,subject,notes,agreement,privacy,captcha,attachments;{publish_legend},published;',
     ],
     'fields'   => [

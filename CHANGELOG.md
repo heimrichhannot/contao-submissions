@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.7] - 2017-05-09
+
+### Fixed
+- tl_submission.postal field was not separated with comma from street and field widget did not appear
+
 ## [1.3.6] - 2017-05-09
 
 ### Fixed
