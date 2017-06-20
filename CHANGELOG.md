@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.8] - 2017-06-20
+
+### Fixed
+- translations
+
 ## [1.3.7] - 2017-05-09
 
 ### Fixed
