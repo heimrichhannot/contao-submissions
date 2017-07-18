@@ -338,7 +338,72 @@ $arrDca = [
         'formHybridBlob'  => [
             'label' => &$GLOBALS['TL_LANG']['tl_submission']['formHybridBlob'],
             'sql'   => "blob NULL",
-        ]
+        ],
+        'billingGender'   => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['male', 'female'],
+            'reference' => &$GLOBALS['TL_LANG']['MSC'],
+            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true],
+            'sql'       => "varchar(10) NOT NULL default ''",
+        ],
+        'billingFirstname'       => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['firstname'],
+            'exclude'   => true,
+            'search'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'inputType' => 'text',
+            'eval'      => [
+                'mandatory'       => true,
+                'maxlength'       => 64,
+                'tl_class'        => 'w50',
+                'substituteField' => true
+            ],
+            'sql'       => "varchar(64) NOT NULL default ''",
+        ],
+        'billingLastname'        => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['lastname'],
+            'exclude'   => true,
+            'search'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'inputType' => 'text',
+            'eval'      => [
+                'mandatory'       => true,
+                'maxlength'       => 64,
+                'tl_class'        => 'w50',
+                'substituteField' => true
+            ],
+            'sql'       => "varchar(64) NOT NULL default ''",
+        ],
+        'billingStreet'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(64) NOT NULL default ''",
+        ],
+        'billingPostal'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['postal'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 5, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(5) NOT NULL default ''",
+        ],
+        'billingCity'            => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['city'],
+            'exclude'   => true,
+            'filter'    => true,
+            'search'    => true,
+            'sorting'   => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 32, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(32) NOT NULL default ''",
+        ],
     ],
 ];
 
