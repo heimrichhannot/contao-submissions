@@ -378,6 +378,16 @@ $arrDca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
+        'billingCompany'         => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['company'],
+            'exclude'   => true,
+            'search'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(128) NOT NULL default ''",
+        ],
         'billingStreet'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street'],
             'exclude'   => true,

@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.10] - 2017-07-26
+
+### Added
+- added field for billing company
+
 ## [1.3.9] - 2017-07-18
 
 ### Added
