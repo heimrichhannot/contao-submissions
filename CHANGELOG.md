@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.11] - 2017-10-09
+
+### Added
+- `includeBlankOption` for `tl_submission.gender`
+
 ## [1.3.10] - 2017-07-26
 
 ### Added

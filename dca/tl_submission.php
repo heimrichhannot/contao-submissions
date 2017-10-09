@@ -120,7 +120,7 @@ $arrDca = [
             'inputType' => 'select',
             'options'   => ['male', 'female'],
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
-            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true],
+            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
         'academicTitle'   => [
