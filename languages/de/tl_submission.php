@@ -7,6 +7,7 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_submission'];
  */
 $arrLang['type'] = ['Typ', 'Wählen Sie hier den Typ der Einsendung aus.'];
 $arrLang['gender'] = ['Geschlecht', 'Geben Sie hier das Geschlecht ein.'];
+$arrLang['genderFe'] = ['Anrede', 'Wählen Sie hier eine Anrede aus.'];
 $arrLang['academicTitle'] = ['Akademischer Titel', 'Geben Sie hier einen akademischen Titel ein.'];
 $arrLang['additionalTitle'] = ['Zusätzlicher Titel', 'Geben Sie hier einen zusätzlichen akademischen Titel ein.'];
 $arrLang['firstname'] = ['Vorname', 'Geben Sie hier den Vornamen ein.'];

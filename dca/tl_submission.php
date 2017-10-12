@@ -115,11 +115,11 @@ $arrDca = [
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'gender'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => ['male', 'female'],
-            'reference' => &$GLOBALS['TL_LANG']['MSC'],
+            'reference' => TL_MODE == 'FE' ? $GLOBALS['TL_LANG']['MSC']['haste_plus']['genderFe'] : $GLOBALS['TL_LANG']['MSC'],
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
@@ -340,12 +340,12 @@ $arrDca = [
             'sql'   => "blob NULL",
         ],
         'billingGender'   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => ['male', 'female'],
-            'reference' => &$GLOBALS['TL_LANG']['MSC'],
-            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true],
+            'reference' => TL_MODE == 'FE' ? $GLOBALS['TL_LANG']['MSC']['haste_plus']['genderFe'] : $GLOBALS['TL_LANG']['MSC'],
+            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
         'billingFirstname'       => [

@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.12] - 2017-10-12
+
+### Added
+- frontend handling for gender (in frontend now is named "salutation" which is more common rather than gender)
+
 ## [1.3.11] - 2017-10-09
 
 ### Added
