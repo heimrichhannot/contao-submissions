@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.13] - 2017-10-26
+
+### Added
+- message
+
 ## [1.3.12] - 2017-10-12
 
 ### Added

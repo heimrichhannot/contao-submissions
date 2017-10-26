@@ -84,7 +84,7 @@ $arrDca = [
     ],
     'palettes' => [
         'default' => '{general_legend},authorType,author;' . '{submission_legend},gender,academicTitle,additionalTitle,firstname,lastname,company,dateOfBirth,street,street2,'
-                     . 'postal,city,country,email,phone,fax,subject,notes,agreement,privacy,captcha,attachments;{publish_legend},published;',
+                     . 'postal,city,country,email,phone,fax,subject,notes,message,agreement,privacy,captcha,attachments;{publish_legend},published;',
     ],
     'fields'   => [
         'id'              => [
@@ -296,6 +296,13 @@ $arrDca = [
         ],
         'notes'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['notes'],
+            'exclude'   => true,
+            'inputType' => 'textarea',
+            'eval'      => ['tl_class' => 'long clr'],
+            'sql'       => "text NULL",
+        ],
+        'message'           => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['message'],
             'exclude'   => true,
             'inputType' => 'textarea',
             'eval'      => ['tl_class' => 'long clr'],
