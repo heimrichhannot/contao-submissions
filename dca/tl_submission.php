@@ -83,26 +83,35 @@ $arrDca = [
         ],
     ],
     'palettes' => [
-        'default' => '{general_legend},authorType,author;' . '{submission_legend},gender,academicTitle,additionalTitle,firstname,lastname,company,dateOfBirth,street,street2,'
-                     . 'postal,city,country,email,phone,fax,subject,notes,message,agreement,privacy,captcha,attachments;{publish_legend},published;',
+        // submission fields are added automatically below
+        'default_backup' => '{general_legend},authorType,author;{submission_legend};{publish_legend},published;'
     ],
     'fields'   => [
         'id'              => [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
+            'eval' => [
+                'noSubmissionField' => true
+            ]
         ],
         'pid'             => [
             'foreignKey' => 'tl_submission_archive.title',
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'belongsTo', 'load' => 'eager'],
+            'eval' => [
+                'noSubmissionField' => true
+            ]
         ],
         'tstamp'          => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
+            'eval' => [
+                'noSubmissionField' => true
+            ]
         ],
         'dateAdded'       => [
             'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
             'sorting' => true,
             'flag'    => 6,
-            'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true],
+            'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true, 'noSubmissionField' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
         ],
         'type'            => [
@@ -329,7 +338,7 @@ $arrDca = [
             'exclude'   => true,
             'filter'    => true,
             'inputType' => 'checkbox',
-            'eval'      => ['tl_class' => 'w50', 'doNotCopy' => true],
+            'eval'      => ['tl_class' => 'w50', 'doNotCopy' => true, 'noSubmissionField' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
         // misc
@@ -345,6 +354,48 @@ $arrDca = [
         'formHybridBlob'  => [
             'label' => &$GLOBALS['TL_LANG']['tl_submission']['formHybridBlob'],
             'sql'   => "blob NULL",
+            'eval' => [
+                'noSubmissionField' => true
+            ]
+        ],
+        'startDate' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['startDate'],
+            'default'   => time(),
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'stopDate' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['stopDate'],
+            'default'   => time(),
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'startDatime' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['startDatime'],
+            'default'   => time(),
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'stopDatime' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['stopDatime'],
+            'default'   => time(),
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'addDifferentBillingData' => [
+            'label'                   => &$GLOBALS['TL_LANG']['tl_submission']['addDifferentBillingData'],
+            'exclude'                 => true,
+            'inputType'               => 'checkbox',
+            'eval'                    => ['tl_class' => 'w50'],
+            'sql'                     => "char(1) NOT NULL default ''"
         ],
         'billingGender'   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
@@ -463,3 +514,6 @@ if (in_array('exporter', \ModuleLoader::getActive()))
         'system/modules/exporter/assets/img/icon_export.png'
     );
 }
+
+// add fields to palette
+\HeimrichHannot\Submissions\Backend\SubmissionBackend::addFieldsToPalette();

@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2017-11-02
+
+### Added
+- startDate, stopDate, startDatime, stopDatime, addDifferentBillingData
+
+### Fixed
+- palette handling -> now generated automatically (see README.md)
+
 ## [1.3.13] - 2017-10-26
 
 ### Added

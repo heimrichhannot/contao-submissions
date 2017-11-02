@@ -24,12 +24,10 @@ class SubmissionBackend extends \Backend
 
         if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($arrRow['id'])) !== null
             && ($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null
-        )
-        {
+        ) {
             $strTitle = preg_replace_callback(
                 '@%([^%]+)%@i',
-                function ($arrMatches) use ($objSubmission)
-                {
+                function ($arrMatches) use ($objSubmission) {
                     return $objSubmission->{$arrMatches[1]};
                 },
                 $objSubmissionArchive->titlePattern
@@ -37,17 +35,15 @@ class SubmissionBackend extends \Backend
         }
 
         return '<div class="tl_content_left">' . $strTitle . ' <span style="color:#b3b3b3; padding-left:3px">[' . \Date::parse(
-            \Config::get('datimFormat'),
-            trim($arrRow['dateAdded'])
-        ) . ']</span></div>';
+                \Config::get('datimFormat'),
+                trim($arrRow['dateAdded'])
+            ) . ']</span></div>';
     }
 
     public function sendConfirmation($row, $href, $label, $title, $icon, $attributes)
     {
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($row['id'])) !== null)
-        {
-            if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null && $objSubmissionArchive->nc_confirmation)
-            {
+        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($row['id'])) !== null) {
+            if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null && $objSubmissionArchive->nc_confirmation) {
                 $href = $this->addToUrl($href);
                 $href = \HeimrichHannot\Haste\Util\Url::addQueryString('id=' . $row['id'], $href);
 
@@ -62,38 +58,31 @@ class SubmissionBackend extends \Backend
         $objSession  = \Session::getInstance();
         $objDatabase = \Database::getInstance();
 
-        if ($objUser->isAdmin)
-        {
+        if ($objUser->isAdmin) {
             return;
         }
 
         // Set the root IDs
-        if (!is_array($objUser->submissionss) || empty($objUser->submissionss))
-        {
+        if (!is_array($objUser->submissionss) || empty($objUser->submissionss)) {
             $root = [0];
-        }
-        else
-        {
+        } else {
             $root = $objUser->submissionss;
         }
 
         $id = strlen(\Input::get('id')) ? \Input::get('id') : CURRENT_ID;
 
-        if (\Input::get('key') == 'send_confirmation')
-        {
+        if (\Input::get('key') == 'send_confirmation') {
             return;
         }
 
         // Check current action
-        switch (\Input::get('act'))
-        {
+        switch (\Input::get('act')) {
             case 'paste':
                 // Allow
                 break;
 
             case 'create':
-                if (!strlen(\Input::get('pid')) || !in_array(\Input::get('pid'), $root))
-                {
+                if (!strlen(\Input::get('pid')) || !in_array(\Input::get('pid'), $root)) {
                     \Controller::log(
                         'Not enough permissions to create submission items in submission archive ID "' . \Input::get('pid') . '"',
                         'tl_submission checkPermission',
@@ -105,8 +94,7 @@ class SubmissionBackend extends \Backend
 
             case 'cut':
             case 'copy':
-                if (!in_array(\Input::get('pid'), $root))
-                {
+                if (!in_array(\Input::get('pid'), $root)) {
                     \Controller::log(
                         'Not enough permissions to ' . \Input::get('act') . ' submission item ID "' . $id . '" to submission archive ID "'
                         . \Input::get('pid') . '"',
@@ -124,14 +112,12 @@ class SubmissionBackend extends \Backend
             case 'feature':
                 $objArchive = $objDatabase->prepare("SELECT pid FROM tl_submission WHERE id=?")->limit(1)->execute($id);
 
-                if ($objArchive->numRows < 1)
-                {
+                if ($objArchive->numRows < 1) {
                     \Controller::log('Invalid submission item ID "' . $id . '"', 'tl_submission checkPermission', TL_ERROR);
                     \Controller::redirect('contao/main.php?act=error');
                 }
 
-                if (!in_array($objArchive->pid, $root))
-                {
+                if (!in_array($objArchive->pid, $root)) {
                     \Controller::log(
                         'Not enough permissions to ' . \Input::get('act') . ' submission item ID "' . $id . '" of submission archive ID "'
                         . $objArchive->pid . '"',
@@ -148,8 +134,7 @@ class SubmissionBackend extends \Backend
             case 'overrideAll':
             case 'cutAll':
             case 'copyAll':
-                if (!in_array($id, $root))
-                {
+                if (!in_array($id, $root)) {
                     \Controller::log(
                         'Not enough permissions to access submission archive ID "' . $id . '"',
                         'tl_submission checkPermission',
@@ -160,8 +145,7 @@ class SubmissionBackend extends \Backend
 
                 $objArchive = $objDatabase->prepare("SELECT id FROM tl_submission WHERE pid=?")->execute($id);
 
-                if ($objArchive->numRows < 1)
-                {
+                if ($objArchive->numRows < 1) {
                     \Controller::log('Invalid submission archive ID "' . $id . '"', 'tl_submission checkPermission', TL_ERROR);
                     \Controller::redirect('contao/main.php?act=error');
                 }
@@ -172,13 +156,10 @@ class SubmissionBackend extends \Backend
                 break;
 
             default:
-                if (strlen(\Input::get('act')))
-                {
+                if (strlen(\Input::get('act'))) {
                     \Controller::log('Invalid command "' . \Input::get('act') . '"', 'tl_submission checkPermission', TL_ERROR);
                     \Controller::redirect('contao/main.php?act=error');
-                }
-                elseif (!in_array($id, $root))
-                {
+                } elseif (!in_array($id, $root)) {
                     \Controller::log('Not enough permissions to access submission archive ID ' . $id, 'tl_submission checkPermission', TL_ERROR);
                     \Controller::redirect('contao/main.php?act=error');
                 }
@@ -190,27 +171,24 @@ class SubmissionBackend extends \Backend
     {
         $objUser = \BackendUser::getInstance();
 
-        if (strlen(\Input::get('tid')))
-        {
+        if (strlen(\Input::get('tid'))) {
             $this->toggleVisibility(\Input::get('tid'), (\Input::get('state') == 1));
             \Controller::redirect($this->getReferer());
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (!$objUser->isAdmin && !$objUser->hasAccess('tl_submission::published', 'alexf'))
-        {
+        if (!$objUser->isAdmin && !$objUser->hasAccess('tl_submission::published', 'alexf')) {
             return '';
         }
 
         $href .= '&amp;tid=' . $row['id'] . '&amp;state=' . ($row['published'] ? '' : 1);
 
-        if (!$row['published'])
-        {
+        if (!$row['published']) {
             $icon = 'invisible.gif';
         }
 
         return '<a href="' . $this->addToUrl($href) . '" title="' . specialchars($title) . '"' . $attributes . '>' . \Image::getHtml($icon, $label)
-               . '</a> ';
+            . '</a> ';
     }
 
     public function toggleVisibility($intId, $blnVisible)
@@ -219,8 +197,7 @@ class SubmissionBackend extends \Backend
         $objDatabase = \Database::getInstance();
 
         // Check permissions to publish
-        if (!$objUser->isAdmin && !$objUser->hasAccess('tl_submission::published', 'alexf'))
-        {
+        if (!$objUser->isAdmin && !$objUser->hasAccess('tl_submission::published', 'alexf')) {
             \Controller::log('Not enough permissions to publish/unpublish item ID "' . $intId . '"', 'tl_submission toggleVisibility', TL_ERROR);
             \Controller::redirect('contao/main.php?act=error');
         }
@@ -229,10 +206,8 @@ class SubmissionBackend extends \Backend
         $objVersions->initialize();
 
         // Trigger the save_callback
-        if (is_array($GLOBALS['TL_DCA']['tl_submission']['fields']['published']['save_callback']))
-        {
-            foreach ($GLOBALS['TL_DCA']['tl_submission']['fields']['published']['save_callback'] as $callback)
-            {
+        if (is_array($GLOBALS['TL_DCA']['tl_submission']['fields']['published']['save_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_submission']['fields']['published']['save_callback'] as $callback) {
                 $this->import($callback[0]);
                 $blnVisible = $this->{$callback[0]}->{$callback[1]}($blnVisible, $this);
             }
@@ -256,42 +231,33 @@ class SubmissionBackend extends \Backend
         \Controller::loadDataContainer('tl_submission');
         $arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
 
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)
-        {
+        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null) {
             return false;
         }
 
-        if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null)
-        {
+        if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null) {
             return false;
         }
 
         // modify palette for backend view, based on archive submissionFields
-        if (!$blnFrontend)
-        {
+        if (!$blnFrontend) {
             if (isset(static::$arrSubmissionFieldsCache[$objSubmissionArchive->id])
                 && is_array(
                     static::$arrSubmissionFieldsCache[$objSubmissionArchive->id]
                 )
-            )
-            {
+            ) {
                 $arrSubmissionFields = static::$arrSubmissionFieldsCache[$objSubmissionArchive->id];
-            }
-            else
-            {
+            } else {
                 $arrDca['palettes']['defaultBackup'] = $arrDca['palettes']['default'];
 
                 $arrSubmissionFields = deserialize($objSubmissionArchive->submissionFields, true);
 
                 // remove subpalette fields from arrSubmissionFields
-                if (is_array($arrDca['subpalettes']))
-                {
-                    foreach ($arrDca['subpalettes'] as $key => $value)
-                    {
+                if (is_array($arrDca['subpalettes'])) {
+                    foreach ($arrDca['subpalettes'] as $key => $value) {
                         $arrSubpaletteFields = \HeimrichHannot\FormHybrid\FormHelper::getPaletteFields($objDc->table, $value);
 
-                        if (!is_array($arrSubpaletteFields))
-                        {
+                        if (!is_array($arrSubpaletteFields)) {
                             continue;
                         }
 
@@ -311,16 +277,13 @@ class SubmissionBackend extends \Backend
 
 
         // overwrite attachment config with archive
-        if (isset($arrDca['fields']['attachments']) && $objSubmissionArchive->addAttachmentConfig)
-        {
+        if (isset($arrDca['fields']['attachments']) && $objSubmissionArchive->addAttachmentConfig) {
             $arrConfig = Arrays::filterByPrefixes($objSubmissionArchive->row(), ['attachment']);
 
-            foreach ($arrConfig as $strKey => $value)
-            {
+            foreach ($arrConfig as $strKey => $value) {
                 $strKey = lcfirst(str_replace('attachment', '', $strKey));
 
-                if($strKey == 'maxUploadSize')
-                {
+                if ($strKey == 'maxUploadSize') {
                     $value .= 'MiB';
                 }
 
@@ -331,50 +294,57 @@ class SubmissionBackend extends \Backend
 
     public function moveAttachments(\DataContainer $objDc)
     {
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null)
-        {
+        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null) {
             return false;
         }
 
-        if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null)
-        {
+        if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null) {
             return false;
         }
 
-        if (!$objSubmission->attachments)
-        {
+        if (!$objSubmission->attachments) {
             return false;
         }
 
         $strSubFolder  = Tokens::replace($objSubmissionArchive->attachmentSubFolderPattern, $objSubmission);
         $objFileModels = \FilesModel::findMultipleByUuids(deserialize($objSubmission->attachments, true));
 
-        if ($objFileModels === null || $strSubFolder == '')
-        {
+        if ($objFileModels === null || $strSubFolder == '') {
             return false;
         }
 
         $strFolder = $objSubmissionArchive->attachmentUploadFolder;
 
-        if (\Validator::isUuid($objSubmissionArchive->attachmentUploadFolder))
-        {
-            if (($strFolder = Files::getPathFromUuid($objSubmissionArchive->attachmentUploadFolder)) === null)
-            {
+        if (\Validator::isUuid($objSubmissionArchive->attachmentUploadFolder)) {
+            if (($strFolder = Files::getPathFromUuid($objSubmissionArchive->attachmentUploadFolder)) === null) {
                 return false;
             }
         }
 
         $strTarget = rtrim($strFolder, '/') . '/' . ltrim($strSubFolder, '/');
 
-        while ($objFileModels->next())
-        {
-            if (!file_exists(TL_ROOT . '/' . $objFileModels->path))
-            {
+        while ($objFileModels->next()) {
+            if (!file_exists(TL_ROOT . '/' . $objFileModels->path)) {
                 continue;
             }
 
             $objFile = new \File($objFileModels->path, true);
             $objFile->renameTo($strTarget . '/' . basename($objFile->value));
         }
+    }
+
+    public static function addFieldsToPalette()
+    {
+        $dca    = &$GLOBALS['TL_DCA']['tl_submission'];
+        $fields = [];
+
+        foreach ($dca['fields'] as $field => $data) {
+            if (!$data['eval']['noSubmissionField']) {
+                $fields[] = $field;
+            }
+        }
+
+        $dca['palettes']['default'] = str_replace('{submission_legend};',
+            '{submission_legend},' . implode(',', $fields) . ';', $dca['palettes']['default_backup']);
     }
 }

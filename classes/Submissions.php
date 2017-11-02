@@ -23,13 +23,11 @@ class Submissions extends \Controller
     {
         $objFolder = new \Folder('files/submissions/uploads');
 
-        if ($blnReturnPath)
-        {
+        if ($blnReturnPath) {
             return $objFolder->path;
         }
 
-        if (\Validator::isUuid($objFolder->getModel()->uuid))
-        {
+        if (\Validator::isUuid($objFolder->getModel()->uuid)) {
             return class_exists('Contao\StringUtil')
                 ? \StringUtil::binToUuid($objFolder->getModel()->uuid)
                 : \StringUtil::binToUuid(
@@ -65,16 +63,13 @@ class Submissions extends \Controller
     {
         $arrOptions = [];
 
-        foreach (General::getFields('tl_submission', false, $varInputType, [], false) as $strField)
-        {
-            if (!in_array($strField, static::getSkipFields()))
-            {
+        foreach (General::getFields('tl_submission', false, $varInputType, [], false) as $strField) {
+            if (!in_array($strField, static::getSkipFields())) {
                 $arrOptions[] = $strField;
             }
         }
 
-        if (empty($arrOptions) && TL_MODE == 'BE' && \Input::get('do') == 'submission')
-        {
+        if (empty($arrOptions) && TL_MODE == 'BE' && \Input::get('do') == 'submission') {
             \Message::addInfo($GLOBALS['TL_LANG']['MSC']['noSubmissionFields']);
         }
 
