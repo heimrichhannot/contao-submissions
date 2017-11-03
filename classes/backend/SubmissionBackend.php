@@ -10,8 +10,10 @@
 
 namespace HeimrichHannot\Submissions\Backend;
 
+use HeimrichHannot\Haste\Dca\DC_HastePlus;
 use HeimrichHannot\Haste\Util\Arrays;
 use HeimrichHannot\Haste\Util\Files;
+use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Submissions\Util\Tokens;
 
 class SubmissionBackend extends \Backend
@@ -25,10 +27,20 @@ class SubmissionBackend extends \Backend
         if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($arrRow['id'])) !== null
             && ($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null
         ) {
+            $dca              = &$GLOBALS['TL_DCA']['tl_submission'];
+            $dc               = new DC_HastePlus('tl_submission');
+            $dc->id           = $objSubmission->id;
+            $dc->activeRecord = $objSubmission;
+
             $strTitle = preg_replace_callback(
                 '@%([^%]+)%@i',
-                function ($arrMatches) use ($objSubmission) {
-                    return $objSubmission->{$arrMatches[1]};
+                function ($arrMatches) use ($objSubmission, $dca, $dc) {
+                    return FormSubmission::prepareSpecialValueForPrint(
+                        $objSubmission->{$arrMatches[1]},
+                        $dca['fields'][$arrMatches[1]],
+                        'tl_submission',
+                        $dc
+                    );
                 },
                 $objSubmissionArchive->titlePattern
             );
