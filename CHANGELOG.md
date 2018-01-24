@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - some english translations
 
+###Changed
+licence LGPL-3.0+ is now LGPL-3.0-or-later
+
 ## [1.4.1] - 2017-11-03
 
 ### Added
