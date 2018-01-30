@@ -13,6 +13,7 @@ $arrLang['additionalTitle']         = ['Zusätzlicher Titel', 'Geben Sie hier ei
 $arrLang['firstname']               = ['Vorname', 'Geben Sie hier den Vornamen ein.'];
 $arrLang['lastname']                = ['Nachname', 'Geben Sie hier den Nachnamen ein.'];
 $arrLang['company']                 = ['Firma/Institution', 'Geben Sie hier die Firma oder Institution ein.'];
+$arrLang['position']                = ['Position', 'Geben Sie hier die Position in der Institution ein.'];
 $arrLang['dateOfBirth']             = ['Geburtsdatum', 'Geben Sie hier das Geburtsdatum ein.'];
 $arrLang['street']                  = ['Straße & Hausnummer', 'Bitte geben Sie hier Straße und Hausnummer ein.'];
 $arrLang['street2']                 = ['Weitere Adressangaben', 'Geben Sie hier weitere Adressangaben ein.'];

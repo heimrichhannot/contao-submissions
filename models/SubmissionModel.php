@@ -168,7 +168,7 @@ class SubmissionModel extends \Model
                 $GLOBALS['TL_LANGUAGE'],
                 [
                     'gender'   => $arrTokens['form_value_gender'],
-                    'title'    => $arrTokens['form_value_title'],
+                    'title'    => $arrTokens['form_value_academicTitle'] ?: $arrTokens['form_value_title'],
                     'lastname' => $arrTokens['form_value_lastname'],
                 ]
             );

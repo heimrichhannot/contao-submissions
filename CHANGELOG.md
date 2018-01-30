@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.3] - 2018-01-30
+
+### Fixed
+- salutation for academicTitle
+
+### Added
+- position field
+
 ## [1.4.2] - 2018-01-24
 
 ### Added
