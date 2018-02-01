@@ -13,6 +13,7 @@ $arrLang['additionalTitle']         = ['Additional title', 'Type in any addition
 $arrLang['firstname']               = ['First name', 'Type in a first name.'];
 $arrLang['lastname']                = ['Last name', 'Type in a last name.'];
 $arrLang['company']                 = ['Company', 'Type in the company.'];
+$arrLang['position']                = ['Position', 'Type in the position.'];
 $arrLang['dateOfBirth']             = ['Date of birth', 'Type in the date of birth.'];
 $arrLang['street']                  = ['Street', 'Type in the street.'];
 $arrLang['street2']                 = ['Additional street information', 'Type in additional street information here.'];
