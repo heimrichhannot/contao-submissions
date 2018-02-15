@@ -184,7 +184,7 @@ class SubmissionBackend extends \Backend
         $objUser = \BackendUser::getInstance();
 
         if (strlen(\Input::get('tid'))) {
-            $this->toggleVisibility(\Input::get('tid'), (\Input::get('state') == 1));
+            $this->toggleVisibility(\Input::get('tid'), (\Input::get('state') === '1'));
             \Controller::redirect($this->getReferer());
         }
 
