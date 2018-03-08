@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.6] - 2018-03-08
+
+### Fixed
+- `tl_submission_archive.submissionFields` style glitch under contao 4
+
 ## [1.4.5] - 2018-02-15
 
 ### Fixed

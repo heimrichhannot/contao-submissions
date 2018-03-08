@@ -141,7 +141,7 @@ $arrDca = [
             'exclude'          => true,
             'inputType'        => 'checkboxWizard',
             'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getFieldsAsOptions'],
-            'eval'             => ['multiple' => true, 'tl_class' => 'w50 clr'],
+            'eval'             => ['multiple' => true, 'tl_class' => 'wizard'],
             'sql'              => "blob NULL",
         ],
         'titlePattern'     => [
