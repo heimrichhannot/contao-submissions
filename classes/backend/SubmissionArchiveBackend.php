@@ -10,13 +10,45 @@
 
 namespace HeimrichHannot\Submissions\Backend;
 
+use Contao\Controller;
+use Contao\Input;
+use Contao\System;
 use HeimrichHannot\Submissions\SubmissionArchiveModel;
-use HeimrichHannot\Submissions\SubmissionModel;
 use HeimrichHannot\Submissions\Submissions;
-use HeimrichHannot\Submissions\Util\Tokens;
 
 class SubmissionArchiveBackend extends \Backend
 {
+    public function setPTableForDelete($table)
+    {
+        if ($table !== 'tl_submission_archive' || Input::get('act') !== 'delete' ||
+            Input::get('do') !== 'submission' || !($id = Input::get('id')) || Input::get('table'))
+        {
+            return;
+        }
+
+        Controller::loadDataContainer('tl_submission_archive');
+        System::loadLanguageFile('tl_submission_archive');
+
+        $dca = &$GLOBALS['TL_DCA']['tl_submission_archive'];
+
+        if (TL_MODE != 'BE')
+        {
+            return;
+        }
+
+        if (null === ($submissionArchive = SubmissionArchiveModel::findByPk($id)))
+        {
+            return;
+        }
+
+        if (!($parentTable = $submissionArchive->parentTable))
+        {
+            return;
+        }
+
+        $dca['config']['ptable'] = $parentTable;
+    }
+
     public function onCreate($strTable, $insertID, $arrSet, \DataContainer $dc)
     {
         if (($objModel = SubmissionArchiveModel::findByPk($insertID)) === null) {

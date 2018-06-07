@@ -78,6 +78,11 @@ $GLOBALS['TL_MODELS']['tl_submission'] = '\HeimrichHannot\Submissions\Submission
 $GLOBALS['TL_MODELS']['tl_submission_archive'] = '\HeimrichHannot\Submissions\SubmissionArchiveModel';
 
 /**
+ * Hooks
+ */
+$GLOBALS['TL_HOOKS']['loadDataContainer']['submissions_setPTableForDelete'] = ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'setPTableForDelete'];
+
+/**
  * Add permissions
  */
 $GLOBALS['TL_PERMISSIONS'][] = 'submissionss';

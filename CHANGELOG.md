@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.7] - 2018-06-07
+
+### Fixed
+- issue with ptable and deletion of submission archives
+
 ## [1.4.6] - 2018-03-08
 
 ### Fixed
