@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.8] - 2018-06-07
+
+### Added
+- support export for module and bundle mode in tl_submission
+
 ## [1.4.7] - 2018-06-07
 
 ### Fixed

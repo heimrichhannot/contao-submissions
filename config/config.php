@@ -9,11 +9,18 @@ $GLOBALS['BE_MOD']['content']['submission'] = [
     'send_confirmation' => ['HeimrichHannot\Submissions\SubmissionModel', 'sendConfirmationNotificationBe']
 ];
 
-if (in_array('exporter', \ModuleLoader::getActive()))
+if (in_array('multifileupload', \ModuleLoader::getActive()))
 {
     $GLOBALS['BE_MOD']['content']['submission']['export_csv'] = \HeimrichHannot\Exporter\ModuleExporter::getBackendModule();
     $GLOBALS['BE_MOD']['content']['submission']['export_xls'] = \HeimrichHannot\Exporter\ModuleExporter::getBackendModule();
 }
+elseif(version_compare(VERSION, '4.1', '>=') && in_array(\HeimrichHannot\ContaoExporterBundle\HeimrichHannotContaoExporterBundle::class,
+        \Contao\System::getContainer()->getParameter('kernel.bundles'), true))
+{
+    $GLOBALS['BE_MOD']['content']['submission']['export_csv'] = ['huh.exporter.action.backendexport', 'export'];
+    $GLOBALS['BE_MOD']['content']['submission']['export_xls'] = ['huh.exporter.action.backendexport', 'export'];
+}
+
 
 /**
  * Notification Center Notification Types

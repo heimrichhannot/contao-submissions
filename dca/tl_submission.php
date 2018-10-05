@@ -510,19 +510,29 @@ if (in_array('multifileupload', \ModuleLoader::getActive()))
 
 \HeimrichHannot\Haste\Dca\General::addAuthorFieldAndCallback('tl_submission');
 
-if (in_array('exporter', \ModuleLoader::getActive()))
-{
+if(in_array('exporter', \ModuleLoader::getActive())){
     $arrDca['list']['global_operations']['export_csv'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
         'export_csv',
         $GLOBALS['TL_LANG']['MSC']['export_csv'],
         'system/modules/exporter/assets/img/icon_export.png'
     );
-
+    
     $arrDca['list']['global_operations']['export_xls'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
         'export_xls',
         $GLOBALS['TL_LANG']['MSC']['export_xls'],
         'system/modules/exporter/assets/img/icon_export.png'
     );
+}
+elseif(version_compare(VERSION, '4.1', '>=') && in_array(\HeimrichHannot\ContaoExporterBundle\HeimrichHannotContaoExporterBundle::class,
+        \Contao\System::getContainer()->getParameter('kernel.bundles'), true))
+{
+    $arrDca['list']['global_operations']['export_csv'] = \Contao\System::getContainer()
+        ->get('huh.exporter.action.backendexport')
+        ->getGlobalOperation('export_csv', $GLOBALS['TL_LANG']['MSC']['export_csv']);
+    
+    $arrDca['list']['global_operations']['export_xls'] = \Contao\System::getContainer()
+        ->get('huh.exporter.action.backendexport')
+        ->getGlobalOperation('export_xls', $GLOBALS['TL_LANG']['MSC']['export_xls']);
 }
 
 // add fields to palette
