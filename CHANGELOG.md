@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2018-12-07
+
+### Added
+- fields: language, languages
+
 ## [1.4.9] - 2018-10-30
 
 ### Added

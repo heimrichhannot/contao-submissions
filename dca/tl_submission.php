@@ -59,7 +59,7 @@ $arrDca = [
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
-                                . '\'))return false;Backend.getScrollOffset()"',
+                    . '\'))return false;Backend.getScrollOffset()"',
             ],
             'toggle'            => [
                 'label'           => &$GLOBALS['TL_LANG']['tl_submission']['toggle'],
@@ -72,7 +72,7 @@ $arrDca = [
                 'icon'            => 'system/modules/submissions/assets/img/icon_send_confirmation.png',
                 'href'            => 'key=send_confirmation',
                 'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['sendConfirmationConfirm']
-                                     . '\'))return false;Backend.getScrollOffset()"',
+                    . '\'))return false;Backend.getScrollOffset()"',
                 'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'sendConfirmation'],
             ],
             'show'              => [
@@ -87,34 +87,34 @@ $arrDca = [
         'default_backup' => '{general_legend},authorType,author;{submission_legend};{publish_legend},published;'
     ],
     'fields'   => [
-        'id'              => [
-            'sql' => "int(10) unsigned NOT NULL auto_increment",
+        'id'                      => [
+            'sql'  => "int(10) unsigned NOT NULL auto_increment",
             'eval' => [
                 'noSubmissionField' => true
             ]
         ],
-        'pid'             => [
+        'pid'                     => [
             'foreignKey' => 'tl_submission_archive.title',
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'belongsTo', 'load' => 'eager'],
+            'eval'       => [
+                'noSubmissionField' => true
+            ]
+        ],
+        'tstamp'                  => [
+            'sql'  => "int(10) unsigned NOT NULL default '0'",
             'eval' => [
                 'noSubmissionField' => true
             ]
         ],
-        'tstamp'          => [
-            'sql' => "int(10) unsigned NOT NULL default '0'",
-            'eval' => [
-                'noSubmissionField' => true
-            ]
-        ],
-        'dateAdded'       => [
+        'dateAdded'               => [
             'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
             'sorting' => true,
             'flag'    => 6,
             'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true, 'noSubmissionField' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
         ],
-        'type'            => [
+        'type'                    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['type'],
             'exclude'   => true,
             'filter'    => true,
@@ -123,7 +123,7 @@ $arrDca = [
             'eval'      => ['includeBlankOption' => true, 'mandatory' => true, 'tl_class' => 'w50'],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'gender'          => [
+        'gender'                  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -132,7 +132,7 @@ $arrDca = [
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'academicTitle'   => [
+        'academicTitle'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['academicTitle'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -145,7 +145,7 @@ $arrDca = [
             ],
             'sql'       => "varchar(20) NOT NULL default ''",
         ],
-        'additionalTitle' => [
+        'additionalTitle'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['additionalTitle'],
             'exclude'   => true,
             'search'    => true,
@@ -153,7 +153,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(128) NOT NULL default ''"
         ],
-        'firstname'       => [
+        'firstname'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['firstname'],
             'exclude'   => true,
             'search'    => true,
@@ -168,7 +168,7 @@ $arrDca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'lastname'        => [
+        'lastname'                => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['lastname'],
             'exclude'   => true,
             'search'    => true,
@@ -183,7 +183,7 @@ $arrDca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'company'         => [
+        'company'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['company'],
             'exclude'   => true,
             'search'    => true,
@@ -193,7 +193,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'position'         => [
+        'position'                => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['position'],
             'exclude'   => true,
             'search'    => true,
@@ -203,14 +203,14 @@ $arrDca = [
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'dateOfBirth'     => [
+        'dateOfBirth'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['dateOfBirth'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['datepicker' => true, 'rgxp' => 'date', 'tl_class' => 'w50 wizard', 'substituteField' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'street'          => [
+        'street'                  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street'],
             'exclude'   => true,
             'search'    => true,
@@ -218,7 +218,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'street2'         => [
+        'street2'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street2'],
             'exclude'   => true,
             'search'    => true,
@@ -226,7 +226,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'postal'          => [
+        'postal'                  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['postal'],
             'exclude'   => true,
             'search'    => true,
@@ -234,7 +234,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 5, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(5) NOT NULL default ''",
         ],
-        'city'            => [
+        'city'                    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['city'],
             'exclude'   => true,
             'filter'    => true,
@@ -244,7 +244,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 32, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(32) NOT NULL default ''",
         ],
-        'country'         => [
+        'country'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['country'],
             'exclude'   => true,
             'filter'    => true,
@@ -260,7 +260,36 @@ $arrDca = [
             ],
             'sql'       => "varchar(2) NOT NULL default ''",
         ],
-        'email'           => [
+        'language'                => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['language'],
+            'exclude'   => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'inputType' => 'select',
+            'options'   => \System::getLanguages(),
+            'eval'      => [
+                'includeBlankOption' => true,
+                'chosen'             => true,
+                'tl_class'           => 'w50'
+            ],
+            'sql'       => "varchar(16) NOT NULL default ''",
+        ],
+        'languages'               => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['languages'],
+            'exclude'   => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'inputType' => 'select',
+            'options'   => \System::getLanguages(),
+            'eval'      => [
+                'multiple'           => true,
+                'includeBlankOption' => true,
+                'chosen'             => true,
+                'tl_class'           => 'w50'
+            ],
+            'sql'       => "varchar(16) NOT NULL default ''",
+        ],
+        'email'                   => [
             'label'         => &$GLOBALS['TL_LANG']['tl_submission']['email'],
             'exclude'       => true,
             'search'        => true,
@@ -277,7 +306,7 @@ $arrDca = [
             ],
             'sql'           => "varchar(64) NOT NULL default ''",
         ],
-        'phone'           => [
+        'phone'                   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['phone'],
             'exclude'   => true,
             'search'    => true,
@@ -291,7 +320,7 @@ $arrDca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'fax'             => [
+        'fax'                     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['fax'],
             'exclude'   => true,
             'search'    => true,
@@ -305,7 +334,7 @@ $arrDca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'subject'         => [
+        'subject'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['subject'],
             'exclude'   => true,
             'search'    => true,
@@ -313,21 +342,21 @@ $arrDca = [
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50'],
             'sql'       => "varchar(128) NOT NULL default ''"
         ],
-        'notes'           => [
+        'notes'                   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['notes'],
             'exclude'   => true,
             'inputType' => 'textarea',
             'eval'      => ['tl_class' => 'long clr'],
             'sql'       => "text NULL",
         ],
-        'message'           => [
+        'message'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['message'],
             'exclude'   => true,
             'inputType' => 'textarea',
             'eval'      => ['tl_class' => 'long clr'],
             'sql'       => "text NULL",
         ],
-        'agreement'       => [
+        'agreement'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['agreement'],
             'exclude'   => true,
             'filter'    => true,
@@ -335,7 +364,7 @@ $arrDca = [
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'privacy'         => [
+        'privacy'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['privacy'],
             'exclude'   => true,
             'filter'    => true,
@@ -343,7 +372,7 @@ $arrDca = [
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'published'       => [
+        'published'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['published'],
             'exclude'   => true,
             'filter'    => true,
@@ -352,7 +381,7 @@ $arrDca = [
             'sql'       => "char(1) NOT NULL default ''",
         ],
         // misc
-        'captcha'         => [
+        'captcha'                 => [
             'label'     => $GLOBALS['TL_LANG']['MSC']['securityQuestion'],
             'inputType' => 'captcha',
             'eval'      => [
@@ -361,14 +390,14 @@ $arrDca = [
                 'tableless' => true,
             ],
         ],
-        'formHybridBlob'  => [
+        'formHybridBlob'          => [
             'label' => &$GLOBALS['TL_LANG']['tl_submission']['formHybridBlob'],
             'sql'   => "blob NULL",
-            'eval' => [
+            'eval'  => [
                 'noSubmissionField' => true
             ]
         ],
-        'startDate' => [
+        'startDate'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['startDate'],
             'default'   => time(),
             'exclude'   => true,
@@ -376,7 +405,7 @@ $arrDca = [
             'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
-        'stopDate' => [
+        'stopDate'                => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['stopDate'],
             'default'   => time(),
             'exclude'   => true,
@@ -384,7 +413,7 @@ $arrDca = [
             'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
-        'startDatime' => [
+        'startDatime'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['startDatime'],
             'default'   => time(),
             'exclude'   => true,
@@ -392,7 +421,7 @@ $arrDca = [
             'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
-        'stopDatime' => [
+        'stopDatime'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['stopDatime'],
             'default'   => time(),
             'exclude'   => true,
@@ -401,13 +430,13 @@ $arrDca = [
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
         'addDifferentBillingData' => [
-            'label'                   => &$GLOBALS['TL_LANG']['tl_submission']['addDifferentBillingData'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => ['tl_class' => 'w50'],
-            'sql'                     => "char(1) NOT NULL default ''"
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['addDifferentBillingData'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => ['tl_class' => 'w50'],
+            'sql'       => "char(1) NOT NULL default ''"
         ],
-        'billingGender'   => [
+        'billingGender'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -416,7 +445,7 @@ $arrDca = [
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'billingFirstname'       => [
+        'billingFirstname'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['firstname'],
             'exclude'   => true,
             'search'    => true,
@@ -431,7 +460,7 @@ $arrDca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'billingLastname'        => [
+        'billingLastname'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['lastname'],
             'exclude'   => true,
             'search'    => true,
@@ -446,7 +475,7 @@ $arrDca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'billingCompany'         => [
+        'billingCompany'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['company'],
             'exclude'   => true,
             'search'    => true,
@@ -456,7 +485,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'billingStreet'          => [
+        'billingStreet'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street'],
             'exclude'   => true,
             'search'    => true,
@@ -464,7 +493,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'billingPostal'          => [
+        'billingPostal'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['postal'],
             'exclude'   => true,
             'search'    => true,
@@ -472,7 +501,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 5, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(5) NOT NULL default ''",
         ],
-        'billingCity'            => [
+        'billingCity'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['city'],
             'exclude'   => true,
             'filter'    => true,
@@ -486,8 +515,7 @@ $arrDca = [
 ];
 
 // add attachment field
-if (in_array('multifileupload', \ModuleLoader::getActive()))
-{
+if (in_array('multifileupload', \ModuleLoader::getActive())) {
     $arrDca['fields']['attachments'] = [
         'label'     => &$GLOBALS['TL_LANG']['tl_submission']['attachments'],
         'exclude'   => true,
@@ -510,26 +538,24 @@ if (in_array('multifileupload', \ModuleLoader::getActive()))
 
 \HeimrichHannot\Haste\Dca\General::addAuthorFieldAndCallback('tl_submission');
 
-if(in_array('exporter', \ModuleLoader::getActive())){
+if (in_array('exporter', \ModuleLoader::getActive())) {
     $arrDca['list']['global_operations']['export_csv'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
         'export_csv',
         $GLOBALS['TL_LANG']['MSC']['export_csv'],
         'system/modules/exporter/assets/img/icon_export.png'
     );
-    
+
     $arrDca['list']['global_operations']['export_xls'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
         'export_xls',
         $GLOBALS['TL_LANG']['MSC']['export_xls'],
         'system/modules/exporter/assets/img/icon_export.png'
     );
-}
-elseif(version_compare(VERSION, '4.1', '>=') && in_array(\HeimrichHannot\ContaoExporterBundle\HeimrichHannotContaoExporterBundle::class,
-        \Contao\System::getContainer()->getParameter('kernel.bundles'), true))
-{
+} elseif (version_compare(VERSION, '4.1', '>=') && in_array(\HeimrichHannot\ContaoExporterBundle\HeimrichHannotContaoExporterBundle::class,
+        \Contao\System::getContainer()->getParameter('kernel.bundles'), true)) {
     $arrDca['list']['global_operations']['export_csv'] = \Contao\System::getContainer()
         ->get('huh.exporter.action.backendexport')
         ->getGlobalOperation('export_csv', $GLOBALS['TL_LANG']['MSC']['export_csv']);
-    
+
     $arrDca['list']['global_operations']['export_xls'] = \Contao\System::getContainer()
         ->get('huh.exporter.action.backendexport')
         ->getGlobalOperation('export_xls', $GLOBALS['TL_LANG']['MSC']['export_xls']);
