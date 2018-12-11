@@ -515,7 +515,8 @@ $arrDca = [
 ];
 
 // add attachment field
-if (in_array('multifileupload', \ModuleLoader::getActive())) {
+$activeBundles = \ModuleLoader::getActive();
+if (in_array('multifileupload', $activeBundles) || in_array('HeimrichHannotContaoMultiFileUploadBundle', $activeBundles)) {
     $arrDca['fields']['attachments'] = [
         'label'     => &$GLOBALS['TL_LANG']['tl_submission']['attachments'],
         'exclude'   => true,

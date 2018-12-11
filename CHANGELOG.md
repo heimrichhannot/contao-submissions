@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2018-12-11
+
+### Fixed
+- attachments fields not added when using multifileupload bundle
+
 ## [1.5.0] - 2018-12-07
 
 ### Added
