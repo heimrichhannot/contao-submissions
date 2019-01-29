@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.2] - 2019-01-29
+
+### Fixed
+- moved gender translation to tl_submission (from haste) and added cs, pl, en and ru translations for male and female
+
 ## [1.5.1] - 2018-12-11
 
 ### Fixed
