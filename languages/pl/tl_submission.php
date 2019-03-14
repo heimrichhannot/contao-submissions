@@ -13,3 +13,4 @@ $arrLang['company'][0]       = 'Firma/Instytucja';
 $arrLang['email'][0]         = 'Adres e-mail';
 $arrLang['subject'][0]       = 'Dotyczy';
 $arrLang['message'][0]       = 'Twoja wiadomość';
+$arrLang['attachments']             = ['Załączniki', 'Laden Sie zusätzliche Anlagen hoch.'];
