@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.5] - 2019-05-24
+
+### Added
+- billingAcademicTitle
+
+### Fixed
+- billing fields are not usable for substitute fields
+
 ## [1.5.4] - 2019-03-14
 
 ### Changed

@@ -442,8 +442,20 @@ $arrDca = [
             'inputType' => 'select',
             'options'   => ['male', 'female'],
             'reference' => TL_MODE == 'FE' ? $GLOBALS['TL_LANG']['MSC']['haste_plus']['genderFe'] : $GLOBALS['TL_LANG']['MSC'],
-            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
+            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
+        ],
+        'billingAcademicTitle'           => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['academicTitle'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['Dr.', 'Prof.'],
+            'eval'      => [
+                'maxlength'          => 20,
+                'includeBlankOption' => true,
+                'tl_class'           => 'w50'
+            ],
+            'sql'       => "varchar(20) NOT NULL default ''",
         ],
         'billingFirstname'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['firstname'],
@@ -456,7 +468,6 @@ $arrDca = [
                 'mandatory'       => true,
                 'maxlength'       => 64,
                 'tl_class'        => 'w50',
-                'substituteField' => true
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
@@ -471,7 +482,6 @@ $arrDca = [
                 'mandatory'       => true,
                 'maxlength'       => 64,
                 'tl_class'        => 'w50',
-                'substituteField' => true
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
@@ -482,7 +492,7 @@ $arrDca = [
             'sorting'   => true,
             'flag'      => 1,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50'],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
         'billingStreet'           => [
@@ -490,7 +500,7 @@ $arrDca = [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval'      => ['maxlength' => 64, 'tl_class' => 'w50'],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
         'billingPostal'           => [
@@ -498,7 +508,7 @@ $arrDca = [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 5, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval'      => ['maxlength' => 5, 'tl_class' => 'w50'],
             'sql'       => "varchar(5) NOT NULL default ''",
         ],
         'billingCity'             => [
@@ -508,7 +518,7 @@ $arrDca = [
             'search'    => true,
             'sorting'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 32, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval'      => ['maxlength' => 32, 'tl_class' => 'w50'],
             'sql'       => "varchar(32) NOT NULL default ''",
         ],
     ],
