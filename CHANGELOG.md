@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.6] - 2019-05-29
+
+### Changed
+- export action order
+
 ## [1.5.5] - 2019-05-24
 
 ### Added
