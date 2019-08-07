@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.7] - 2019-08-07
+
+### Changed
+- added localization
+
 ## [1.5.6] - 2019-05-29
 
 ### Changed
