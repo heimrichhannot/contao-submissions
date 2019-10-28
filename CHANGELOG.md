@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.8] - 2019-10-28
+
+### Fixed
+- prevented checkPermission from being called in frontend
+
 ## [1.5.7] - 2019-08-07
 
 ### Changed

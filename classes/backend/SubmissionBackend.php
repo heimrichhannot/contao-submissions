@@ -70,7 +70,7 @@ class SubmissionBackend extends \Backend
         $objSession  = \Session::getInstance();
         $objDatabase = \Database::getInstance();
 
-        if ($objUser->isAdmin) {
+        if ($objUser->isAdmin || TL_MODE == 'FE') {
             return;
         }
 
