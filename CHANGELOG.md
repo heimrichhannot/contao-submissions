@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2019-11-06
+
+- commented currently dysfunctional send_confirmation operation (todo)
+
 ## [1.5.8] - 2019-10-28
 
 ### Fixed

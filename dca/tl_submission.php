@@ -67,14 +67,15 @@ $arrDca = [
                 'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
                 'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'toggleIcon'],
             ],
-            'send_confirmation' => [
-                'label'           => &$GLOBALS['TL_LANG']['tl_submission']['send_confirmation'],
-                'icon'            => 'system/modules/submissions/assets/img/icon_send_confirmation.png',
-                'href'            => 'key=send_confirmation',
-                'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['sendConfirmationConfirm']
-                    . '\'))return false;Backend.getScrollOffset()"',
-                'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'sendConfirmation'],
-            ],
+            // TODO
+//            'send_confirmation' => [
+//                'label'           => &$GLOBALS['TL_LANG']['tl_submission']['send_confirmation'],
+//                'icon'            => 'system/modules/submissions/assets/img/icon_send_confirmation.png',
+//                'href'            => 'key=send_confirmation',
+//                'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['sendConfirmationConfirm']
+//                    . '\'))return false;Backend.getScrollOffset()"',
+//                'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'sendConfirmation'],
+//            ],
             'show'              => [
                 'label' => &$GLOBALS['TL_LANG']['tl_submission']['show'],
                 'href'  => 'act=show',
