@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.1] - 2020-01-16
+- fixed contao 4 compatibilty for tl_submission_archive and multifileupload
+
 ## [1.6.0] - 2019-11-06
 
 - commented currently dysfunctional send_confirmation operation (todo)

@@ -88,6 +88,7 @@ $GLOBALS['TL_MODELS']['tl_submission_archive'] = '\HeimrichHannot\Submissions\Su
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['loadDataContainer']['submissions_setPTableForDelete'] = ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'setPTableForDelete'];
+$GLOBALS['TL_HOOKS']['loadDataContainer']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\LoadDataContainerListener::class, 'onLoadDataContainer'];
 
 /**
  * Add permissions
