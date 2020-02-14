@@ -94,7 +94,7 @@ class LoadDataContainerListener
                     'default'   => Config::get('uploadTypes'),
                     'inputType' => 'text',
                     'eval'      => ['mandatory' => true, 'tl_class' => 'w50'],
-                    'sql'       => "varchar(255) NOT NULL default ''",
+                    'sql'       => "text NULL",
                 ],
                 'attachmentFieldType'        => [
                     'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['attachmentFieldType'],
