@@ -8,6 +8,9 @@ $arrDca = [
         'ptable'            => 'tl_submission_archive',
         'enableVersioning'  => true,
         'doNotCopyRecords'  => true,
+        'oncreate_callback' => [
+            ['HeimrichHannot\Submissions\Submissions', 'setCurrentLanguage']
+        ],
         'onload_callback'   => [
             ['HeimrichHannot\Haste\Dca\General', 'setDateAdded', true],
             ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'checkPermission'],
@@ -521,6 +524,16 @@ $arrDca = [
             'inputType' => 'text',
             'eval'      => ['maxlength' => 32, 'tl_class' => 'w50'],
             'sql'       => "varchar(32) NOT NULL default ''",
+        ],
+        'submissionLanguage'            => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['submissionLanguage'],
+            'exclude'   => true,
+            'filter'    => true,
+            'search'    => true,
+            'sorting'   => true,
+            'inputType' => 'text',
+            'eval'      => ['tl_class' => 'w50', 'readonly' => true],
+            'sql'       => "varchar(4) NOT NULL default ''",
         ],
     ],
 ];

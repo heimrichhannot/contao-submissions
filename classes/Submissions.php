@@ -2,6 +2,8 @@
 
 namespace HeimrichHannot\Submissions;
 
+use Contao\Database;
+use Contao\DataContainer;
 use HeimrichHannot\Haste\Dca\General;
 use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
 
@@ -94,5 +96,10 @@ class Submissions extends \Controller
     public static function getConfirmationNotificationsAsOptions()
     {
         return NotificationCenterPlus::getNotificationsAsOptions(Submissions::NOTIFICATION_TYPE_CONFIRMATION);
+    }
+
+    public function setCurrentLanguage(string $table, int $id, array $fields, DataContainer $dc)
+    {
+        Database::getInstance()->prepare("UPDATE tl_submission SET submissionLanguage=? WHERE id=?")->execute($GLOBALS['TL_LANGUAGE'], $id);
     }
 }

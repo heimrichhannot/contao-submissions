@@ -38,6 +38,7 @@ $arrLang['stopDatime']              = ['Enddatum', 'Wählen Sie hier das Enddatu
 $arrLang['addDifferentBillingData'] = ['Abweichende Rechnungsdaten angeben', 'Wählen Sie diese Option, um abweichende Rechnungsdaten festzulegen.'];
 $arrLang['published']               = ['Aktiviert', 'Wählen Sie diese Option, um die Einsendung zu aktivieren.'];
 $arrLang['formHybridBlob']          = ['FormHybrid BLOB', 'Dieses Feld enthält Änderungen, die noch nicht final in den Datensatz gespeichert werden sollen. Wird bspw. bei Multistep-Formularen eingesetzt.'];
+$arrLang['submissionLanguage']      = ['Sprache der Einsendung', 'Dieses Feld enthält die Sprache der Einsendung.'];
 
 /**
  * Legends

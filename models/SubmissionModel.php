@@ -2,8 +2,13 @@
 
 namespace HeimrichHannot\Submissions;
 
+use Contao\Controller;
+use Contao\DataContainer;
+use Contao\DC_Table;
+use Contao\System;
 use HeimrichHannot\FormHybrid\DC_Hybrid;
 use HeimrichHannot\FormHybrid\Submission;
+use HeimrichHannot\Haste\Dca\DC_HastePlus;
 use HeimrichHannot\Haste\Dca\General;
 use HeimrichHannot\Haste\Util\Arrays;
 use HeimrichHannot\Haste\Util\Environment;
@@ -251,6 +256,22 @@ class SubmissionModel extends \Model
         $objSubmission->memberAuthor = $intMember;
 
         $objSubmission->save();
+
+        if(is_array($GLOBALS['TL_DCA'][static::$strTable]['config']['oncreate_callback'])) {
+            $dc = new DC_HastePlus(static::$strTable);
+            $dc->id = $objSubmission->id;
+            $dc->activeRecord = $objSubmission;
+
+            foreach ($GLOBALS['TL_DCA'][static::$strTable]['config']['oncreate_callback'] as $callback) {
+                if (is_array($callback)) {
+                    System::importStatic($callback[0]);
+                    $callbackObj = System::importStatic($callback[0]);
+                    $callbackObj->{$callback[1]}(static::$strTable, $objSubmission->id, $objSubmission->row(), $dc);
+                } elseif (is_callable($callback)) {
+                    $callback(static::$strTable, $objSubmission->id, $objSubmission->row(), $dc);
+                }
+            }
+        }
 
         return $objSubmission;
     }
