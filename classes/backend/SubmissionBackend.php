@@ -241,32 +241,32 @@ class SubmissionBackend extends \Backend
     public function modifyPalette(\DataContainer $objDc, $blnFrontend = false)
     {
         \Controller::loadDataContainer('tl_submission');
-        $arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
+        $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
         if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null) {
             return false;
         }
 
-        if (($objSubmissionArchive = $objSubmission->getRelated('pid')) === null) {
+        if (($archive = $objSubmission->getRelated('pid')) === null) {
             return false;
         }
 
         // modify palette for backend view, based on archive submissionFields
         if (!$blnFrontend) {
-            if (isset(static::$arrSubmissionFieldsCache[$objSubmissionArchive->id])
+            if (isset(static::$arrSubmissionFieldsCache[$archive->id])
                 && is_array(
-                    static::$arrSubmissionFieldsCache[$objSubmissionArchive->id]
+                    static::$arrSubmissionFieldsCache[$archive->id]
                 )
             ) {
-                $arrSubmissionFields = static::$arrSubmissionFieldsCache[$objSubmissionArchive->id];
+                $arrSubmissionFields = static::$arrSubmissionFieldsCache[$archive->id];
             } else {
-                $arrDca['palettes']['defaultBackup'] = $arrDca['palettes']['default'];
+                $dca['palettes']['defaultBackup'] = $dca['palettes']['default'];
 
-                $arrSubmissionFields = deserialize($objSubmissionArchive->submissionFields, true);
+                $arrSubmissionFields = deserialize($archive->submissionFields, true);
 
                 // remove subpalette fields from arrSubmissionFields
-                if (is_array($arrDca['subpalettes'])) {
-                    foreach ($arrDca['subpalettes'] as $key => $value) {
+                if (is_array($dca['subpalettes'])) {
+                    foreach ($dca['subpalettes'] as $key => $value) {
                         $arrSubpaletteFields = \HeimrichHannot\FormHybrid\FormHelper::getPaletteFields($objDc->table, $value);
 
                         if (!is_array($arrSubpaletteFields)) {
@@ -277,20 +277,19 @@ class SubmissionBackend extends \Backend
                     }
                 }
 
-                static::$arrSubmissionFieldsCache[$objSubmissionArchive->id] = $arrSubmissionFields;
+                static::$arrSubmissionFieldsCache[$archive->id] = $arrSubmissionFields;
             }
 
-            $arrDca['palettes']['default'] = str_replace(
+            $dca['palettes']['default'] = str_replace(
                 'submissionFields',
                 implode(',', $arrSubmissionFields),
                 \HeimrichHannot\Submissions\Submissions::PALETTE_DEFAULT
             );
         }
 
-
         // overwrite attachment config with archive
-        if (isset($arrDca['fields']['attachments']) && $objSubmissionArchive->addAttachmentConfig) {
-            $arrConfig = Arrays::filterByPrefixes($objSubmissionArchive->row(), ['attachment']);
+        if (isset($dca['fields']['attachments']) && $archive->addAttachmentConfig) {
+            $arrConfig = Arrays::filterByPrefixes($archive->row(), ['attachment']);
 
             foreach ($arrConfig as $strKey => $value) {
                 $strKey = lcfirst(str_replace('attachment', '', $strKey));
@@ -299,8 +298,15 @@ class SubmissionBackend extends \Backend
                     $value .= 'MiB';
                 }
 
-                $arrDca['fields']['attachments']['eval'][$strKey] = $value;
+                $dca['fields']['attachments']['eval'][$strKey] = $value;
             }
+        }
+
+        // mandatory overrides
+        $mandatoryOverrides = deserialize($archive->submissionFieldsMandatoryOverride, true);
+
+        foreach ($mandatoryOverrides as $override) {
+            $dca['fields'][$override['field']]['eval']['mandatory'] = $override['mandatory'];
         }
     }
 

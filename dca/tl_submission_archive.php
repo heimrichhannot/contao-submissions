@@ -65,7 +65,7 @@ $arrDca = [
                 'href'            => 'act=delete',
                 'icon'            => 'delete.gif',
                 'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
-                                     . '\'))return false;Backend.getScrollOffset()"',
+                    . '\'))return false;Backend.getScrollOffset()"',
                 'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'deleteArchive'],
             ],
             'show'       => [
@@ -77,15 +77,15 @@ $arrDca = [
     ],
     'palettes'    => [
         '__selector__' => [],
-        'default'      => '{general_legend},title,parentTable,parentField,pid;{fields_legend},submissionFields,titlePattern;'
-                          . '{notification_legend},nc_submission,nc_confirmation;',
+        'default'      => '{general_legend},title,parentTable,parentField,pid;{fields_legend},submissionFields,titlePattern,submissionFieldsMandatoryOverride;'
+            . '{notification_legend},nc_submission,nc_confirmation;',
     ],
     'subpalettes' => [],
     'fields'      => [
-        'id'               => [
+        'id'                                => [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
-        'parentTable'      => [
+        'parentTable'                       => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['parentTable'],
             'inputType'        => 'select',
             'options_callback' => ['\HeimrichHannot\Haste\Dca\General', 'getDataContainers'],
@@ -97,7 +97,7 @@ $arrDca = [
                 'includeBlankOption' => true,
             ],
         ],
-        'parentField'      => [
+        'parentField'                       => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['parentField'],
             'inputType'        => 'select',
             'options_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'getParentFields'],
@@ -109,24 +109,24 @@ $arrDca = [
                 'includeBlankOption' => true,
             ],
         ],
-        'pid'              => [
+        'pid'                               => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['pid'],
             'inputType'        => 'select',
             'options_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'getParentEntitiesAsOptions'],
             'sql'              => "int(10) unsigned NOT NULL default '0'",
             'eval'             => ['tl_class' => 'w50', 'chosen' => true, 'includeBlankOption' => true],
         ],
-        'tstamp'           => [
+        'tstamp'                            => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-        'dateAdded'        => [
+        'dateAdded'                         => [
             'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
             'sorting' => true,
             'flag'    => 6,
             'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
         ],
-        'title'            => [
+        'title'                             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['title'],
             'exclude'   => true,
             'search'    => true,
@@ -136,7 +136,7 @@ $arrDca = [
             'eval'      => ['mandatory' => true, 'maxlength' => 128, 'tl_class' => 'w50'],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'submissionFields' => [
+        'submissionFields'                  => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['submissionFields'],
             'exclude'          => true,
             'inputType'        => 'checkboxWizard',
@@ -144,14 +144,38 @@ $arrDca = [
             'eval'             => ['multiple' => true, 'tl_class' => 'wizard'],
             'sql'              => "blob NULL",
         ],
-        'titlePattern'     => [
+        'titlePattern'                      => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['titlePattern'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50'],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'nc_submission'    => [
+        'submissionFieldsMandatoryOverride' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['submissionFieldsMandatoryOverride'],
+            'inputType' => 'multiColumnEditor',
+            'eval'      => [
+                'tl_class'          => 'long clr',
+                'multiColumnEditor' => [
+                    'minRowCount' => 0,
+                    'fields' => [
+                        'field'     => [
+                            'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['submissionFieldsMandatoryOverride']['field'],
+                            'inputType'        => 'select',
+                            'eval'             => ['groupStyle' => 'width: 48%', 'chosen' => true],
+                            'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getFieldsAsOptions']
+                        ],
+                        'mandatory' => [
+                            'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['submissionFieldsMandatoryOverride']['mandatory'],
+                            'inputType' => 'checkbox',
+                            'eval'             => ['groupStyle' => 'width: 20%'],
+                        ],
+                    ],
+                ],
+            ],
+            'sql'       => "blob NULL",
+        ],
+        'nc_submission'                     => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['nc_submission'],
             'exclude'          => true,
             'inputType'        => 'select',
@@ -159,7 +183,7 @@ $arrDca = [
             'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql'              => "int(10) unsigned NOT NULL default '0'",
         ],
-        'nc_confirmation'  => [
+        'nc_confirmation'                   => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['nc_confirmation'],
             'exclude'          => true,
             'inputType'        => 'select',

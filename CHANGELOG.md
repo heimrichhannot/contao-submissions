@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.8.0] - 2020-06-03
+- added possibility to override 
+
 ## [1.7.0] - 2020-03-19
 - added oncreate_callback in `SubmissionModel::create` and `tl_submission`
 - added `submissionLanguage` to `tl_submission`
