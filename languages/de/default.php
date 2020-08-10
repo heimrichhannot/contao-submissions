@@ -9,3 +9,4 @@ $GLOBALS['TL_LANG']['MSC']['confirmationNotificationSent'] = 'Die Bestätigungsb
 
 $GLOBALS['TL_LANG']['MSC']['salutation']['male']   = 'Herr';
 $GLOBALS['TL_LANG']['MSC']['salutation']['female'] = 'Frau';
+$GLOBALS['TL_LANG']['MSC']['salutation']['divers'] = 'Divers';

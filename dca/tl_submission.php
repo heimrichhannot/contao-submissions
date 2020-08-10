@@ -131,7 +131,7 @@ $arrDca = [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
             'exclude'   => true,
             'inputType' => 'select',
-            'options'   => ['male', 'female'],
+            'options'   => ['male', 'female', 'divers'],
             'reference' => TL_MODE == 'FE' ? $GLOBALS['TL_LANG']['MSC']['salutation'] : $GLOBALS['TL_LANG']['MSC'],
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
