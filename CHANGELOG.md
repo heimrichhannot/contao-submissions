@@ -1,8 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.10.0] - 2020-08-11
+- added firstname to salutation generation
+
 ## [1.9.0] - 2020-08-10
-- added diverse gender 
+- added diverse gender
 
 ## [1.8.0] - 2020-06-03
 - added possibility to override 

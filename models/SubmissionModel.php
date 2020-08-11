@@ -174,6 +174,7 @@ class SubmissionModel extends \Model
                 [
                     'gender'   => $arrTokens['form_value_gender'],
                     'title'    => $arrTokens['form_value_academicTitle'] ?: $arrTokens['form_value_title'],
+                    'firstname' => $arrTokens['form_value_firstname'],
                     'lastname' => $arrTokens['form_value_lastname'],
                 ]
             );
