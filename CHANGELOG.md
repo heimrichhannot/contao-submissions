@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.11.0] - 2020-09-24
+- added ics tokens (support for notification center plus's ics generation)
+
 ## [1.10.0] - 2020-08-11
 - added firstname to salutation generation
 
