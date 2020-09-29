@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.13.0] - 2020-09-29
+- added pid translation
+
 ## [1.12.0] - 2020-09-25
 - added more ics tokens (support for notification center plus's ics generation)
 

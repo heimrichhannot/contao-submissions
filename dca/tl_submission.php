@@ -47,24 +47,24 @@ $arrDca = [
             ],
         ],
         'operations'        => [
-            'edit'              => [
+            'edit'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_submission']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif',
             ],
-            'copy'              => [
+            'copy'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_submission']['copy'],
                 'href'  => 'act=copy',
                 'icon'  => 'copy.gif',
             ],
-            'delete'            => [
+            'delete' => [
                 'label'      => &$GLOBALS['TL_LANG']['tl_submission']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                     . '\'))return false;Backend.getScrollOffset()"',
             ],
-            'toggle'            => [
+            'toggle' => [
                 'label'           => &$GLOBALS['TL_LANG']['tl_submission']['toggle'],
                 'icon'            => 'visible.gif',
                 'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
@@ -79,7 +79,7 @@ $arrDca = [
 //                    . '\'))return false;Backend.getScrollOffset()"',
 //                'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'sendConfirmation'],
 //            ],
-            'show'              => [
+            'show'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_submission']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif',
@@ -98,6 +98,7 @@ $arrDca = [
             ]
         ],
         'pid'                     => [
+            'label'      => &$GLOBALS['TL_LANG']['tl_submission']['pid'],
             'foreignKey' => 'tl_submission_archive.title',
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => ['type' => 'belongsTo', 'load' => 'eager'],
@@ -525,7 +526,7 @@ $arrDca = [
             'eval'      => ['maxlength' => 32, 'tl_class' => 'w50'],
             'sql'       => "varchar(32) NOT NULL default ''",
         ],
-        'submissionLanguage'            => [
+        'submissionLanguage'      => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['submissionLanguage'],
             'exclude'   => true,
             'filter'    => true,
