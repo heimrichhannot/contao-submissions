@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.14.0] - 2020-10-08
+- possibility to apply the palette logic once again
+
 ## [1.13.0] - 2020-09-29
 - added pid translation
 

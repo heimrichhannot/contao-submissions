@@ -238,7 +238,7 @@ class SubmissionBackend extends \Backend
         );
     }
 
-    public function modifyPalette(\DataContainer $objDc, $blnFrontend = false)
+    public static function modifyPalette(\DataContainer $objDc, $blnFrontend = false, $skipCache = false)
     {
         \Controller::loadDataContainer('tl_submission');
         $dca = &$GLOBALS['TL_DCA']['tl_submission'];
@@ -253,7 +253,7 @@ class SubmissionBackend extends \Backend
 
         // modify palette for backend view, based on archive submissionFields
         if (!$blnFrontend) {
-            if (isset(static::$arrSubmissionFieldsCache[$archive->id])
+            if (!$skipCache && isset(static::$arrSubmissionFieldsCache[$archive->id])
                 && is_array(
                     static::$arrSubmissionFieldsCache[$archive->id]
                 )
