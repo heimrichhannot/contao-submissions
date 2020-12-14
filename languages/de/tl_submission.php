@@ -17,6 +17,7 @@ $lang['company']                 = ['Firma/Institution', 'Geben Sie hier die Fir
 $lang['position']                = ['Position', 'Geben Sie hier die Position in der Institution ein.'];
 $lang['dateOfBirth']             = ['Geburtsdatum', 'Geben Sie hier das Geburtsdatum ein.'];
 $lang['street']                  = ['Straße & Hausnummer', 'Bitte geben Sie hier Straße und Hausnummer ein.'];
+$lang['streetNumber']            = ['Hausnummer', 'Bitte geben Sie hier die Hausnummer ein.'];
 $lang['street2']                 = ['Weitere Adressangaben', 'Geben Sie hier weitere Adressangaben ein.'];
 $lang['postal']                  = ['Postleitzahl', 'Geben Sie hier die Postleitzahl ein.'];
 $lang['city']                    = ['Ort', 'Geben Sie hier den Ort ein.'];

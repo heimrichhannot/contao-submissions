@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.15.0] - 2020-12-14
+- increased title length to 255
+- added streetNumber field
+
 ## [1.14.0] - 2020-10-08
 - possibility to apply the palette logic once again
 

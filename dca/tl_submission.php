@@ -223,6 +223,14 @@ $arrDca = [
             'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
+        'streetNumber'                  => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['streetNumber'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'sql'       => "varchar(64) NOT NULL default ''",
+        ],
         'street2'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street2'],
             'exclude'   => true,
