@@ -42,7 +42,7 @@ class LoadDataContainerListener
              */
             $arrDca['palettes']['__selector__'][] = 'addAttachmentConfig';
             $arrDca['palettes']['default']        =
-                str_replace('titlePattern;', 'titlePattern;{attachment_legend},addAttachmentConfig;', $arrDca['palettes']['default']);
+                str_replace('{notification_legend}', '{attachment_legend},addAttachmentConfig;{notification_legend}', $arrDca['palettes']['default']);
 
 
             /**
