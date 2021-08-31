@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.17.0] - 2021-08-31
+
+- Added: support for php 8
+
 ## [1.16.0] - 2021-06-29
 
 - added Polish translations
