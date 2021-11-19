@@ -4,8 +4,9 @@ namespace HeimrichHannot\Submissions;
 
 use Contao\Database;
 use Contao\DataContainer;
-use HeimrichHannot\Haste\Dca\General;
+use Contao\System;
 use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
+use HeimrichHannot\UtilsBundle\Dca\DcaUtil;
 
 class Submissions extends \Controller
 {
@@ -65,7 +66,13 @@ class Submissions extends \Controller
     {
         $arrOptions = [];
 
-        foreach (General::getFields('tl_submission', false, $varInputType, [], false) as $strField) {
+        $fields = System::getContainer()->get(DcaUtil::class)->getFields('tl_submission', [
+            'localizeLabels' => false,
+            'inputTypes' => $varInputType,
+            'skipSorting' => true,
+        ]);
+
+        foreach ($fields as $strField) {
             if (!in_array($strField, static::getSkipFields())) {
                 $arrOptions[] = $strField;
             }

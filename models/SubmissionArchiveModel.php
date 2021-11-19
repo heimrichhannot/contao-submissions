@@ -2,7 +2,9 @@
 
 namespace HeimrichHannot\Submissions;
 
-use HeimrichHannot\Haste\Dca\General;
+use Contao\StringUtil;
+use Contao\System;
+use HeimrichHannot\UtilsBundle\Model\ModelUtil;
 
 class SubmissionArchiveModel extends \Model
 {
@@ -32,7 +34,7 @@ class SubmissionArchiveModel extends \Model
     {
         if (($objSubmissionArchive = static::findByParent($strTable, $intPid)) !== null)
         {
-            return deserialize($objSubmissionArchive->submissionFields, true);
+            return StringUtil::deserialize($objSubmissionArchive->submissionFields, true);
         }
     }
 
@@ -43,7 +45,7 @@ class SubmissionArchiveModel extends \Model
             return null;
         }
 
-        return General::getModelInstance($objArchive->parentTable, $objArchive->pid);
+        return System::getContainer()->get(ModelUtil::class)->findModelInstanceByPk($objArchive->parentTable, $objArchive->pid);
     }
 
 }

@@ -15,6 +15,7 @@ use Contao\Input;
 use Contao\System;
 use HeimrichHannot\Submissions\SubmissionArchiveModel;
 use HeimrichHannot\Submissions\Submissions;
+use HeimrichHannot\UtilsBundle\Dca\DcaUtil;
 
 class SubmissionArchiveBackend extends \Backend
 {
@@ -74,7 +75,10 @@ class SubmissionArchiveBackend extends \Backend
     public static function getParentFields(\DataContainer $objDc)
     {
         if ($objDc->activeRecord->parentTable) {
-            return \HeimrichHannot\Haste\Dca\General::getFields($objDc->activeRecord->parentTable, false, 'text');
+            return System::getContainer()->get(DcaUtil::class)->getFields($objDc->activeRecord->parentTable, [
+                'localizeLabels' => true,
+                'inputTypes' => ['text'],
+            ]);
         }
     }
 
@@ -84,7 +88,7 @@ class SubmissionArchiveBackend extends \Backend
 
         if ($objDc->activeRecord->parentTable && $objDc->activeRecord->parentField
             && ($objSubmissionArchives =
-                \HeimrichHannot\Submissions\SubmissionArchiveModel::findByParentTable($objDc->activeRecord->parentTable)) !== null
+                SubmissionArchiveModel::findByParentTable($objDc->activeRecord->parentTable)) !== null
         ) {
             $arrUsedPids = $objSubmissionArchives->fetchEach('pid');
 

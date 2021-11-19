@@ -12,7 +12,7 @@ $arrDca = [
             ['HeimrichHannot\Submissions\Submissions', 'setCurrentLanguage']
         ],
         'onload_callback'   => [
-            ['HeimrichHannot\Haste\Dca\General', 'setDateAdded', true],
+            ['huh.utils.dca', 'setDateAdded', true],
             ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'checkPermission'],
             ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'modifyPalette', true],
         ],
@@ -307,7 +307,10 @@ $arrDca = [
             'exclude'       => true,
             'search'        => true,
             'inputType'     => 'text',
-            'save_callback' => [['HeimrichHannot\Haste\Dca\General', 'lowerCase']],
+            'save_callback' => [
+                function ($varValue, DataContainer $objDc) {
+                    return trim(strtolower($varValue));
+                }],
             'eval'          => [
                 'mandatory'                 => true,
                 'maxlength'                 => 64,

@@ -2,20 +2,13 @@
 
 namespace HeimrichHannot\Submissions;
 
-use Contao\Controller;
-use Contao\DataContainer;
-use Contao\DC_Table;
 use Contao\System;
 use HeimrichHannot\FormHybrid\DC_Hybrid;
-use HeimrichHannot\FormHybrid\Submission;
 use HeimrichHannot\Haste\Dca\DC_HastePlus;
 use HeimrichHannot\Haste\Dca\General;
-use HeimrichHannot\Haste\Util\Arrays;
-use HeimrichHannot\Haste\Util\Environment;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
-use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
 use NotificationCenter\Model\Notification;
 
 class SubmissionModel extends \Model
@@ -98,6 +91,8 @@ class SubmissionModel extends \Model
         if (($objSubmission = static::findByPk($objDc->id)) !== null)
         {
             static::sendConfirmationNotification($objSubmission->id);
+
+
 
             \Message::addConfirmation($GLOBALS['TL_LANG']['MSC']['confirmationNotificationSent']);
             \Controller::redirect(Url::addQueryString('id=' . $objSubmission->pid, Url::removeQueryString(['key'])));

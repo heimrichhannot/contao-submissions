@@ -15,7 +15,7 @@ $arrDca = [
             ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'checkPermission'],
         ],
         'onsubmit_callback' => [
-            ['HeimrichHannot\Haste\Dca\General', 'setDateAdded'],
+            ['huh.utils.dca', 'setDateAdded'],
         ],
         'sql'               => [
             'keys' => [
@@ -88,7 +88,7 @@ $arrDca = [
         'parentTable'                       => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['parentTable'],
             'inputType'        => 'select',
-            'options_callback' => ['\HeimrichHannot\Haste\Dca\General', 'getDataContainers'],
+            'options_callback' => ['huh.utils.dca', 'getDataContainers'],
             'sql'              => "varchar(255) NOT NULL default ''",
             'eval'             => [
                 'tl_class'           => 'w50',

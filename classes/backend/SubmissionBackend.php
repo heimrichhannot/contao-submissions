@@ -10,11 +10,14 @@
 
 namespace HeimrichHannot\Submissions\Backend;
 
-use HeimrichHannot\Haste\Dca\DC_HastePlus;
-use HeimrichHannot\Haste\Util\Arrays;
+use Contao\StringUtil;
+use Contao\System;
 use HeimrichHannot\Haste\Util\Files;
 use HeimrichHannot\Haste\Util\FormSubmission;
+use HeimrichHannot\Submissions\SubmissionModel;
 use HeimrichHannot\Submissions\Util\Tokens;
+use HeimrichHannot\UtilsBundle\Arrays\ArrayUtil;
+use HeimrichHannot\UtilsBundle\Driver\DC_Table_Utils;
 
 class SubmissionBackend extends \Backend
 {
@@ -24,11 +27,11 @@ class SubmissionBackend extends \Backend
     {
         $strTitle = $arrRow['id'];
 
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($arrRow['id'])) !== null
+        if (($objSubmission = SubmissionModel::findByPk($arrRow['id'])) !== null
             && ($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null
         ) {
             $dca              = &$GLOBALS['TL_DCA']['tl_submission'];
-            $dc               = new DC_HastePlus('tl_submission');
+            $dc               = new DC_Table_Utils('tl_submission');
             $dc->id           = $objSubmission->id;
             $dc->activeRecord = $objSubmission;
 
@@ -54,7 +57,7 @@ class SubmissionBackend extends \Backend
 
     public function sendConfirmation($row, $href, $label, $title, $icon, $attributes)
     {
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($row['id'])) !== null) {
+        if (($objSubmission = SubmissionModel::findByPk($row['id'])) !== null) {
             if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null && $objSubmissionArchive->nc_confirmation) {
                 $href = $this->addToUrl($href);
                 $href = \HeimrichHannot\Haste\Util\Url::addQueryString('id=' . $row['id'], $href);
@@ -243,7 +246,7 @@ class SubmissionBackend extends \Backend
         \Controller::loadDataContainer('tl_submission');
         $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null) {
+        if (($objSubmission = SubmissionModel::findByPk($objDc->id)) === null) {
             return false;
         }
 
@@ -289,7 +292,7 @@ class SubmissionBackend extends \Backend
 
         // overwrite attachment config with archive
         if (isset($dca['fields']['attachments']) && $archive->addAttachmentConfig) {
-            $arrConfig = Arrays::filterByPrefixes($archive->row(), ['attachment']);
+            $arrConfig = System::getContainer()->get(ArrayUtil::class)->filterByPrefixes($archive->row(), ['attachment']);
 
             foreach ($arrConfig as $strKey => $value) {
                 $strKey = lcfirst(str_replace('attachment', '', $strKey));
@@ -303,7 +306,7 @@ class SubmissionBackend extends \Backend
         }
 
         // mandatory overrides
-        $mandatoryOverrides = deserialize($archive->submissionFieldsMandatoryOverride, true);
+        $mandatoryOverrides = StringUtil::deserialize($archive->submissionFieldsMandatoryOverride, true);
 
         foreach ($mandatoryOverrides as $override) {
             $dca['fields'][$override['field']]['eval']['mandatory'] = $override['mandatory'];
@@ -312,7 +315,7 @@ class SubmissionBackend extends \Backend
 
     public function moveAttachments(\DataContainer $objDc)
     {
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null) {
+        if (($objSubmission = SubmissionModel::findByPk($objDc->id)) === null) {
             return false;
         }
 
