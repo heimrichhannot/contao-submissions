@@ -10,14 +10,16 @@
 
 namespace HeimrichHannot\Submissions\Backend;
 
+use Contao\Config;
 use Contao\StringUtil;
 use Contao\System;
-use HeimrichHannot\Haste\Util\Files;
-use HeimrichHannot\Haste\Util\FormSubmission;
+use Contao\Validator;
 use HeimrichHannot\Submissions\SubmissionModel;
 use HeimrichHannot\Submissions\Util\Tokens;
 use HeimrichHannot\UtilsBundle\Arrays\ArrayUtil;
 use HeimrichHannot\UtilsBundle\Driver\DC_Table_Utils;
+use HeimrichHannot\UtilsBundle\File\FileUtil;
+use HeimrichHannot\UtilsBundle\Form\FormUtil;
 
 class SubmissionBackend extends \Backend
 {
@@ -38,11 +40,8 @@ class SubmissionBackend extends \Backend
             $strTitle = preg_replace_callback(
                 '@%([^%]+)%@i',
                 function ($arrMatches) use ($objSubmission, $dca, $dc) {
-                    return FormSubmission::prepareSpecialValueForPrint(
-                        $objSubmission->{$arrMatches[1]},
-                        $dca['fields'][$arrMatches[1]],
-                        'tl_submission',
-                        $dc
+                    return System::getContainer()->get(FormUtil::class)->prepareSpecialValueForOutput(
+                        $arrMatches[1], $objSubmission->{$arrMatches[1]}, $dc
                     );
                 },
                 $objSubmissionArchive->titlePattern
@@ -50,7 +49,7 @@ class SubmissionBackend extends \Backend
         }
 
         return '<div class="tl_content_left">' . $strTitle . ' <span style="color:#b3b3b3; padding-left:3px">[' . \Date::parse(
-                \Config::get('datimFormat'),
+                Config::get('datimFormat'),
                 trim($arrRow['dateAdded'])
             ) . ']</span></div>';
     }
@@ -336,8 +335,8 @@ class SubmissionBackend extends \Backend
 
         $strFolder = $objSubmissionArchive->attachmentUploadFolder;
 
-        if (\Validator::isUuid($objSubmissionArchive->attachmentUploadFolder)) {
-            if (($strFolder = Files::getPathFromUuid($objSubmissionArchive->attachmentUploadFolder)) === null) {
+        if (Validator::isUuid($objSubmissionArchive->attachmentUploadFolder)) {
+            if (($strFolder = System::getContainer()->get(FileUtil::class)->getPathFromUuid($objSubmissionArchive->attachmentUploadFolder)) === null) {
                 return false;
             }
         }

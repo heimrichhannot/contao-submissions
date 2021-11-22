@@ -1,5 +1,7 @@
 <?php
 
+use HeimrichHannot\UtilsBundle\Dca\DcaUtil;
+
 $arrDca = &$GLOBALS['TL_DCA']['tl_submission_archive'];
 
 $arrDca = [
@@ -88,7 +90,9 @@ $arrDca = [
         'parentTable'                       => [
             'label'            => &$GLOBALS['TL_LANG']['tl_submission_archive']['parentTable'],
             'inputType'        => 'select',
-            'options_callback' => ['huh.utils.dca', 'getDataContainers'],
+            'options_callback' => static function(Contao\DataContainer $dc = null) {
+                return Contao\System::getContainer()->get(DcaUtil::class)->getDataContainers();
+            },
             'sql'              => "varchar(255) NOT NULL default ''",
             'eval'             => [
                 'tl_class'           => 'w50',
