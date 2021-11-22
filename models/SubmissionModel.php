@@ -2,13 +2,16 @@
 
 namespace HeimrichHannot\Submissions;
 
+use Contao\Input;
+use Contao\StringUtil;
 use Contao\System;
 use HeimrichHannot\FormHybrid\DC_Hybrid;
-use HeimrichHannot\Haste\Dca\DC_HastePlus;
-use HeimrichHannot\Haste\Dca\General;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
+use HeimrichHannot\Submissions\Helper\StringHelper;
+use HeimrichHannot\UtilsBundle\Driver\DC_Table_Utils;
+use HeimrichHannot\UtilsBundle\Model\ModelUtil;
 use NotificationCenter\Model\Notification;
 
 class SubmissionModel extends \Model
@@ -53,7 +56,8 @@ class SubmissionModel extends \Model
                 return static::$arrArchiveParentsCache[$objSubmissionArchive->id];
             }
 
-            if (($objArchiveParent = General::getModelInstance($objSubmissionArchive->parentTable, $objSubmissionArchive->pid)) !== null)
+
+            if (($objArchiveParent = System::getContainer()->get(ModelUtil::class)->findModelInstanceByPk($objSubmissionArchive->parentTable, $objSubmissionArchive->pid)) !== null)
             {
                 static::$arrArchiveParentsCache[$objSubmissionArchive->id] = $objArchiveParent;
 
@@ -75,7 +79,7 @@ class SubmissionModel extends \Model
 
     public static function sendSubmissionNotification($intSubmission, $arrTokens = [])
     {
-        $intSubmission = $intSubmission ?: \Input::get('id');
+        $intSubmission = $intSubmission ?: Input::get('id');
 
         if (($objSubmissionArchive = SubmissionModel::getArchive($intSubmission)) !== null)
         {
@@ -219,8 +223,6 @@ class SubmissionModel extends \Model
     }
 
     /**
-     * @deprecated Use HeimrichHannot\Haste\Util\FormSubmission::tokenizeData()
-     *
      * @param array  $arrSubmissionData
      * @param string $strPrefix
      *
@@ -228,7 +230,67 @@ class SubmissionModel extends \Model
      */
     public static function tokenizeData(array $arrSubmissionData = [], $strPrefix = 'form')
     {
-        return FormSubmission::tokenizeData($arrSubmissionData, $strPrefix);
+        $arrTokens = [];
+
+        foreach ($arrSubmissionData as $strName => $arrData)
+        {
+            if (!is_array($arrData))
+            {
+                if ($strName != 'submission' && $strName != 'submission_all' && !is_object($arrData))
+                {
+                    $arrTokens[$strName] = $arrData;
+                    continue;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            foreach ($arrData as $strType => $varValue)
+            {
+                switch ($strType)
+                {
+                    case 'output':
+                        $arrTokens[$strPrefix . '_' . $strName]       = $varValue;
+
+                        $arrTokens[$strPrefix . '_plain_' . $strName] = StringHelper::convertToText(StringUtil::decodeEntities($varValue), true);
+                        break;
+                    case 'value':
+                        // check for values causing notification center's json_encode call to fail (unprintable characters like binary!)
+                        if (ctype_print($varValue) || $varValue == '')
+                        {
+                            $arrTokens[$strPrefix . '_value_' . $strName] = $varValue;
+                        }
+                        else
+                        {
+                            $arrTokens[$strPrefix . '_value_' . $strName] = $arrData['output'];
+                        }
+                        break;
+                    case 'submission':
+                        // add "\t\n" after each line and not only "\n" to prevent outlook line break remover
+                        $arrTokens[$strPrefix . '_submission_' . $strName] = rtrim($varValue, "\t\n");
+                        break;
+                }
+            }
+        }
+
+        // token: ##formsubmission_all##
+        if (isset($arrSubmissionData['submission_all']))
+        {
+            $arrTokens[$strPrefix . 'submission_all'] = $arrSubmissionData['submission_all'];
+        }
+
+        // token: ##formsubmission##
+        if (isset($arrSubmissionData['submission']))
+        {
+            $arrTokens[$strPrefix . 'submission'] = $arrSubmissionData['submission'];
+        }
+
+        // prepare attachments
+
+
+        return $arrTokens;
     }
 
     public static function generateEntityTokens(\Model $objEntity, array $arrDca, $objDc, $arrFields = [])
@@ -254,7 +316,7 @@ class SubmissionModel extends \Model
         $objSubmission->save();
 
         if(is_array($GLOBALS['TL_DCA'][static::$strTable]['config']['oncreate_callback'])) {
-            $dc = new DC_HastePlus(static::$strTable);
+            $dc = new DC_Table_Utils(static::$strTable);
             $dc->id = $objSubmission->id;
             $dc->activeRecord = $objSubmission;
 
