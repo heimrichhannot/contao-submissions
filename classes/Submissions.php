@@ -5,7 +5,6 @@ namespace HeimrichHannot\Submissions;
 use Contao\Database;
 use Contao\DataContainer;
 use HeimrichHannot\Haste\Dca\General;
-use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
 
 class Submissions extends \Controller
 {
@@ -90,16 +89,28 @@ class Submissions extends \Controller
 
     public static function getNotificationsAsOptions()
     {
-        return NotificationCenterPlus::getNotificationsAsOptions(Submissions::NOTIFICATION_TYPE_FORM_SUBMISSION);
+        return static::getNotificationOptionsByType(Submissions::NOTIFICATION_TYPE_FORM_SUBMISSION);
     }
 
     public static function getConfirmationNotificationsAsOptions()
     {
-        return NotificationCenterPlus::getNotificationsAsOptions(Submissions::NOTIFICATION_TYPE_CONFIRMATION);
+        return static::getNotificationOptionsByType(Submissions::NOTIFICATION_TYPE_CONFIRMATION);
     }
 
     public function setCurrentLanguage(string $table, int $id, array $fields, DataContainer $dc)
     {
         Database::getInstance()->prepare("UPDATE tl_submission SET submissionLanguage=? WHERE id=?")->execute($GLOBALS['TL_LANGUAGE'], $id);
+    }
+
+    private static function getNotificationOptionsByType($strType)
+    {
+        $arrChoices       = [];
+        $objNotifications = \Database::getInstance()->execute("SELECT id,title FROM tl_nc_notification WHERE type='$strType' ORDER BY title");
+
+        while ($objNotifications->next()) {
+            $arrChoices[$objNotifications->id] = $objNotifications->title;
+        }
+
+        return $arrChoices;
     }
 }

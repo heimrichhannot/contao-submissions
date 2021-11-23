@@ -15,7 +15,6 @@ use HeimrichHannot\Haste\Util\Environment;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
-use HeimrichHannot\NotificationCenterPlus\NotificationCenterPlus;
 use NotificationCenter\Model\Notification;
 
 class SubmissionModel extends \Model

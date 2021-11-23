@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2021-11-23
+- Changed: removed notification_center_plus dependency
+
 ## [1.17.0] - 2021-08-31
 
 - Added: support for php 8
