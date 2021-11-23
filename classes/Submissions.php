@@ -12,6 +12,7 @@ class Submissions extends \Controller
 
     const NOTIFICATION_TYPE_FORM_SUBMISSION = 'submission_form';
     const NOTIFICATION_TYPE_CONFIRMATION    = 'submission_confirmation';
+    const NOTIFICATION_TYPE_OPTIN    = 'submission_optin';
 
     const PALETTE_DEFAULT = '{general_legend},authorType,author;{submission_legend},submissionFields;{publish_legend},published;';
 
