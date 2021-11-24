@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2021-11-23
+## [1.18.0] - 2021-11-24
+- Added: option to store form data in submission table (including archive select on form generator config)
+- Added: option to activate optin process for form submissons (needs at least contao 4.7)
+- Changed: raised minimum php version to 7.1
 - Changed: removed notification_center_plus dependency
 
 ## [1.17.0] - 2021-08-31
