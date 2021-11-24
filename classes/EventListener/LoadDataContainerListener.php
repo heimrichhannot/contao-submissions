@@ -13,8 +13,10 @@ namespace HeimrichHannot\Submissions\EventListener;
 
 use Contao\Config;
 use Contao\ModuleLoader;
+use HeimrichHannot\Haste\Dca\General;
 use HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend;
 use HeimrichHannot\Submissions\Submissions;
+use function Clue\StreamFilter\fun;
 
 class LoadDataContainerListener
 {
@@ -28,6 +30,11 @@ class LoadDataContainerListener
             case 'tl_submission_archive':
                 $this->addOptionalSubmissionArchiveFields();
                 break;
+            case 'tl_form':
+                $this->addOptInSupport($table);
+                break;
+            case 'tl_submission':
+                $this->addOptInTokenIdField($table);
         }
     }
 
@@ -35,7 +42,7 @@ class LoadDataContainerListener
     {
         // add attachment related config fields
         $activeBundles = ModuleLoader::getActive();
-        $arrDca = &$GLOBALS['TL_DCA']['tl_submission_archive'];
+        $arrDca        = &$GLOBALS['TL_DCA']['tl_submission_archive'];
         if (in_array('multifileupload', $activeBundles) || in_array('HeimrichHannotContaoMultiFileUploadBundle', $activeBundles)) {
             /**
              * Palettes
@@ -117,6 +124,86 @@ class LoadDataContainerListener
             ];
 
             $arrDca['fields'] = array_merge($arrDca['fields'], $arrFields);
+        }
+    }
+
+    private function addOptInSupport(string $table): void
+    {
+        if (version_compare(VERSION, '4.7', '>=')) {
+            $dca    = &$GLOBALS['TL_DCA'][$table];
+            $fields = [
+                'huhSubAddOptIn'          => [
+                    'exclude'   => true,
+                    'filter'    => true,
+                    'inputType' => 'checkbox',
+                    'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50 clr'],
+                    'sql'       => "char(1) NOT NULL default ''"
+                ],
+                'huhSubOptInNotification' => [
+                    'exclude'          => true,
+                    'search'           => true,
+                    'inputType'        => 'select',
+                    'options_callback' => static function () {
+                        return Submissions::getNotificationOptionsByType(Submissions::NOTIFICATION_TYPE_OPTIN);
+                    },
+                    'eval'             => ['chosen' => true, 'tl_class' => 'w50', "mandatory" => true],
+                    'sql'              => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
+                ],
+                'huhSubOptInJumpTo'       => [
+                    'exclude'    => true,
+                    'inputType'  => 'pageTree',
+                    'foreignKey' => 'tl_page.title',
+                    'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
+                    'sql'        => "int(10) unsigned NOT NULL default 0",
+                    'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
+                ],
+                'huhSubOptInField'        => [
+                    'inputType'        => 'select',
+                    'options_callback' => static function() {
+                        return General::getFields('tl_submission', false, ['checkbox'], [], false);
+                    },
+//                    'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getFieldsAsOptions'],
+                    'default'          => 'published',
+                    'sql'              => "varchar(64) NOT NULL default ''",
+                    'eval'             => [
+                        'tl_class'           => 'w50',
+                        'chosen'             => true,
+                        'includeBlankOption' => true,
+                    ],
+                ],
+            ];
+
+            if ('tl_form' === $table) {
+                $dca['subpalettes']['storeAsSubmission'] = str_replace(
+                    'submissionArchive',
+                    'submissionArchive,huhSubAddOptIn',
+                    $dca['subpalettes']['storeAsSubmission']
+                );
+                $dca['palettes']['__selector__'][]       = 'huhSubAddOptIn';
+                $dca['subpalettes']['huhSubAddOptIn']    = 'huhSubOptInNotification,huhSubOptInJumpTo,huhSubOptInField';
+            }
+
+            $dca['fields'] = array_merge($dca['fields'], $fields);
+        }
+    }
+
+    public function addOptInTokenIdField(string $table): void
+    {
+        if (version_compare(VERSION, '4.7', '>=')) {
+            $GLOBALS['TL_DCA'][$table]['fields']['huhSubOptInTokenId'] = [
+                'exclude'   => true,
+                'filter'    => true,
+                'inputType' => 'text',
+                'eval'      => ['tl_class' => 'w50 clr'],
+                'sql'       => "varchar(32) NOT NULL default ''"
+            ];
+            $GLOBALS['TL_DCA'][$table]['fields']['huhSubOptInCache']   = [
+                'exclude'   => true,
+                'filter'    => true,
+                'inputType' => 'text',
+                'eval'      => ['tl_class' => 'w50 clr'],
+                'sql'       => "blob NULL"
+            ];
         }
     }
 }
