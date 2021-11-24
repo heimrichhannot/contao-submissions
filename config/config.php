@@ -127,6 +127,20 @@ $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] = array_merge_recursive(
                 'ics_add_time_field'    => ['event_*', 'form_value_*', 'form_plain_*'],
                 'ics_start_time_field'  => ['event_*', 'form_value_*', 'form_plain_*'],
                 'ics_end_time_field'    => ['event_*', 'form_value_*', 'form_plain_*'],
+            ],
+            \HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_OPTIN           => [
+                'recipients'           => ['admin_email', 'form_*', 'formconfig_*'],
+                'email_subject'        => ['form_*', 'formconfig_*', 'admin_email'],
+                'email_text'           => ['form_*', 'formconfig_*', 'formlabel_*', 'raw_data', 'raw_data_filled', 'admin_email', 'optInToken', 'optInUrl'],
+                'email_html'           => ['form_*', 'formconfig_*', 'formlabel_*', 'raw_data', 'raw_data_filled', 'admin_email', 'optInToken', 'optInUrl'],
+                'file_name'            => ['form_*', 'formconfig_*', 'admin_email'],
+                'file_content'         => ['form_*', 'formconfig_*', 'formlabel_*', 'raw_data', 'raw_data_filled', 'admin_email', 'optInToken', 'optInUrl'],
+                'email_sender_name'    => ['admin_email', 'form_*', 'formconfig_*'],
+                'email_sender_address' => ['admin_email', 'form_*', 'formconfig_*'],
+                'email_recipient_cc'   => ['admin_email', 'form_*', 'formconfig_*'],
+                'email_recipient_bcc'  => ['admin_email', 'form_*', 'formconfig_*'],
+                'email_replyTo'        => ['admin_email', 'form_*', 'formconfig_*'],
+                'attachment_tokens'    => ['form_*', 'formconfig_*'],
             ]
         ]
     ]
@@ -143,6 +157,11 @@ $GLOBALS['TL_MODELS']['tl_submission_archive'] = '\HeimrichHannot\Submissions\Su
  */
 $GLOBALS['TL_HOOKS']['loadDataContainer']['submissions_setPTableForDelete'] = ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'setPTableForDelete'];
 $GLOBALS['TL_HOOKS']['loadDataContainer']['huh_submissions']                = [\HeimrichHannot\Submissions\EventListener\LoadDataContainerListener::class, 'onLoadDataContainer'];
+$GLOBALS['TL_HOOKS']['prepareFormData']['huh_submissions']         = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onPrepareFormData'];
+$GLOBALS['TL_HOOKS']['storeFormData']['huh_submissions']           = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onStoreFormData'];
+$GLOBALS['TL_HOOKS']['processFormData']['huh_submissions']         = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onProcessFormData'];
+$GLOBALS['TL_HOOKS']['sendNotificationMessage']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onSendNotificationMessage'];
+$GLOBALS['TL_HOOKS']['initializeSystem']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\InitializeSystemListener::class, '__invoke'];
 
 /**
  * Add permissions

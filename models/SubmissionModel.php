@@ -2,22 +2,17 @@
 
 namespace HeimrichHannot\Submissions;
 
-use Contao\Controller;
-use Contao\DataContainer;
-use Contao\DC_Table;
+use Contao\Model;
 use Contao\System;
 use HeimrichHannot\FormHybrid\DC_Hybrid;
-use HeimrichHannot\FormHybrid\Submission;
 use HeimrichHannot\Haste\Dca\DC_HastePlus;
 use HeimrichHannot\Haste\Dca\General;
-use HeimrichHannot\Haste\Util\Arrays;
-use HeimrichHannot\Haste\Util\Environment;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
 use NotificationCenter\Model\Notification;
 
-class SubmissionModel extends \Model
+class SubmissionModel extends Model
 {
 
     protected static $strTable = 'tl_submission';

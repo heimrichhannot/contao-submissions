@@ -12,6 +12,7 @@ class Submissions extends \Controller
 
     const NOTIFICATION_TYPE_FORM_SUBMISSION = 'submission_form';
     const NOTIFICATION_TYPE_CONFIRMATION    = 'submission_confirmation';
+    const NOTIFICATION_TYPE_OPTIN    = 'submission_optin';
 
     const PALETTE_DEFAULT = '{general_legend},authorType,author;{submission_legend},submissionFields;{publish_legend},published;';
 
@@ -102,10 +103,10 @@ class Submissions extends \Controller
         Database::getInstance()->prepare("UPDATE tl_submission SET submissionLanguage=? WHERE id=?")->execute($GLOBALS['TL_LANGUAGE'], $id);
     }
 
-    private static function getNotificationOptionsByType($strType)
+    public static function getNotificationOptionsByType($strType)
     {
         $arrChoices       = [];
-        $objNotifications = \Database::getInstance()->execute("SELECT id,title FROM tl_nc_notification WHERE type='$strType' ORDER BY title");
+        $objNotifications = Database::getInstance()->execute("SELECT id,title FROM tl_nc_notification WHERE type='$strType' ORDER BY title");
 
         while ($objNotifications->next()) {
             $arrChoices[$objNotifications->id] = $objNotifications->title;
