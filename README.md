@@ -1,7 +1,5 @@
 # Submissions
-
-A generic module to store and handle submissions in Contao. You can use it with all of your modules to simplify submission handling.
-Works great with [heimrichhannot/frontendedit](https://github.com/heimrichhannot/contao-frontendedit),
+A generic module to store and handle submissions in Contao. You can use it with all of your modules to simplify submission handling. Works great with [heimrichhannot/frontendedit](https://github.com/heimrichhannot/contao-frontendedit),
 [heimrichhannot/formhybrid_list](https://github.com/heimrichhannot/contao-formhybrid_list) and
 [heimrichhannot/formhybrid](https://github.com/heimrichhannot/contao-formhybrid).
 
@@ -28,6 +26,40 @@ Works great with [heimrichhannot/frontendedit](https://github.com/heimrichhannot
 - easily export submissions as CSV and Excel file (using [heimrichhannot/contao-exporter](https://github.com/heimrichhannot/contao-exporter))
 - optional cleaner support for periodically removing unpublished (aka inactive) submissions (using TL_CRON or your server's cron, using [heimrichhannot/contao-entity_cleaner](https://github.com/heimrichhannot/contao-entity_cleaner))
 - specify a member (frontend) or a user (backend) to be the author of the submission
+- Form generator support including opt-in process (contao 4.7+ only)
+
+## Installation and usage
+
+### Install
+
+1. Install with composer or contao manager
+
+    composer require heimrichhannot/contao-submissions
+
+2. Update database
+
+### Usage
+
+You will find a new backend menu entry named "Submissions". Create a new archive with a title and select the fields, 
+your submissions should contain.
+
+#### Form generator
+You can store your form generator submissions directly as submission. Just active 
+"store as submission" and select the submission archive. Form field names must be 
+the same as the fields names of the submission entity.
+
+If you on contao 4.7 or higher, you can also set up an opt-in process for your submission.
+Create an opt-in notification in notification center and select it in the form configuration.
+You can also choose a jump to page to which the user is redirected when the opt-in-url 
+is called and the opt-in was successful. If you want to check a property on successful
+opt-ins, you can set the confirmation field property (e.g. set the publish field to true).
+
+### Formhybrid
+
+To use this bundle with formhybrid, we recommend to install 
+[Submissions Creator](https://github.com/heimrichhannot/contao-submissions_creator).
+
+## Further information
 
 ### Fields
 
