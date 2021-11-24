@@ -133,6 +133,7 @@ class LoadDataContainerListener
             $dca    = &$GLOBALS['TL_DCA'][$table];
             $fields = [
                 'huhSubAddOptIn'          => [
+                    'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubAddOptIn'],
                     'exclude'   => true,
                     'filter'    => true,
                     'inputType' => 'checkbox',
@@ -140,6 +141,7 @@ class LoadDataContainerListener
                     'sql'       => "char(1) NOT NULL default ''"
                 ],
                 'huhSubOptInNotification' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubOptInNotification'],
                     'exclude'          => true,
                     'search'           => true,
                     'inputType'        => 'select',
@@ -150,6 +152,7 @@ class LoadDataContainerListener
                     'sql'              => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
                 ],
                 'huhSubOptInJumpTo'       => [
+                    'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubOptInJumpTo'],
                     'exclude'    => true,
                     'inputType'  => 'pageTree',
                     'foreignKey' => 'tl_page.title',
@@ -158,11 +161,11 @@ class LoadDataContainerListener
                     'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
                 ],
                 'huhSubOptInField'        => [
+                    'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubOptInField'],
                     'inputType'        => 'select',
                     'options_callback' => static function() {
                         return General::getFields('tl_submission', false, ['checkbox'], [], false);
                     },
-//                    'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getFieldsAsOptions'],
                     'default'          => 'published',
                     'sql'              => "varchar(64) NOT NULL default ''",
                     'eval'             => [
@@ -191,6 +194,7 @@ class LoadDataContainerListener
     {
         if (version_compare(VERSION, '4.7', '>=')) {
             $GLOBALS['TL_DCA'][$table]['fields']['huhSubOptInTokenId'] = [
+                'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubOptInTokenId'],
                 'exclude'   => true,
                 'filter'    => true,
                 'inputType' => 'text',
@@ -198,6 +202,7 @@ class LoadDataContainerListener
                 'sql'       => "varchar(32) NOT NULL default ''"
             ];
             $GLOBALS['TL_DCA'][$table]['fields']['huhSubOptInCache']   = [
+                'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubOptInCache'],
                 'exclude'   => true,
                 'filter'    => true,
                 'inputType' => 'text',

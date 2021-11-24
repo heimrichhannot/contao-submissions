@@ -37,6 +37,8 @@ $arrLang['addDifferentBillingData'] = ['Specify different billing data', 'Choose
 $arrLang['published']               = ['Activated', 'Choose this option to activate the submission.'];
 $arrLang['formHybridBlob']          = ['FormHybrid BLOB', 'This field contains changes, that are not supposed to be finally saved into the record (e.g. multistep forms).'];
 $arrLang['submissionLanguage']      = ['Language of submission', 'This field contains the language in which the submission was edited.'];
+$lang['huhSubOptInTokenId']         = ['Opt-in token id', 'Contains the token identifier until the token is confirmed.'];
+$lang['huhSubOptInCache']           = ['Opt-in cache', 'Stores data for the opt-in process.'];
 
 /**
  * Legends

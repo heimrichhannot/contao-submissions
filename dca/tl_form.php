@@ -9,6 +9,7 @@ $dca['palettes']['default'] = str_replace(',storeValues', ',storeValues,storeAsS
 
 $fields = [
     'storeAsSubmission' => [
+        'label'     => &$GLOBALS['TL_LANG']['tl_form']['storeAsSubmission'],
         'exclude'   => true,
         'filter'    => true,
         'inputType' => 'checkbox',
@@ -16,6 +17,7 @@ $fields = [
         'sql'       => "char(1) NOT NULL default ''"
     ],
     'submissionArchive' => [
+        'label'     => &$GLOBALS['TL_LANG']['tl_form']['submissionArchive'],
         'exclude'    => true,
         'search'     => true,
         'inputType'  => 'select',
