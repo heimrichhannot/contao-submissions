@@ -71,10 +71,17 @@ class InitializeSystemListener
         $submission->huhSubOptInTokenId = '';
         $submission->save();
 
+
         /** @var PageModel|null $jumpTo */
-        if (($jumpTo = $form->getRelated('huhSubOptInJumpTo')) instanceof PageModel)
-        {
-            Controller::redirect($jumpTo->getFrontendUrl());
+        $jumpTo = $form->getRelated('huhSubOptInJumpTo');
+        if (!$jumpTo instanceof PageModel) {
+            $jumpTo = $GLOBALS['objPage'];
         }
+        if ($jumpTo) {
+            Controller::redirect($jumpTo->getFrontendUrl());
+        } else {
+            Controller::redirect("/");
+        }
+
     }
 }

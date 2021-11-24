@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.18.1] - 2021-11-24
+- Fixed: redirect issue if no redirect page is set on opt-in redirect
+
 ## [1.18.0] - 2021-11-24
 - Added: option to store form data in submission table (including archive select on form generator config)
 - Added: option to activate optin process for form submissons (needs at least contao 4.7)

@@ -36,8 +36,6 @@ class FormGeneratorListener
                     $submittedData['optInTokenId'] = $token->getIdentifier();
                 }
             }
-
-
         }
     }
 
