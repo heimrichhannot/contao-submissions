@@ -51,26 +51,30 @@ class InitializeSystemListener
             throw new \RuntimeException('Invalid token! (Error: HuhSubInit03)');
         }
 
+        // Valid token, do confirm process
+
+        $token->confirm();
+
+        if ($form->huhSubOptInField) {
+            $submission->{$form->huhSubOptInField} = "1";
+        }
+
         /** @var tl_form $instance */
         $instance = System::importStatic(tl_form::class);
         if ($instance) {
-            if ($form->huhSubOptInField) {
-                $submission->{$form->huhSubOptInField} = "1";
-            }
             $submissionCache = deserialize($submission->huhSubOptInCache);
-            $instance->sendFormNotification($submission->row(), $form->row(), $submissionCache['files'], $submissionCache['labels']);
-            $token->confirm();
+            $instance->sendFormNotification($submission->row(), $form->row(), $submissionCache['files'] ?? [], $submissionCache['labels'] ?? []);
+        }
 
-            // clean database
-            $submission->huhSubOptInCache = '';
-            $submission->huhSubOptInTokenId = '';
-            $submission->save();
+        // clean database
+        $submission->huhSubOptInCache = '';
+        $submission->huhSubOptInTokenId = '';
+        $submission->save();
 
-            /** @var PageModel|null $objJumpTo */
-            if (($objJumpTo = $form->getRelated('huhSubOptInJumpTo')) instanceof PageModel)
-            {
-                Controller::redirect($objJumpTo->getFrontendUrl());
-            }
+        /** @var PageModel|null $jumpTo */
+        if (($jumpTo = $form->getRelated('huhSubOptInJumpTo')) instanceof PageModel)
+        {
+            Controller::redirect($jumpTo->getFrontendUrl());
         }
     }
 }
