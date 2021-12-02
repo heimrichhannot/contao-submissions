@@ -26,11 +26,12 @@ class FormGeneratorListener
             if (version_compare(VERSION, '4.7', '>=')) {
                 if ($form->huhSubAddOptIn && $form->huhSubOptInNotification) {
                     $form->nc_notification = $form->huhSubOptInNotification;
+
                     $token = System::getContainer()->get('contao.opt-in')
                         ->create(
                             static::OPTIN_TOKEN_PREFIX,
                             $submittedData['email'] ?? $GLOBALS['TL_ADMIN_EMAIL'] ?? 'contao@example.org',
-                            ['tl_form' => [$form->id]]
+                            []
                         );
                     $form->optInIdentifier = $token->getIdentifier();
                     $submittedData['optInTokenId'] = $token->getIdentifier();
@@ -67,6 +68,7 @@ class FormGeneratorListener
                 $submission->huhSubOptInCache = serialize([
                     'labels' => $labels,
                     'files' => $files,
+                    'form' => $form->id
                 ]);
                 $submission->save();
             }

@@ -36,19 +36,17 @@ class InitializeSystemListener
             throw new \RuntimeException('Token already confirmed');
         }
 
-        $related = $token->getRelatedRecords();
-        if (!isset($related['tl_form'])) {
-            throw new \RuntimeException('Invalid token! (Error: HuhSubInit01)');
-        }
-
-        $form = FormModel::findByPk($related['tl_form'][0]);
-        if (!$form) {
-            throw new \RuntimeException('Invalid token! (Error: HuhSubInit02)');
-        }
-
         $submission = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$token->getIdentifier()]);
         if (!$submission || $submission->count() > 1) {
             throw new \RuntimeException('Invalid token! (Error: HuhSubInit03)');
+        }
+
+        $submissionCache = deserialize($submission->huhSubOptInCache, true);
+
+        $form = FormModel::findByPk($submissionCache['form']);
+
+        if (!$form) {
+            throw new \RuntimeException('Invalid token! (Error: HuhSubInit02)');
         }
 
         // Valid token, do confirm process
