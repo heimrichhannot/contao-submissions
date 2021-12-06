@@ -192,7 +192,7 @@ class LoadDataContainerListener
                     $dca['subpalettes']['storeAsSubmission']
                 );
                 $dca['palettes']['__selector__'][]       = 'huhSubAddOptIn';
-                $dca['subpalettes']['huhSubAddOptIn']    = 'huhSubOptInNotification,huhSubOptInJumpTo,huhSubOptInField,huhSubOptInTokenInvalid';
+                $dca['subpalettes']['huhSubAddOptIn']    = 'huhSubOptInNotification,huhSubOptInJumpTo,huhSubOptInField,huhSubOptInTokenInvalidJumpTo';
             }
 
             $dca['fields'] = array_merge($dca['fields'], $fields);

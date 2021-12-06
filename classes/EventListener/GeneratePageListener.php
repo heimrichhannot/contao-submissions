@@ -6,6 +6,8 @@ use Contao\Controller;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\FormModel;
 use Contao\Input;
+use Contao\PageRegular;
+use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
@@ -13,11 +15,11 @@ use HeimrichHannot\Submissions\SubmissionModel;
 use NotificationCenter\tl_form;
 
 /**
- * Hook("initializeSystem")
+ * Hook("generatePage")
  */
-class InitializeSystemListener
+class GeneratePageListener
 {
-    public function __invoke(): void
+    public function __invoke(PageModel $pageModel, LayoutModel $layout, PageRegular $pageRegular): void
     {
         if (version_compare(VERSION, '4.7', '<')) {
             return;
@@ -31,31 +33,31 @@ class InitializeSystemListener
         $token = System::getContainer()->get('contao.opt-in')->find($tokenId);
 
         if (null === $token) {
-            throw new PageNotFoundException('Invalid token!  (Error: HuhSubInit01)');
+            $submissions = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$token->getIdentifier()]);
+            if ($submissions) {
+                while ($submissions->next()) {
+                    $submissions->huhSubOptInTokenId = '';
+                    $submissions->huhSubOptInCache = '';
+                    $submissions->save();
+                }
+            }
+            $this->errorRedirect('HuhSubInit01');
         }
 
         $submission = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$token->getIdentifier()]);
         if (!$submission || $submission->count() > 1) {
-            throw new PageNotFoundException('Invalid token!  (Error: HuhSubInit02)');
+            $this->errorRedirect('HuhSubInit02');
         }
 
         $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache, true);
 
         $form = FormModel::findByPk($submissionCache['form']);
         if (!$form) {
-            throw new PageNotFoundException('Invalid token!  (Error: HuhSubInit03)');
+            $this->errorRedirect('HuhSubInit03');
         }
 
         if ($token->isConfirmed()) {
-            if ($form->huhSubOptInTokenInvalidJumpTo) {
-                /** @var PageModel|null $jumpTo */
-                $jumpTo = $form->getRelated('huhSubOptInTokenInvalidJumpTo');
-                if ($jumpTo instanceof PageModel) {
-                    Controller::redirect($jumpTo->getFrontendUrl());
-                }
-                throw new PageNotFoundException('Invalid already confirmed!  (Error: HuhSubInit04)');
-            }
-            throw new \RuntimeException('Token already confirmed');
+            $this->errorRedirect('Token already confirmed!', $form);
         }
 
         // Valid token, do confirm process
@@ -74,8 +76,7 @@ class InitializeSystemListener
         }
 
         // clean database
-        $submission->huhSubOptInCache = '';
-        $submission->huhSubOptInTokenId = '';
+        $submission->huhSubOptInCache = serialize(['form' => $submissionCache['form'] ?? '']);
         $submission->save();
 
 
@@ -89,7 +90,19 @@ class InitializeSystemListener
         } else {
             Controller::redirect("/");
         }
-
     }
 
+    private function errorRedirect(string $errorCode, FormModel $form = null): void
+    {
+        if ($form && $form->huhSubOptInTokenInvalidJumpTo) {
+            /** @var PageModel|null $jumpTo */
+            $jumpTo = $form->getRelated('huhSubOptInTokenInvalidJumpTo');
+            if ($jumpTo instanceof PageModel) {
+                Controller::redirect($jumpTo->getFrontendUrl());
+            }
+        }
+
+        Input::setGet('token', null);
+        throw new PageNotFoundException('Invalid token!  (Error: '.$errorCode.')');
+    }
 }

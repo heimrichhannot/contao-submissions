@@ -156,12 +156,12 @@ $GLOBALS['TL_MODELS']['tl_submission_archive'] = '\HeimrichHannot\Submissions\Su
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['loadDataContainer']['submissions_setPTableForDelete'] = ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'setPTableForDelete'];
-$GLOBALS['TL_HOOKS']['loadDataContainer']['huh_submissions']                = [\HeimrichHannot\Submissions\EventListener\LoadDataContainerListener::class, 'onLoadDataContainer'];
-$GLOBALS['TL_HOOKS']['prepareFormData']['huh_submissions']         = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onPrepareFormData'];
-$GLOBALS['TL_HOOKS']['storeFormData']['huh_submissions']           = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onStoreFormData'];
-$GLOBALS['TL_HOOKS']['processFormData']['huh_submissions']         = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onProcessFormData'];
+$GLOBALS['TL_HOOKS']['loadDataContainer']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\LoadDataContainerListener::class, 'onLoadDataContainer'];
+$GLOBALS['TL_HOOKS']['prepareFormData']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onPrepareFormData'];
+$GLOBALS['TL_HOOKS']['storeFormData']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onStoreFormData'];
+$GLOBALS['TL_HOOKS']['processFormData']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onProcessFormData'];
 $GLOBALS['TL_HOOKS']['sendNotificationMessage']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\FormGeneratorListener::class, 'onSendNotificationMessage'];
-$GLOBALS['TL_HOOKS']['initializeSystem']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\InitializeSystemListener::class, '__invoke'];
+$GLOBALS['TL_HOOKS']['getPageLayout']['huh_submissions'] = [\HeimrichHannot\Submissions\EventListener\GeneratePageListener::class, '__invoke'];
 
 /**
  * Add permissions
