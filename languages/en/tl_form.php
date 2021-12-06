@@ -8,6 +8,6 @@ $lang['submissionArchive'] = ['Submission archive', "The submissin archive which
 $lang['huhSubAddOptIn']          = ['Activate opt-in', "Activate opt-in process for form submissions."];
 $lang['huhSubOptInNotification'] = ['Opt-in notification', "Choose an opt-in notification."];
 $lang['huhSubOptInJumpTo']       = ['Opt-in redirect page', "Choose a page to which the visitor will be redirected after successful opt-in."];
-$lang['huhSubOptInTokenInvalidJumpTo'] = ['Invalid token redirect page', "Choose a page the visitor will be redirected to if te token is expired, already confirmed or not existing."];
+$lang['huhSubOptInTokenInvalidJumpTo'] = ['Token confirmed page', "Choose a page the visitor will be redirected to if the token is already confirmed."];
 $lang['huhSubOptInField']        = ['Opt-in confirmation field', "Choose a field that should set to true after a successful opt-in."];
 
