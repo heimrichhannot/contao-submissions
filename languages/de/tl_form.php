@@ -8,5 +8,6 @@ $lang['submissionArchive'] = ['Einsendungsarchiv', "Das Einsendungsarchiv, in we
 $lang['huhSubAddOptIn'] = ['Opt-in aktivieren', "Soll für dieses Formular ein Opt-in verwendet werden?"];
 $lang['huhSubOptInNotification'] = ['Opt-in Benachrichtigung', "Wählen Sie hier die Opt-in-Benachrichtigung aus."];
 $lang['huhSubOptInJumpTo'] = ['Opt-in Weiterleitungsseite', "Wählen Sie die Seite aus, auf welche nach erfolgreichem Opt-in weitergeleitet werden soll."];
+$lang['huhSubOptInTokenInvalidJumpTo'] = ['"Invalider Token"-Weiterleitungsseite', "Wählen Sie die Seite aus, auf welche weitergeleitet werden soll, wenn der Token abgelaufen ist, bereits bestätigt wurde oder nicht existiert."];
 $lang['huhSubOptInField'] = ['Opt-in Bestätigungsfeld', "Wählen Sie hier ein Feld aus, welches bei erfolgreichem Opt-in auf true gesetzt werden soll."];
 

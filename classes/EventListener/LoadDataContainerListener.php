@@ -160,6 +160,15 @@ class LoadDataContainerListener
                     'sql'        => "int(10) unsigned NOT NULL default 0",
                     'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
                 ],
+                'huhSubOptInTokenInvalidJumpTo'       => [
+                    'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubOptInTokenInvalidJumpTo'],
+                    'exclude'    => true,
+                    'inputType'  => 'pageTree',
+                    'foreignKey' => 'tl_page.title',
+                    'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
+                    'sql'        => "int(10) unsigned NOT NULL default 0",
+                    'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
+                ],
                 'huhSubOptInField'        => [
                     'label'     => &$GLOBALS['TL_LANG'][$table]['huhSubOptInField'],
                     'inputType'        => 'select',
@@ -183,7 +192,7 @@ class LoadDataContainerListener
                     $dca['subpalettes']['storeAsSubmission']
                 );
                 $dca['palettes']['__selector__'][]       = 'huhSubAddOptIn';
-                $dca['subpalettes']['huhSubAddOptIn']    = 'huhSubOptInNotification,huhSubOptInJumpTo,huhSubOptInField';
+                $dca['subpalettes']['huhSubAddOptIn']    = 'huhSubOptInNotification,huhSubOptInJumpTo,huhSubOptInField,huhSubOptInTokenInvalid';
             }
 
             $dca['fields'] = array_merge($dca['fields'], $fields);

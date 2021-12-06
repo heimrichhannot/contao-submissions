@@ -3,9 +3,11 @@
 namespace HeimrichHannot\Submissions\EventListener;
 
 use Contao\Controller;
+use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\FormModel;
 use Contao\Input;
 use Contao\PageModel;
+use Contao\StringUtil;
 use Contao\System;
 use HeimrichHannot\Submissions\SubmissionModel;
 use NotificationCenter\tl_form;
@@ -29,24 +31,31 @@ class InitializeSystemListener
         $token = System::getContainer()->get('contao.opt-in')->find($tokenId);
 
         if (null === $token) {
-            throw new \RuntimeException('Invalid token identifier');
-        }
-
-        if ($token->isConfirmed()) {
-            throw new \RuntimeException('Token already confirmed');
+            throw new PageNotFoundException('Invalid token!  (Error: HuhSubInit01)');
         }
 
         $submission = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$token->getIdentifier()]);
         if (!$submission || $submission->count() > 1) {
-            throw new \RuntimeException('Invalid token! (Error: HuhSubInit03)');
+            throw new PageNotFoundException('Invalid token!  (Error: HuhSubInit02)');
         }
 
-        $submissionCache = deserialize($submission->huhSubOptInCache, true);
+        $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache, true);
 
         $form = FormModel::findByPk($submissionCache['form']);
-
         if (!$form) {
-            throw new \RuntimeException('Invalid token! (Error: HuhSubInit02)');
+            throw new PageNotFoundException('Invalid token!  (Error: HuhSubInit03)');
+        }
+
+        if ($token->isConfirmed()) {
+            if ($form->huhSubOptInTokenInvalidJumpTo) {
+                /** @var PageModel|null $jumpTo */
+                $jumpTo = $form->getRelated('huhSubOptInTokenInvalidJumpTo');
+                if ($jumpTo instanceof PageModel) {
+                    Controller::redirect($jumpTo->getFrontendUrl());
+                }
+                throw new PageNotFoundException('Invalid already confirmed!  (Error: HuhSubInit04)');
+            }
+            throw new \RuntimeException('Token already confirmed');
         }
 
         // Valid token, do confirm process
@@ -60,7 +69,7 @@ class InitializeSystemListener
         /** @var tl_form $instance */
         $instance = System::importStatic(tl_form::class);
         if ($instance) {
-            $submissionCache = deserialize($submission->huhSubOptInCache);
+            $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache);
             $instance->sendFormNotification($submission->row(), $form->row(), $submissionCache['files'] ?? [], $submissionCache['labels'] ?? []);
         }
 
@@ -82,4 +91,5 @@ class InitializeSystemListener
         }
 
     }
+
 }
