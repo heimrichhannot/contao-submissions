@@ -2,12 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.19.0] - 2021-12-07
+- Added: option to set a redirect page if a token is already confirmed (formgenerator opt-in)
+- Changed: invalid tokens now lead to 404 page instead of throwing an exception (formgenerator opt-in)
+
 ## [1.18.1] - 2021-11-24
 - Fixed: redirect issue if no redirect page is set on opt-in redirect
 
 ## [1.18.0] - 2021-11-24
 - Added: option to store form data in submission table (including archive select on form generator config)
-- Added: option to activate optin process for form submissons (needs at least contao 4.7)
+- Added: option to activate opt-in process for form submissons (needs at least contao 4.7)
 - Changed: raised minimum php version to 7.1
 - Changed: removed notification_center_plus dependency
 
