@@ -7,7 +7,7 @@ $lang = &$GLOBALS['TL_LANG']['tl_submission'];
  */
 $lang['pid']                     = ['Archiv', 'Wählen Sie hier das Einsendungsarchiv aus'];
 $lang['type']                    = ['Typ', 'Wählen Sie hier den Typ der Einsendung aus.'];
-$lang['gender']                  = ['Geschlecht', 'Geben Sie hier das Geschlecht ein.'];
+$lang['gender']                  = TL_MODE == 'FE' ? ['Anrede', 'Wählen Sie hier eine Anrede aus.'] : ['Geschlecht', 'Geben Sie hier das Geschlecht ein.'];
 $lang['genderFe']                = ['Anrede', 'Wählen Sie hier eine Anrede aus.'];
 $lang['academicTitle']           = ['Akademischer Titel', 'Geben Sie hier einen akademischen Titel ein.'];
 $lang['additionalTitle']         = ['Zusätzlicher Titel', 'Geben Sie hier einen zusätzlichen akademischen Titel ein.'];
@@ -43,6 +43,17 @@ $lang['formHybridBlob']          = ['FormHybrid BLOB', 'Dieses Feld enthält Än
 $lang['submissionLanguage']      = ['Sprache der Einsendung', 'Dieses Feld enthält die Sprache der Einsendung.'];
 $lang['huhSubOptInTokenId']      = ['Opt-in Token-Id', 'Dieses Feld enthält den Identifier des Tokens, bis der Opt-in bestätigt wurde.'];
 $lang['huhSubOptInCache']        = ['Opt-in Cache', 'Dieses Feld speichert Daten für den Opt-in-Prozess zwischen.'];
+$lang['huhSubOptInCache']        = ['Opt-in Cache', 'Dieses Feld speichert Daten für den Opt-in-Prozess zwischen.'];
+
+// billing
+$lang['billingGender']        = $lang['gender'];
+$lang['billingAcademicTitle'] = $lang['academicTitle'];
+$lang['billingFirstname']     = $lang['firstname'];
+$lang['billingLastname']      = $lang['lastname'];
+$lang['billingCompany']       = $lang['company'];
+$lang['billingStreet']        = $lang['street'];
+$lang['billingPostal']        = $lang['postal'];
+$lang['billingCity']          = $lang['city'];
 
 /**
  * Legends

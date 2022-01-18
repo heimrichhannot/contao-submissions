@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.19.1] - 2022-01-18
+
+- Fixed: gender and billing labels for contao 4.9
+
 ## [1.19.0] - 2021-12-07
 - Added: option to set a redirect page if a token is already confirmed (formgenerator opt-in)
 - Changed: invalid tokens now lead to 404 page instead of throwing an exception (formgenerator opt-in)

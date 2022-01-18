@@ -129,7 +129,7 @@ $arrDca = [
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'gender'                  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => ['male', 'female', 'divers'],
@@ -450,7 +450,7 @@ $arrDca = [
             'sql'       => "char(1) NOT NULL default ''"
         ],
         'billingGender'           => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission'][TL_MODE == 'FE' ? 'genderFe' : 'gender'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => ['male', 'female'],
