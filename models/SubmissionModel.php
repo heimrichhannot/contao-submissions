@@ -12,6 +12,11 @@ use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
 use NotificationCenter\Model\Notification;
 
+/**
+ * @property int $id
+ * @property int $tstamp
+ * @property int $dateAdded
+ */
 class SubmissionModel extends Model
 {
 
