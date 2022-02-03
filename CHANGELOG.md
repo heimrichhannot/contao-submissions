@@ -3,24 +3,24 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.20.0] - 2022-01-03
-- Added: SubmissionsBeforeSendConfirmationNotificationEvent
-- Changed: update some translations
-- Changed: updated documentation
+- Added: SubmissionsBeforeSendConfirmationNotificationEvent ([#6])
+- Changed: update some translations ([#6])
+- Changed: updated documentation ([#6])
 
 ## [1.19.1] - 2022-01-18
 
 - Fixed: gender and billing labels for contao 4.9
 
 ## [1.19.0] - 2021-12-07
-- Added: option to set a redirect page if a token is already confirmed (formgenerator opt-in)
-- Changed: invalid tokens now lead to 404 page instead of throwing an exception (formgenerator opt-in)
+- Added: option to set a redirect page if a token is already confirmed (formgenerator opt-in) ([#5])
+- Changed: invalid tokens now lead to 404 page instead of throwing an exception (formgenerator opt-in) ([#5])
 
 ## [1.18.1] - 2021-11-24
 - Fixed: redirect issue if no redirect page is set on opt-in redirect
 
 ## [1.18.0] - 2021-11-24
-- Added: option to store form data in submission table (including archive select on form generator config)
-- Added: option to activate opt-in process for form submissons (needs at least contao 4.7)
+- Added: option to store form data in submission table (including archive select on form generator config) ([#4])
+- Added: option to activate opt-in process for form submissons (needs at least contao 4.7) ([#4])
 - Changed: raised minimum php version to 7.1
 - Changed: removed notification_center_plus dependency
 
@@ -304,3 +304,7 @@ licence LGPL-3.0+ is now LGPL-3.0-or-later
 ### Removed
 
 - author & authorType functionality - included in haste_plus
+
+[#6]: https://github.com/heimrichhannot/contao-submissions/pull/6
+[#5]: https://github.com/heimrichhannot/contao-submissions/pull/5
+[#6]: https://github.com/heimrichhannot/contao-submissions/pull/4
