@@ -48,11 +48,19 @@ You can store your form generator submissions directly as submission. Just activ
 "store as submission" and select the submission archive. Form field names must be 
 the same as the fields names of the submission entity.
 
-If you on contao 4.7 or higher, you can also set up an opt-in process for your submission.
+If you on contao 4.7 or higher, you can also set up an **double opt-in** process for your submission.
 Create an opt-in notification in notification center and select it in the form configuration.
 You can also choose a jump to page to which the user is redirected when the opt-in-url 
 is called and the opt-in was successful. If you want to check a property on successful
 opt-ins, you can set the confirmation field property (e.g. set the publish field to true).
+
+You can use following notification tokens in the opt-in-notification:
+
+| Token | Description               |
+|-------|---------------------------|
+| optInToken | Contains the opt-in token |
+| optInUrl | Contains the opt-in url   |
+
 
 ### Formhybrid
 
