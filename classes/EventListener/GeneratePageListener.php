@@ -11,6 +11,7 @@ use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
+use HeimrichHannot\Submissions\Event\SubmissionsBeforeSendConfirmationNotificationEvent;
 use HeimrichHannot\Submissions\SubmissionModel;
 use NotificationCenter\tl_form;
 
@@ -48,6 +49,7 @@ class GeneratePageListener
         if (!$submission || $submission->count() > 1) {
             $this->errorRedirect('HuhSubInit02');
         }
+        $submission = $submission->current();
 
         $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache, true);
 
@@ -66,6 +68,24 @@ class GeneratePageListener
 
         if ($form->huhSubOptInField) {
             $submission->{$form->huhSubOptInField} = "1";
+        }
+
+        $event = new SubmissionsBeforeSendConfirmationNotificationEvent($submission, $submissionCache, $form);
+        try {
+            System::getContainer()->get('event_dispatcher')->dispatch(
+                $event,
+                SubmissionsBeforeSendConfirmationNotificationEvent::class
+            );
+        } catch (\Exception $e) {
+            if (System::getContainer()->get('kernel')->isDebug()) {
+                throw $e;
+            } else {
+                System::log(
+                    "Exception while executing SubmissionsBeforeSendConfirmationNotificationEvent",
+                    __METHOD__,
+                    TL_ERROR
+                );
+            }
         }
 
         /** @var tl_form $instance */
