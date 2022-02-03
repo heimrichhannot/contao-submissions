@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.20.0] - 2022-01-03
+- Added: SubmissionsBeforeSendConfirmationNotificationEvent
+- Changed: update some translations
+- Changed: updated documentation
+
 ## [1.19.1] - 2022-01-18
 
 - Fixed: gender and billing labels for contao 4.9

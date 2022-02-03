@@ -3,6 +3,8 @@ A generic module to store and handle submissions in Contao. You can use it with 
 [heimrichhannot/formhybrid_list](https://github.com/heimrichhannot/contao-formhybrid_list) and
 [heimrichhannot/formhybrid](https://github.com/heimrichhannot/contao-formhybrid).
 
+[Screenshots](docs/screenshots.md)
+
 ## Features
 
 - a new submissions entity (organized in archives)
@@ -42,10 +44,10 @@ opt-ins, you can set the confirmation field property (e.g. set the publish field
 
 You can use following notification tokens in the opt-in-notification:
 
-| Token | Description               |
-|-------|---------------------------|
+| Token      | Description               |
+|------------|---------------------------|
 | optInToken | Contains the opt-in token |
-| optInUrl | Contains the opt-in url   |
+| optInUrl   | Contains the opt-in url   |
 
 
 ### Formhybrid
