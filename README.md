@@ -28,9 +28,7 @@ A generic module to store and handle submissions in Contao. You can use it with 
 - specify a member (frontend) or a user (backend) to be the author of the submission
 - Form generator support including opt-in process (contao 4.7+ only)
 
-## Installation and usage
-
-### Install
+## Install
 
 1. Install with composer or contao manager
 
@@ -38,12 +36,12 @@ A generic module to store and handle submissions in Contao. You can use it with 
 
 2. Update database
 
-### Usage
+## Usage
 
 You will find a new backend menu entry named "Submissions". Create a new archive with a title and select the fields, 
 your submissions should contain.
 
-#### Form generator
+### Form generator
 You can store your form generator submissions directly as submission. Just active 
 "store as submission" and select the submission archive. Form field names must be 
 the same as the fields names of the submission entity.
@@ -122,7 +120,7 @@ After adding new fields, run
 
 in your dca in order to add the new fields to the default palette.
 
-#### tl_submission_archive
+### tl_submission_archive
 
 Name | Description
 ---- | -----------
@@ -135,8 +133,21 @@ titlePattern | Specifies a pattern for the archive's submission's label (e.g. "%
 nc_submission | Specifies a notification being sent when submitting a submission (sorry for the poor expression ^^). Could be used for informing some customer that a submission had been made.
 nc_confirmation | Specifies a notification being sent to the author of the submission. Can be resent in the list view of the archive via backend.
 
+
+
+## Developers
+
+### Events
+
+These events are implemented as symfony events and only usable in contao 4+.
+
+| Event                                               | Description                                                                           |
+|-----------------------------------------------------|---------------------------------------------------------------------------------------|
+| SubmissionsBeforeSendConfirmationNotificationEvent  | Is dispatched before the success notification is sent. Needs double opt-in activated. |
+
+
 ### Hooks
 
-Name | Arguments | Description
----- | --------- | -----------
-preGenerateSubmissionTokens | $objSubmission, $objSubmissionArchive, $arrFields | Triggered just before the token generation for notifications is started. Could be used for changing the field list.
+| Name                        | Arguments                                         | Description                                                                                                         |
+|-----------------------------|---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| preGenerateSubmissionTokens | $objSubmission, $objSubmissionArchive, $arrFields | Triggered just before the token generation for notifications is started. Could be used for changing the field list. |
