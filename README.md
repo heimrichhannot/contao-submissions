@@ -3,18 +3,6 @@ A generic module to store and handle submissions in Contao. You can use it with 
 [heimrichhannot/formhybrid_list](https://github.com/heimrichhannot/contao-formhybrid_list) and
 [heimrichhannot/formhybrid](https://github.com/heimrichhannot/contao-formhybrid).
 
-![alt Archive](docs/screenshot.png)
-
-*Archive configuration*
-
-![alt Archive](docs/screenshot2.png)
-
-*List view with opportunity to export and resend confirmation*
-
-![alt Archive](docs/screenshot3.png)
-
-*Submission view (every field of this form can be changed, of course)*
-
 ## Features
 
 - a new submissions entity (organized in archives)
