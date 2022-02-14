@@ -23,7 +23,7 @@ if (in_array('multifileupload', \ModuleLoader::getActive())) {
  * Notification Center Notification Types
  */
 $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] = array_merge_recursive(
-    (array)$GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'],
+    (array) ($GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] ?? []),
     [
         \HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_SUBMISSIONS => [
             \HeimrichHannot\Submissions\Submissions::NOTIFICATION_TYPE_FORM_SUBMISSION => [

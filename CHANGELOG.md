@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.20.1] - 2022-02-14
+
+- Fixed: array index issues in php 8+
+
 ## [1.20.0] - 2022-01-03
 - Added: SubmissionsBeforeSendConfirmationNotificationEvent ([#6])
 - Changed: update some translations ([#6])

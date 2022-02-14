@@ -357,7 +357,7 @@ class SubmissionBackend extends \Backend
         $fields = [];
 
         foreach ($dca['fields'] as $field => $data) {
-            if (!$data['eval']['noSubmissionField']) {
+            if (!($data['eval']['noSubmissionField'] ?? null)) {
                 $fields[] = $field;
             }
         }

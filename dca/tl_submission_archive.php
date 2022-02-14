@@ -64,7 +64,7 @@ $arrDca = [
                 'label'           => &$GLOBALS['TL_LANG']['tl_submission_archive']['copy'],
                 'href'            => 'act=delete',
                 'icon'            => 'delete.gif',
-                'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                'attributes'      => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null)
                     . '\'))return false;Backend.getScrollOffset()"',
                 'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'deleteArchive'],
             ],
