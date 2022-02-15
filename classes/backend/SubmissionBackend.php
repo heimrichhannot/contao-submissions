@@ -265,7 +265,7 @@ class SubmissionBackend extends \Backend
                 $arrSubmissionFields = deserialize($archive->submissionFields, true);
 
                 // remove subpalette fields from arrSubmissionFields
-                if (is_array($dca['subpalettes'])) {
+                if (isset($dca['subpalettes']) && is_array($dca['subpalettes'])) {
                     foreach ($dca['subpalettes'] as $key => $value) {
                         $arrSubpaletteFields = \HeimrichHannot\FormHybrid\FormHelper::getPaletteFields($objDc->table, $value);
 
