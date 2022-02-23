@@ -49,9 +49,9 @@ class FormGeneratorListener
 
             // Remove fields that not exist
             $data = array_intersect_key($data, array_flip(Database::getInstance()->getFieldNames('tl_submission')));
-
-            return $data;
         }
+
+        return $data;
     }
 
     public function onProcessFormData(array $submittedData, array $formData, ?array $files, array $labels, Form $form): void
