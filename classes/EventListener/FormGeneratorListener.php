@@ -2,10 +2,13 @@
 
 namespace HeimrichHannot\Submissions\EventListener;
 
+use Contao\Controller;
 use Contao\Database;
 use Contao\Environment;
 use Contao\Form;
+use Contao\StringUtil;
 use Contao\System;
+use Contao\Validator;
 use HeimrichHannot\Submissions\SubmissionModel;
 use NotificationCenter\Model\Gateway;
 use NotificationCenter\Model\Message;
@@ -49,6 +52,21 @@ class FormGeneratorListener
 
             // Remove fields that not exist
             $data = array_intersect_key($data, array_flip(Database::getInstance()->getFieldNames('tl_submission')));
+
+            if (!empty($_SESSION['FILES'])) {
+                Controller::loadDataContainer('tl_submission');
+                foreach ($_SESSION['FILES'] as $field=>$fieldData) {
+                    if (isset($data[$field]) && isset($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
+                        $data[$field] = StringUtil::uuidToBin($fieldData['uuid']);
+
+                        if (($GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['fieldType'] ?? false ) === 'checkbox'
+                            || ($GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['multiple'] ?? false) === true
+                        ) {
+                            $data[$field] = serialize([$fieldData['uuid']]);
+                        }
+                    }
+                }
+            }
         }
 
         return $data;

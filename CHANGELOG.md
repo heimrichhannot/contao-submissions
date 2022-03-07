@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.20.4] - 2022-03-07
+- Fixed: file uploads not working in form generator
+
 ## [1.20.3] - 2022-02-23
 - Fixed: FormGeneratorListener::onStoreFormData() return value
 
