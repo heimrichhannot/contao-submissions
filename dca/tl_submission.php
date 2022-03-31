@@ -22,6 +22,7 @@ $arrDca = [
         'sql'               => [
             'keys' => [
                 'id' => 'primary',
+                'uuid' => 'unique',
             ],
         ],
     ],
@@ -118,6 +119,12 @@ $arrDca = [
             'flag'    => 6,
             'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true, 'noSubmissionField' => true],
             'sql'     => "int(10) unsigned NOT NULL default '0'",
+        ],
+        'uuid' => [
+            'sql' => "binary(16) NULL",
+            'eval' => [
+                'noSubmissionField' => true
+            ]
         ],
         'type'                    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['type'],

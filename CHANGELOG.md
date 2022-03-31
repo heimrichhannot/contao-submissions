@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.21.0] - 2022-03-31
+- Changed: added a uuid field an fill it in form generator hook, so submission can be loaded in subsquent hook
+
 ## [1.20.4] - 2022-03-07
 - Fixed: file uploads not working in form generator
 

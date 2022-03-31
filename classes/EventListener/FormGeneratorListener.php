@@ -26,6 +26,10 @@ class FormGeneratorListener
             $form->storeValues = '1';
             $form->targetTable = 'tl_submission';
 
+            if (!isset($data['uuid'])) {
+                $submittedData['uuid'] = Database::getInstance()->getUuid();
+            }
+
             if (version_compare(VERSION, '4.7', '>=')) {
                 if ($form->huhSubAddOptIn && $form->huhSubOptInNotification) {
                     $form->nc_notification = $form->huhSubOptInNotification;
