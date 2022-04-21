@@ -101,7 +101,7 @@ class FormGeneratorListener
         }
     }
 
-    public function onSendNotificationMessage(Message $message, array &$tokens, string $language, Gateway $gatewayModel): bool
+    public function onSendNotificationMessage(Message $message, array &$tokens, ?string $language, ?Gateway $gatewayModel): bool
     {
         if (!isset($tokens['formconfig_id']) || !($tokens['formconfig_storeAsSubmission'] ?? false)) {
             return true;
