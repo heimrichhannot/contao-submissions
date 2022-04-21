@@ -118,11 +118,10 @@ class FormGeneratorListener
 
             if (false === json_encode($tokens)) {
                 System::log(
-                    'The message contained invalid tokens and could not be sent!',
+                    sprintf("The message '%s' (ID %s) contains invalid tokens!", $message->title, $message->id),
                     __METHOD__,
                     TL_ERROR
                 );
-                return false;
             }
         }
 
