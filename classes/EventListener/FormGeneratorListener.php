@@ -76,8 +76,12 @@ class FormGeneratorListener
         return $data;
     }
 
-    public function onProcessFormData(array $submittedData, array $formData, ?array $files, array $labels, Form $form): void
+    public function onProcessFormData(array &$submittedData, array $formData, ?array $files, array $labels, Form $form): void
     {
+        if (isset($submittedData['uuid']) && Validator::isBinaryUuid($submittedData['uuid'])) {
+            $submittedData['uuid'] = StringUtil::binToUuid($submittedData['uuid']);
+        }
+
         if (version_compare(VERSION, '4.7', '>=')) {
             if ($form->storeAsSubmission && $form->submissionArchive
                 && $form->huhSubAddOptIn && $form->huhSubOptInNotification && isset($submittedData['optInTokenId']))
@@ -99,25 +103,34 @@ class FormGeneratorListener
 
     public function onSendNotificationMessage(Message $message, array &$tokens, string $language, Gateway $gatewayModel): bool
     {
+        if (!isset($tokens['formconfig_id']) || !($tokens['formconfig_storeAsSubmission'] ?? false)) {
+            return true;
+        }
+
+        if (false === json_encode($tokens)) {
+
+            if (Validator::isBinaryUuid($tokens['form_uuid'])) {
+                $uuid = StringUtil::binToUuid($tokens['form_uuid']);
+                $tokens['raw_data'] = str_replace($tokens['form_uuid'], $uuid, $tokens['raw_data']);
+                $tokens['raw_data_filled'] = str_replace($tokens['form_uuid'], $uuid, $tokens['raw_data_filled']);
+                $tokens['form_uuid'] = $uuid;
+            }
+
+            if (false === json_encode($tokens)) {
+                System::log(
+                    'The message contained invalid tokens and could not be sent!',
+                    __METHOD__,
+                    TL_ERROR
+                );
+                return false;
+            }
+        }
+
         if (version_compare(VERSION, '4.7', '>=')) {
-            if (!isset($tokens['formconfig_id'])) {
-                return true;
+            if (($tokens['formconfig_huhSubAddOptIn'] ?? false) && isset($tokens['formconfig_optInIdentifier'])) {
+                $tokens['optInToken'] = $tokens['formconfig_optInIdentifier'];
+                $tokens['optInUrl'] = Environment::get('base').'?token='.$tokens['formconfig_optInIdentifier'];
             }
-            if (isset($tokens['form_uuid']) && Validator::isBinaryUuid($tokens['form_uuid'])) {
-                $tokens['form_uuid'] = StringUtil::binToUuid($tokens['form_uuid']);
-            }
-
-            if (
-                !($tokens['formconfig_storeAsSubmission'] ?? false)
-                || !($tokens['formconfig_huhSubAddOptIn'] ?? false)
-                || !isset($tokens['formconfig_optInIdentifier'])
-            ) {
-
-                return true;
-            }
-
-            $tokens['optInToken'] = $tokens['formconfig_optInIdentifier'];
-            $tokens['optInUrl'] = Environment::get('base').'?token='.$tokens['formconfig_optInIdentifier'];
         }
 
         return true;

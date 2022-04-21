@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.21.2] - 2022-04-21
+- Fixed: uuid field leads to invalid notification center tokens
+
 ## [1.21.1] - 2022-04-21
 - Fixed: uuid field leads to invalid notification center tokens
 
