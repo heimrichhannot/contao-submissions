@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.21.1] - 2022-04-21
+- Fixed: uuid field leads to invalid notification center tokens
+
 ## [1.21.0] - 2022-03-31
 - Changed: added a uuid field an fill it in form generator hook, so submission can be loaded in subsquent hook
 

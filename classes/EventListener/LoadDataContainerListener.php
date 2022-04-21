@@ -21,7 +21,7 @@ use function Clue\StreamFilter\fun;
 class LoadDataContainerListener
 {
     /**
-     * @Hook("loadDataContainer")
+     * Hook("loadDataContainer")
      * @param string $table
      */
     public function onLoadDataContainer($table): void

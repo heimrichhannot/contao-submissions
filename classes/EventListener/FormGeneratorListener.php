@@ -103,11 +103,16 @@ class FormGeneratorListener
             if (!isset($tokens['formconfig_id'])) {
                 return true;
             }
+            if (isset($tokens['form_uuid']) && Validator::isBinaryUuid($tokens['form_uuid'])) {
+                $tokens['form_uuid'] = StringUtil::binToUuid($tokens['form_uuid']);
+            }
+
             if (
                 !($tokens['formconfig_storeAsSubmission'] ?? false)
                 || !($tokens['formconfig_huhSubAddOptIn'] ?? false)
                 || !isset($tokens['formconfig_optInIdentifier'])
             ) {
+
                 return true;
             }
 
