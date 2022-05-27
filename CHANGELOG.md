@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.21.4] - 2022-05-27
+- Fixed: call member functon on null error
+
 ## [1.21.3] - 2022-04-21
 - Fixed: don't stop sending message on invalid tokens in notification center
 

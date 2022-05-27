@@ -34,7 +34,7 @@ class GeneratePageListener
         $token = System::getContainer()->get('contao.opt-in')->find($tokenId);
 
         if (null === $token) {
-            $submissions = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$token->getIdentifier()]);
+            $submissions = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$tokenId]);
             if ($submissions) {
                 while ($submissions->next()) {
                     $submissions->huhSubOptInTokenId = '';
