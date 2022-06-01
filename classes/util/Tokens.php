@@ -11,6 +11,9 @@
 namespace HeimrichHannot\Submissions\Util;
 
 
+use Contao\StringUtil;
+use Contao\Validator;
+
 class Tokens
 {
     public static function replace($strBuffer, \HeimrichHannot\Submissions\SubmissionModel $objSubmission)
@@ -58,5 +61,34 @@ class Tokens
         }
 
         return $varValue;
+    }
+
+    /**
+     * Convert or remove invalid tokens for notification center
+     *
+     * @param array $tokens
+     * @return array
+     */
+    public static function cleanInvalidTokens(array $tokens): array
+    {
+        if (false !== json_encode($tokens)) {
+            return $tokens;
+        }
+
+        foreach ($tokens as $k => $v) {
+            if (false !== json_encode($v)) {
+                continue;
+            }
+
+            if (Validator::isBinaryUuid($v)) {
+                $tokens[$k] = $v = StringUtil::binToUuid($v);
+            }
+
+            if (false === json_encode($v)) {
+                unset($tokens[$k]);
+            }
+        }
+
+        return $tokens;
     }
 }

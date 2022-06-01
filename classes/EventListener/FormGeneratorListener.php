@@ -10,6 +10,7 @@ use Contao\StringUtil;
 use Contao\System;
 use Contao\Validator;
 use HeimrichHannot\Submissions\SubmissionModel;
+use HeimrichHannot\Submissions\Util\Tokens;
 use NotificationCenter\Model\Gateway;
 use NotificationCenter\Model\Message;
 
@@ -115,14 +116,6 @@ class FormGeneratorListener
                 $tokens['raw_data_filled'] = str_replace($tokens['form_uuid'], $uuid, $tokens['raw_data_filled']);
                 $tokens['form_uuid'] = $uuid;
             }
-
-            if (false === json_encode($tokens)) {
-                System::log(
-                    sprintf("The message '%s' (ID %s) contains invalid tokens!", $message->title, $message->id),
-                    __METHOD__,
-                    TL_ERROR
-                );
-            }
         }
 
         if (version_compare(VERSION, '4.7', '>=')) {
@@ -130,6 +123,15 @@ class FormGeneratorListener
                 $tokens['optInToken'] = $tokens['formconfig_optInIdentifier'];
                 $tokens['optInUrl'] = Environment::get('base').'?token='.$tokens['formconfig_optInIdentifier'];
             }
+        }
+
+        if (false === json_encode($tokens)) {
+            System::log(
+                sprintf("The message '%s' (ID %s) contains invalid tokens!", $message->title, $message->id),
+                __METHOD__,
+                TL_ERROR
+            );
+            $tokens = Tokens::cleanInvalidTokens($tokens);
         }
 
         return true;

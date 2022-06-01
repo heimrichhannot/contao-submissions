@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.22.0] - 2022-06-01
+- Added: Tokens::cleanInvalidTokens()
+- Changed: invalid tokens now always cleaned
+
 ## [1.21.4] - 2022-05-27
 - Fixed: call member functon on null error
 

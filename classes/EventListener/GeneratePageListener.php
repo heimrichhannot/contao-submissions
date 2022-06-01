@@ -13,6 +13,7 @@ use Contao\StringUtil;
 use Contao\System;
 use HeimrichHannot\Submissions\Event\SubmissionsBeforeSendConfirmationNotificationEvent;
 use HeimrichHannot\Submissions\SubmissionModel;
+use HeimrichHannot\Submissions\Util\Tokens;
 use NotificationCenter\tl_form;
 
 /**
@@ -92,7 +93,12 @@ class GeneratePageListener
         $instance = System::importStatic(tl_form::class);
         if ($instance) {
             $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache);
-            $instance->sendFormNotification($submission->row(), $form->row(), $submissionCache['files'] ?? [], $submissionCache['labels'] ?? []);
+            $instance->sendFormNotification(
+                Tokens::cleanInvalidTokens($submission->row()),
+                Tokens::cleanInvalidTokens($form->row()),
+                $submissionCache['files'] ?? [],
+                $submissionCache['labels'] ?? []
+            );
         }
 
         // clean database
