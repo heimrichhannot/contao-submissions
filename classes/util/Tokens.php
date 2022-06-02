@@ -11,12 +11,9 @@
 namespace HeimrichHannot\Submissions\Util;
 
 
-use Contao\Environment;
 use Contao\FilesModel;
-use Contao\FormFieldModel;
 use Contao\StringUtil;
 use Contao\Validator;
-use Webmozart\PathUtil\Path;
 
 class Tokens
 {
