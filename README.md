@@ -36,6 +36,8 @@ You can store your form generator submissions directly as submission. Just activ
 "store as submission" and select the submission archive. Form field names must be 
 the same as the fields names of the submission entity.
 
+For submitted files `form_attachment_*`-Notification-Center-Tokens are generated.
+
 If you on contao 4.7 or higher, you can also set up an **double opt-in** process for your submission.
 Create an opt-in notification in notification center and select it in the form configuration.
 You can also choose a jump to page to which the user is redirected when the opt-in-url 

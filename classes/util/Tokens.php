@@ -11,8 +11,12 @@
 namespace HeimrichHannot\Submissions\Util;
 
 
+use Contao\Environment;
+use Contao\FilesModel;
+use Contao\FormFieldModel;
 use Contao\StringUtil;
 use Contao\Validator;
+use Webmozart\PathUtil\Path;
 
 class Tokens
 {
@@ -86,6 +90,18 @@ class Tokens
 
             if (false === json_encode($v)) {
                 unset($tokens[$k]);
+            }
+        }
+
+        return $tokens;
+    }
+
+    public static function addAttachmentTokens(array $tokens, array $files): array
+    {
+        foreach ($files as $fieldName => $fileData) {
+            $fileModel = FilesModel::findByUuid($fileData['uuid']);
+            if ($fileModel) {
+                $tokens['attachment_'.$fieldName] = $fileModel->path;
             }
         }
 

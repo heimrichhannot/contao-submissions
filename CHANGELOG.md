@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.0] - 2022-06-02
+- Added: Tokens::addAttachmentTokens()
+- Changed: generate attachment tokens for submitted files in form generator
+- Changed: pass submittedData to SubmissionsBeforeSendConfirmationNotificationEvent
+
 ## [1.22.0] - 2022-06-01
 - Added: Tokens::cleanInvalidTokens()
 - Changed: invalid tokens now always cleaned

@@ -83,6 +83,8 @@ class FormGeneratorListener
             $submittedData['uuid'] = StringUtil::binToUuid($submittedData['uuid']);
         }
 
+        $submittedData = Tokens::addAttachmentTokens($submittedData, $files);
+
         if (version_compare(VERSION, '4.7', '>=')) {
             if ($form->storeAsSubmission && $form->submissionArchive
                 && $form->huhSubAddOptIn && $form->huhSubOptInNotification && isset($submittedData['optInTokenId']))

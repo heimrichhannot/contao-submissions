@@ -11,6 +11,7 @@ use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
+use Contao\Validator;
 use HeimrichHannot\Submissions\Event\SubmissionsBeforeSendConfirmationNotificationEvent;
 use HeimrichHannot\Submissions\SubmissionModel;
 use HeimrichHannot\Submissions\Util\Tokens;
@@ -71,7 +72,13 @@ class GeneratePageListener
             $submission->{$form->huhSubOptInField} = "1";
         }
 
-        $event = new SubmissionsBeforeSendConfirmationNotificationEvent($submission, $submissionCache, $form);
+        $submissionData = $submission->row();
+
+        if (!empty($submissionCache['files']) && is_array($submissionCache['files'])) {
+            $submissionData = Tokens::addAttachmentTokens($submissionData, $submissionCache['files']);
+        }
+
+        $event = new SubmissionsBeforeSendConfirmationNotificationEvent($submission, $submissionCache, $form, $submissionData);
         try {
             System::getContainer()->get('event_dispatcher')->dispatch(
                 $event,
@@ -94,7 +101,7 @@ class GeneratePageListener
         if ($instance) {
             $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache);
             $instance->sendFormNotification(
-                Tokens::cleanInvalidTokens($submission->row()),
+                Tokens::cleanInvalidTokens($event->getSubmissionData()),
                 Tokens::cleanInvalidTokens($form->row()),
                 $submissionCache['files'] ?? [],
                 $submissionCache['labels'] ?? []
