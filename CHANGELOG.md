@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.1] - 2022-06-27
+- Changed: type hint to be less restrictive in FormGeneratorListener
+
 ## [1.23.0] - 2022-06-02
 - Added: Tokens::addAttachmentTokens()
 - Changed: generate attachment tokens for submitted files in form generator
