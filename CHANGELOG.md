@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.2] - 2022-06-28
+- Changed: type hint to be less restrictive in Tokens
+
 ## [1.23.1] - 2022-06-27
 - Changed: type hint to be less restrictive in FormGeneratorListener
 
