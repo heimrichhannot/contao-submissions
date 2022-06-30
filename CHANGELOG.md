@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.3] - 2022-06-30
+- Fixed: empty host in optInUrl in some cases
+- Fixed: warning in Tokens
+
 ## [1.23.2] - 2022-06-28
 - Changed: type hint to be less restrictive in Tokens
 
