@@ -121,7 +121,10 @@ class FormGeneratorListener
         }
 
         if (version_compare(VERSION, '4.7', '>=')) {
-            if (($tokens['formconfig_huhSubAddOptIn'] ?? false) && isset($tokens['formconfig_optInIdentifier'])) {
+            if (($tokens['formconfig_huhSubAddOptIn'] ?? false)
+                && isset($tokens['formconfig_optInIdentifier'])
+                && System::getContainer()->get('request_stack')->getCurrentRequest()
+            ) {
                 $base = System::getContainer()->get('request_stack')->getCurrentRequest()->getSchemeAndHttpHost();
                 $tokens['optInToken'] = $tokens['formconfig_optInIdentifier'];
                 $tokens['optInUrl'] = $base.'?token='.$tokens['formconfig_optInIdentifier'];

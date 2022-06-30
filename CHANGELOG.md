@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.4] - 2022-06-30
+- Fixed: issue on sending messages with notification center queue
+
 ## [1.23.3] - 2022-06-30
+- Fixed: empty host in optInUrl in some cases
 - Fixed: empty host in optInUrl in some cases
 - Fixed: warning in Tokens
 
