@@ -64,6 +64,10 @@ class GeneratePageListener
             $this->errorRedirect('Token already confirmed!', $form);
         }
 
+        if (!$token->isValid()) {
+            $this->errorRedirect('Token is expired or no longer valid.', $form);
+        }
+
         // Valid token, do confirm process
 
         $token->confirm();
@@ -136,6 +140,8 @@ class GeneratePageListener
         }
 
         Input::setGet('token', null);
-        throw new PageNotFoundException('Invalid token!  (Error: '.$errorCode.')');
+        throw new PageNotFoundException(
+            ($GLOBALS['TL_LANG']['ERR']['submission']['invalidToken'] ?? 'Invalid token!').'  (Error: '.$errorCode.')'
+        );
     }
 }

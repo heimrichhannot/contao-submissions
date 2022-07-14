@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.5] - 2022-07-14
+- Changed: added some translations to token check
+- Fixed: missing token validation check
+
 ## [1.23.4] - 2022-06-30
 - Fixed: issue on sending messages with notification center queue
 
