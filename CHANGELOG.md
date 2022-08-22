@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.6] - 2022-08-22
+- Fixed: warning in php 8
+
 ## [1.23.5] - 2022-07-14
 - Changed: added some translations to token check
 - Fixed: missing token validation check

@@ -402,7 +402,7 @@ $arrDca = [
         ],
         // misc
         'captcha'                 => [
-            'label'     => $GLOBALS['TL_LANG']['MSC']['securityQuestion'],
+            'label'     => $GLOBALS['TL_LANG']['MSC']['securityQuestion'] ?? null,
             'inputType' => 'captcha',
             'eval'      => [
                 'mandatory' => true,
