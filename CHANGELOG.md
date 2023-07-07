@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.24.0] - 2023-07-07
+- Added: billingCountry field
+
 ## [1.23.6] - 2022-08-22
 - Fixed: warning in php 8
 

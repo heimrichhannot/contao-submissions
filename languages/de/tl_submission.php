@@ -54,6 +54,7 @@ $lang['billingCompany']       = $lang['company'];
 $lang['billingStreet']        = $lang['street'];
 $lang['billingPostal']        = $lang['postal'];
 $lang['billingCity']          = $lang['city'];
+$lang['billingCountry']       = $lang['country'];
 
 /**
  * Legends

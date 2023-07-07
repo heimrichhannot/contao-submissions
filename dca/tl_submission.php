@@ -541,6 +541,18 @@ $arrDca = [
             'eval'      => ['maxlength' => 32, 'tl_class' => 'w50'],
             'sql'       => "varchar(32) NOT NULL default ''",
         ],
+        'billingCountry'                 => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['country'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => \System::getCountries(),
+            'eval'      => [
+                'includeBlankOption'        => true,
+                'chosen'                    => true,
+                'tl_class'                  => 'w50',
+            ],
+            'sql'       => "varchar(2) NOT NULL default ''",
+        ],
         'submissionLanguage'      => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission']['submissionLanguage'],
             'exclude'   => true,
