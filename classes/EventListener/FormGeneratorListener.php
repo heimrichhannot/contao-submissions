@@ -4,7 +4,6 @@ namespace HeimrichHannot\Submissions\EventListener;
 
 use Contao\Controller;
 use Contao\Database;
-use Contao\Environment;
 use Contao\Form;
 use Contao\StringUtil;
 use Contao\System;
@@ -111,7 +110,6 @@ class FormGeneratorListener
         }
 
         if (false === json_encode($tokens)) {
-
             if (Validator::isBinaryUuid($tokens['form_uuid'])) {
                 $uuid = StringUtil::binToUuid($tokens['form_uuid']);
                 $tokens['raw_data'] = str_replace($tokens['form_uuid'], $uuid, $tokens['raw_data']);

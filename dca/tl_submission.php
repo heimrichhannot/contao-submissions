@@ -611,11 +611,11 @@ if (in_array('exporter', \ModuleLoader::getActive())) {
         [
             'export_csv' => \Contao\System::getContainer()
                 ->get('huh.exporter.action.backendexport')
-                ->getGlobalOperation('export_csv', $GLOBALS['TL_LANG']['MSC']['export_csv']),
+                ->getGlobalOperation('export_csv', ($GLOBALS['TL_LANG']['MSC']['export_csv'] ?? 'Export CSV')),
 
             'export_xls' => \Contao\System::getContainer()
                 ->get('huh.exporter.action.backendexport')
-                ->getGlobalOperation('export_xls', $GLOBALS['TL_LANG']['MSC']['export_xls'])
+                ->getGlobalOperation('export_xls', $GLOBALS['TL_LANG']['MSC']['export_xls'] ?? 'Export XLS')
         ]
     );
 }
