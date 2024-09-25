@@ -1,8 +1,8 @@
 <?php
 
-$arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
+$dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
-$arrDca = [
+$dca = [
     'config'   => [
         'dataContainer'     => 'Table',
         'ptable'            => 'tl_submission_archive',
@@ -569,7 +569,7 @@ $arrDca = [
 // add attachment field
 $activeBundles = \ModuleLoader::getActive();
 if (in_array('multifileupload', $activeBundles) || in_array('HeimrichHannotContaoMultiFileUploadBundle', $activeBundles)) {
-    $arrDca['fields']['attachments'] = [
+    $dca['fields']['attachments'] = [
         'label'     => &$GLOBALS['TL_LANG']['tl_submission']['attachments'],
         'exclude'   => true,
         'inputType' => 'multifileupload',
@@ -592,13 +592,13 @@ if (in_array('multifileupload', $activeBundles) || in_array('HeimrichHannotConta
 \HeimrichHannot\Haste\Dca\General::addAuthorFieldAndCallback('tl_submission');
 
 if (in_array('exporter', \ModuleLoader::getActive())) {
-    $arrDca['list']['global_operations']['export_csv'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
+    $dca['list']['global_operations']['export_csv'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
         'export_csv',
         $GLOBALS['TL_LANG']['MSC']['export_csv'],
         'system/modules/exporter/assets/img/icon_export.png'
     );
 
-    $arrDca['list']['global_operations']['export_xls'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
+    $dca['list']['global_operations']['export_xls'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
         'export_xls',
         $GLOBALS['TL_LANG']['MSC']['export_xls'],
         'system/modules/exporter/assets/img/icon_export.png'
@@ -606,7 +606,7 @@ if (in_array('exporter', \ModuleLoader::getActive())) {
 } elseif (version_compare(VERSION, '4.1', '>=') && in_array(\HeimrichHannot\ContaoExporterBundle\HeimrichHannotContaoExporterBundle::class,
         \Contao\System::getContainer()->getParameter('kernel.bundles'), true)) {
     System::getContainer()->get('huh.utils.array')->insertInArrayByName(
-        $arrDca['list']['global_operations'],
+        $dca['list']['global_operations'],
         'all',
         [
             'export_csv' => \Contao\System::getContainer()

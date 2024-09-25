@@ -20,7 +20,7 @@
         "php": "^8.2",
         "contao/core-bundle": "^4.13 || ^5.0",
         "heimrichhannot/contao-haste_plus": "~1.5",
-        "terminal42/notification_center": "^1.7 || ^2.0",
+        "terminal42/notification_center": "^2.0",
         "heimrichhannot/contao-multi_column_editor": "^1.4",
         "heimrichhannot/contao-notification_center_plus": ">=1.0.4",
         "heimrichhannot/contao-utils-bundle": "^3.4"
