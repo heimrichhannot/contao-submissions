@@ -16,7 +16,7 @@ use HeimrichHannot\Haste\Util\Files;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Submissions\Util\Tokens;
 
-class SubmissionBackend extends \Backend
+class SubmissionBackend extends \Contao\Backend
 {
     protected static $arrSubmissionFieldsCache = [];
 

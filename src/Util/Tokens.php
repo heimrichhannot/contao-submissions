@@ -10,14 +10,14 @@
 
 namespace HeimrichHannot\Submissions\Util;
 
-
 use Contao\FilesModel;
 use Contao\StringUtil;
 use Contao\Validator;
+use HeimrichHannot\Submissions\SubmissionModel;
 
 class Tokens
 {
-    public static function replace($strBuffer, \HeimrichHannot\Submissions\SubmissionModel $objSubmission)
+    public static function replace($strBuffer, SubmissionModel $objSubmission): string
     {
         $tokens = preg_split('/\[(([^\[\]]*)*)\]/', $strBuffer, -1, PREG_SPLIT_DELIM_CAPTURE);
 
@@ -52,8 +52,7 @@ class Tokens
         return \Controller::replaceInsertTags($strBuffer);
     }
 
-
-    public static function transform($varValue, $strField, $arrParams, \HeimrichHannot\Submissions\SubmissionModel $objSubmission)
+    public static function transform($varValue, $strField, $arrParams, SubmissionModel $objSubmission)
     {
         switch ($arrParams[0]) {
             case 'date':
@@ -92,7 +91,6 @@ class Tokens
 
         return $tokens;
     }
-
 
     public static function addAttachmentTokens(array $tokens, ?array $files): array
     {

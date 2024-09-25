@@ -1,12 +1,11 @@
 <?php
 
-namespace HeimrichHannot\Submissions;
+namespace HeimrichHannot\Submissions\Model;
 
 use Contao\Model;
 use Contao\System;
 use HeimrichHannot\FormHybrid\DC_Hybrid;
 use HeimrichHannot\Haste\Dca\DC_HastePlus;
-use HeimrichHannot\Haste\Dca\General;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
@@ -19,67 +18,100 @@ use NotificationCenter\Model\Notification;
  */
 class SubmissionModel extends Model
 {
-
     protected static $strTable = 'tl_submission';
 
-    protected static $arrArchiveParentsCache = [];
+    /**
+     * @var Model[] Cache for parent entities
+     */
+    protected static array $archiveParentsCache = [];
 
-    public static function findSubmissionsByParent($strTable, $intPid, $blnPublishedOnly = false, array $arrOptions = [])
-    {
-        if (($objSubmissionArchives = SubmissionArchiveModel::findByParent($strTable, $intPid)) !== null)
-        {
-            if (!$blnPublishedOnly)
-            {
-                return static::findByPid($objSubmissionArchives->id, $arrOptions);
-            }
-            else
-            {
-                return static::findBy(
-                    ['tl_submission.published=1', 'tl_submission.pid=?'],
-                    [$objSubmissionArchives->id],
-                    $arrOptions
-                );
-            }
-        }
+    public static function findSubmissionsByParent(
+        string $table,
+        int    $pid,
+        bool   $publishedOnly = false,
+        array  $options = []
+    ) {
+        $archives = SubmissionArchiveModel::findByParent($table, $pid);
 
-        return null;
-    }
-
-    public static function getArchiveParent($intSubmission)
-    {
-        if (($objSubmissionArchive = static::getArchive($intSubmission)) === null)
+        if ($archives === null)
         {
             return null;
         }
 
-        if ($objSubmissionArchive->parentTable && $objSubmissionArchive->pid)
+        if (!$publishedOnly)
         {
-            if (isset(static::$arrArchiveParentsCache[$objSubmissionArchive->id]))
-            {
-                return static::$arrArchiveParentsCache[$objSubmissionArchive->id];
-            }
-
-            if (($objArchiveParent = General::getModelInstance($objSubmissionArchive->parentTable, $objSubmissionArchive->pid)) !== null)
-            {
-                static::$arrArchiveParentsCache[$objSubmissionArchive->id] = $objArchiveParent;
-
-                return $objArchiveParent;
-            }
+            return static::findByPid($archives->id, $options);
         }
+
+        return static::findBy(
+            ['tl_submission.published=1', 'tl_submission.pid=?'],
+            [$archives->id],
+            $options
+        );
     }
 
-    public static function getArchive($intSubmission)
+    public static function getArchiveParent(int $submission): Model|null
     {
-        if (($objSubmission = SubmissionModel::findByPk($intSubmission)) !== null)
+        $archive = static::getArchive($submission);
+
+        if (!$archive)
         {
-            if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null)
-            {
-                return $objSubmissionArchive;
-            }
+            return null;
         }
+
+        if (!$archive->parentTable || !$archive->pid)
+        {
+            return null;
+        }
+
+        if (isset(static::$archiveParentsCache[$archive->id]))
+        {
+            return static::$archiveParentsCache[$archive->id];
+        }
+
+        $modelClass = Model::getClassFromTable($archive->parentTable);
+
+        if (!\class_exists($modelClass))
+        {
+            return null;
+        }
+
+        $archiveParent = $modelClass::findByPk($archive->pid);
+
+        if ($archiveParent === null)
+        {
+            return null;
+        }
+
+        static::$archiveParentsCache[$archive->id] = $archiveParent;
+
+        return $archiveParent;
     }
 
-    public static function sendSubmissionNotification($intSubmission, $arrTokens = [])
+    /* =============================================
+     * TODO: Move the following into a manager class
+     * ============================================= */
+
+    public static function getArchive($intSubmission): SubmissionArchiveModel|Model|null
+    {
+        $submission = SubmissionModel::findByPk($intSubmission);
+
+        if (!$submission)
+        {
+            return null;
+        }
+
+        $submissionArchive = $submission->getRelated('pid');
+
+        if (!$submissionArchive)
+        {
+            return null;
+        }
+
+        return $submissionArchive;
+    }
+
+    public static function sendSubmissionNotification($intSubmission, $arrTokens = []): void
     {
         $intSubmission = $intSubmission ?: \Input::get('id');
 

@@ -16,7 +16,7 @@ use Contao\System;
 use HeimrichHannot\Submissions\SubmissionArchiveModel;
 use HeimrichHannot\Submissions\Submissions;
 
-class SubmissionArchiveBackend extends \Backend
+class SubmissionArchiveBackend extends \Contao\Backend
 {
     public function setPTableForDelete($table)
     {
