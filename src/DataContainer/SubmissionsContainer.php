@@ -6,9 +6,14 @@ use Contao\Controller;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Intl\Countries;
 use Contao\DataContainer;
+use Contao\Date;
+use Contao\DC_Table;
 use Contao\StringUtil;
+use Contao\System;
 use Doctrine\DBAL\Connection;
+use Haste\Dca\PaletteManipulator;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
+use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
 use HeimrichHannot\UtilsBundle\Util\Utils;
@@ -28,12 +33,27 @@ class SubmissionsContainer
     public function onCreateCallback(string $table, int $id, array $fields, DataContainer $dc): void
         // this is only relevant for creating submissions in the backend
     {
-        $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? 'en';
-
         $this->connection->executeStatement(
             "UPDATE tl_submission SET submissionLanguage=? WHERE id=?",
-            [$locale, $id]
+            [$this->getLocale(), $id]
         );
+    }
+
+    #[AsEventListener('huh.form_type.huh_submission.store_form_data')]
+    public function onFormTypeCreate(StoreFormDataEvent $event): void
+    {
+        $data = $event->getData();
+
+        if (empty($data['submissionLanguage'])) {
+            $data['submissionLanguage'] = $this->getLocale();
+        }
+
+        $event->setData($data);
+    }
+
+    protected function getLocale(): string
+    {
+        return $this->requestStack->getCurrentRequest()?->getLocale() ?? 'en';
     }
 
     #[AsCallback(table: 'tl_submission', target: 'config.onload')]
@@ -47,7 +67,7 @@ class SubmissionsContainer
         Controller::loadDataContainer('tl_submission');
         $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
-        $submission = SubmissionModel::findByPk($dca->id);
+        $submission = SubmissionModel::findByPk($dc->id);
         if (!$submission instanceof SubmissionModel) {
             return;
         }
@@ -66,11 +86,22 @@ class SubmissionsContainer
             $submissionFields = \array_diff($submissionFields, $subpaletteFields);
         }
 
-        $dca['palettes']['default'] = \str_replace(
-            'submissionFields',
-            implode(',', $submissionFields),
-            '{general_legend},authorType,author;{submission_legend},submissionFields;{publish_legend},published;'
-        );
+        // $dca['palettes']['default'] = \str_replace(
+        //     'submissionFields',
+        //     implode(',', $submissionFields),
+        //     '{submission_legend},submissionFields;{publish_legend},published;'
+        // );
+
+        $pm = PaletteManipulator::create()
+            ->addLegend('submission_legend', '');
+
+        foreach ($submissionFields as $field) {
+            $pm->addField($field, 'submission_legend', PaletteManipulator::POSITION_APPEND);
+        }
+
+        $pm->addLegend('publish_legend', 'submission_legend')
+            ->addField('published', 'publish_legend', PaletteManipulator::POSITION_APPEND)
+            ->applyToPalette('default', 'tl_submission');
 
         // mandatory overrides
         $mandatoryOverrides = StringUtil::deserialize($archive->submissionFieldsMandatoryOverride, true);
@@ -91,5 +122,62 @@ class SubmissionsContainer
     {
         $event->setOptionsByKeyValue($this->countries->getCountries());
         $event->setEmptyOption(true);
+    }
+
+    #[AsCallback(table: 'tl_submission', target: 'list.sorting.child_record')]
+    public function onSortingChildRecordCallback(array $record): string
+    {
+        $genHtml = function($title) use ($record) {
+            return \sprintf(
+                '<div class="tl_content_left">%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span></div>',
+                $title,
+                Date::parse(\Config::get('datimFormat'), \trim($record['dateAdded']))
+            );
+        };
+
+        $submission = SubmissionModel::findByPk($record['id']);
+        $submissionArchive = $submission?->getArchive();
+
+        if (!$submission instanceof SubmissionModel
+            || !$submissionArchive instanceof SubmissionArchiveModel
+            || !$submissionArchive->titlePattern)
+        {
+            return $genHtml($record['id'] ?: '');
+        }
+
+        $dca = &$GLOBALS['TL_DCA']['tl_submission'];
+
+        $dc = new DC_Table('tl_submission');
+        $dc->id = $submission->id;
+        $dc->activeRecord = $submission;
+
+        if (\method_exists($this->utils, 'formatter'))
+            // if utils v3 is used
+        {
+            $formatter = function ($dc, $field, $value) {
+                return $this->utils->formatter()->formatDcaFieldValue($dc, $field, $value);
+            };
+        }
+        else // if utils v2 is used
+        {
+            $formatter = function ($dc, $field, $value) {
+                /** @var \HeimrichHannot\UtilsBundle\Form\FormUtil $formUtil */
+                $formUtil = System::getContainer()->get('huh.utils.form');
+                return $formUtil->prepareSpecialValueForOutput($field, $value, $dc);
+            };
+        }
+
+        $pregReplaceCallback = function ($matches) use ($submission, $dca, $dc, $formatter) {
+            $field = $dca['fields'][$matches[1]] ?? [];
+            $value = $submission->{$matches[1]} ?? null;
+            return $formatter($dc, $field, $value);
+        };
+
+        $title = $submissionArchive->titlePattern;
+        $title = \str_replace('%%', '__PERCENT__', $title);
+        $title = \preg_replace_callback('/%([^%]+)%/i', $pregReplaceCallback, $title);
+        $title = \str_replace('__PERCENT__', '%', $title);
+
+        return $genHtml($title);
     }
 }

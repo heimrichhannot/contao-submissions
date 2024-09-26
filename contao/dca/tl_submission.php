@@ -12,12 +12,6 @@ $dca = [
         'ptable'            => 'tl_submission_archive',
         'enableVersioning'  => true,
         'doNotCopyRecords'  => true,
-        'onload_callback'   => [
-            ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'modifyPalette', true],
-        ],
-        'onsubmit_callback' => [
-            ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'moveAttachments'],
-        ],
         'sql'               => [
             'keys' => [
                 'id' => 'primary',
@@ -35,7 +29,6 @@ $dca = [
             'fields'                => ['dateAdded DESC'],
             'headerFields'          => ['title'],
             'panelLayout'           => 'filter;search,limit',
-            'child_record_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'listChildren'],
             'filter'                => [['tstamp>?', 0]],
         ],
         'global_operations' => [

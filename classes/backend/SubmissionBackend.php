@@ -350,19 +350,4 @@ class SubmissionBackend extends \Contao\Backend
             $objFile->renameTo($strTarget . '/' . basename($objFile->value));
         }
     }
-
-    public static function addFieldsToPalette()
-    {
-        $dca    = &$GLOBALS['TL_DCA']['tl_submission'];
-        $fields = [];
-
-        foreach ($dca['fields'] as $field => $data) {
-            if (!($data['eval']['noSubmissionField'] ?? null)) {
-                $fields[] = $field;
-            }
-        }
-
-        $dca['palettes']['default'] = str_replace('{submission_legend};',
-            '{submission_legend},' . implode(',', $fields) . ';', $dca['palettes']['default_backup']);
-    }
 }
