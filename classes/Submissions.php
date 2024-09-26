@@ -16,11 +16,6 @@ class Submissions extends \Controller
 
     const PALETTE_DEFAULT = '{general_legend},authorType,author;{submission_legend},submissionFields;{publish_legend},published;';
 
-    public static function getDefaultAttachmentSubFolderPattern()
-    {
-        return '[dateAdded::date::Y]/[dateAdded::date::m]/[dateAdded::date::d]/[id]';
-    }
-
     public static function getDefaultAttachmentSRC($blnReturnPath = false)
     {
         $objFolder = new \Folder('files/submissions/uploads');

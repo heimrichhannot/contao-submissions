@@ -1,6 +1,10 @@
 <?php
 
+use HeimrichHannot\UtilsBundle\Dca\DateAddedField;
+
 $dca = &$GLOBALS['TL_DCA']['tl_submission'];
+
+DateAddedField::register('tl_submission');
 
 $dca = [
     'config'   => [
@@ -8,12 +12,7 @@ $dca = [
         'ptable'            => 'tl_submission_archive',
         'enableVersioning'  => true,
         'doNotCopyRecords'  => true,
-        'oncreate_callback' => [
-            ['HeimrichHannot\Submissions\Submissions', 'setCurrentLanguage']
-        ],
         'onload_callback'   => [
-            ['HeimrichHannot\Haste\Dca\General', 'setDateAdded', true],
-            ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'checkPermission'],
             ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'modifyPalette', true],
         ],
         'onsubmit_callback' => [
@@ -88,17 +87,16 @@ $dca = [
         ],
     ],
     'palettes' => [
-        // submission fields are added automatically below
-        'default_backup' => '{general_legend},authorType,author;{submission_legend};{publish_legend},published;'
+        'default' => '{submission_legend};{publish_legend},published;'
     ],
     'fields'   => [
-        'id'                      => [
+        'id' => [
             'sql'  => "int(10) unsigned NOT NULL auto_increment",
             'eval' => [
                 'noSubmissionField' => true
             ]
         ],
-        'pid'                     => [
+        'pid' => [
             'label'      => &$GLOBALS['TL_LANG']['tl_submission']['pid'],
             'foreignKey' => 'tl_submission_archive.title',
             'sql'        => "int(10) unsigned NOT NULL default '0'",
@@ -107,27 +105,26 @@ $dca = [
                 'noSubmissionField' => true
             ]
         ],
-        'tstamp'                  => [
-            'sql'  => "int(10) unsigned NOT NULL default '0'",
-            'eval' => [
-                'noSubmissionField' => true
-            ]
-        ],
-        'dateAdded'               => [
-            'label'   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
-            'sorting' => true,
-            'flag'    => 6,
-            'eval'    => ['rgxp' => 'datim', 'doNotCopy' => true, 'noSubmissionField' => true],
-            'sql'     => "int(10) unsigned NOT NULL default '0'",
-        ],
         'uuid' => [
             'sql' => "binary(16) NULL",
             'eval' => [
                 'noSubmissionField' => true
             ]
         ],
-        'type'                    => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['type'],
+        'tstamp' => [
+            'sql'  => "int(10) unsigned NOT NULL default '0'",
+            'eval' => [
+                'noSubmissionField' => true
+            ]
+        ],
+        'published' => [
+            'exclude'   => true,
+            'filter'    => true,
+            'inputType' => 'checkbox',
+            'eval'      => ['tl_class' => 'w50', 'doNotCopy' => true, 'noSubmissionField' => true],
+            'sql'       => "char(1) NOT NULL default ''",
+        ],
+        'type' => [
             'exclude'   => true,
             'filter'    => true,
             'inputType' => 'select',
@@ -135,8 +132,7 @@ $dca = [
             'eval'      => ['includeBlankOption' => true, 'mandatory' => true, 'tl_class' => 'w50'],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'gender'                  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
+        'gender' => [
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => ['male', 'female', 'divers'],
@@ -144,8 +140,7 @@ $dca = [
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'academicTitle'           => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['academicTitle'],
+        'academicTitle' => [
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => ['Dr.', 'Prof.'],
@@ -157,16 +152,7 @@ $dca = [
             ],
             'sql'       => "varchar(20) NOT NULL default ''",
         ],
-        'additionalTitle'         => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['additionalTitle'],
-            'exclude'   => true,
-            'search'    => true,
-            'inputType' => 'text',
-            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
-            'sql'       => "varchar(128) NOT NULL default ''"
-        ],
-        'firstname'               => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['firstname'],
+        'firstname' => [
             'exclude'   => true,
             'search'    => true,
             'sorting'   => true,
@@ -180,8 +166,7 @@ $dca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'lastname'                => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['lastname'],
+        'lastname' => [
             'exclude'   => true,
             'search'    => true,
             'sorting'   => true,
@@ -195,8 +180,7 @@ $dca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'company'                 => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['company'],
+        'company' => [
             'exclude'   => true,
             'search'    => true,
             'sorting'   => true,
@@ -205,8 +189,7 @@ $dca = [
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'position'                => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['position'],
+        'position' => [
             'exclude'   => true,
             'search'    => true,
             'sorting'   => true,
@@ -215,47 +198,41 @@ $dca = [
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-        'dateOfBirth'             => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['dateOfBirth'],
+        'dateOfBirth' => [
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['datepicker' => true, 'rgxp' => 'date', 'tl_class' => 'w50 wizard', 'substituteField' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],
-        'street'                  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street'],
+        'street' => [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'streetNumber'                  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['streetNumber'],
+        'streetNumber' => [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'street2'                 => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street2'],
+        'street2' => [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'postal'                  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['postal'],
+        'postal' => [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 5, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(5) NOT NULL default ''",
         ],
-        'city'                    => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['city'],
+        'city' => [
             'exclude'   => true,
             'filter'    => true,
             'search'    => true,
@@ -264,13 +241,11 @@ $dca = [
             'eval'      => ['maxlength' => 32, 'tl_class' => 'w50', 'substituteField' => true],
             'sql'       => "varchar(32) NOT NULL default ''",
         ],
-        'country'                 => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['country'],
+        'country' => [
             'exclude'   => true,
             'filter'    => true,
             'sorting'   => true,
             'inputType' => 'select',
-            'options'   => \System::getCountries(),
             'eval'      => [
                 'includeBlankOption'        => true,
                 'chosen'                    => true,
@@ -280,41 +255,10 @@ $dca = [
             ],
             'sql'       => "varchar(2) NOT NULL default ''",
         ],
-        'language'                => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['language'],
-            'exclude'   => true,
-            'filter'    => true,
-            'sorting'   => true,
-            'inputType' => 'select',
-            'options'   => \System::getLanguages(),
-            'eval'      => [
-                'includeBlankOption' => true,
-                'chosen'             => true,
-                'tl_class'           => 'w50'
-            ],
-            'sql'       => "varchar(16) NOT NULL default ''",
-        ],
-        'languages'               => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['languages'],
-            'exclude'   => true,
-            'filter'    => true,
-            'sorting'   => true,
-            'inputType' => 'select',
-            'options'   => \System::getLanguages(),
-            'eval'      => [
-                'multiple'           => true,
-                'includeBlankOption' => true,
-                'chosen'             => true,
-                'tl_class'           => 'w50'
-            ],
-            'sql'       => "varchar(16) NOT NULL default ''",
-        ],
-        'email'                   => [
-            'label'         => &$GLOBALS['TL_LANG']['tl_submission']['email'],
+        'email' => [
             'exclude'       => true,
             'search'        => true,
             'inputType'     => 'text',
-            'save_callback' => [['HeimrichHannot\Haste\Dca\General', 'lowerCase']],
             'eval'          => [
                 'mandatory'                 => true,
                 'maxlength'                 => 64,
@@ -326,8 +270,7 @@ $dca = [
             ],
             'sql'           => "varchar(64) NOT NULL default ''",
         ],
-        'phone'                   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['phone'],
+        'phone' => [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
@@ -340,8 +283,7 @@ $dca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'fax'                     => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['fax'],
+        'fax' => [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
@@ -354,207 +296,34 @@ $dca = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
-        'subject'                 => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['subject'],
+        'subject' => [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 128, 'tl_class' => 'w50'],
             'sql'       => "varchar(128) NOT NULL default ''"
         ],
-        'notes'                   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['notes'],
+        'message' => [
             'exclude'   => true,
             'inputType' => 'textarea',
             'eval'      => ['tl_class' => 'long clr'],
             'sql'       => "text NULL",
         ],
-        'message'                 => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['message'],
-            'exclude'   => true,
-            'inputType' => 'textarea',
-            'eval'      => ['tl_class' => 'long clr'],
-            'sql'       => "text NULL",
-        ],
-        'agreement'               => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['agreement'],
+        'agreement' => [
             'exclude'   => true,
             'filter'    => true,
             'inputType' => 'checkbox',
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'privacy'                 => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['privacy'],
+        'privacy' => [
             'exclude'   => true,
             'filter'    => true,
             'inputType' => 'checkbox',
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true],
             'sql'       => "char(1) NOT NULL default ''",
         ],
-        'published'               => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['published'],
-            'exclude'   => true,
-            'filter'    => true,
-            'inputType' => 'checkbox',
-            'eval'      => ['tl_class' => 'w50', 'doNotCopy' => true, 'noSubmissionField' => true],
-            'sql'       => "char(1) NOT NULL default ''",
-        ],
-        // misc
-        'captcha'                 => [
-            'label'     => $GLOBALS['TL_LANG']['MSC']['securityQuestion'] ?? null,
-            'inputType' => 'captcha',
-            'eval'      => [
-                'mandatory' => true,
-                'required'  => true,
-                'tableless' => true,
-            ],
-        ],
-        'formHybridBlob'          => [
-            'label' => &$GLOBALS['TL_LANG']['tl_submission']['formHybridBlob'],
-            'sql'   => "blob NULL",
-            'eval'  => [
-                'noSubmissionField' => true
-            ]
-        ],
-        'startDate'               => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['startDate'],
-            'default'   => time(),
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ],
-        'stopDate'                => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['stopDate'],
-            'default'   => time(),
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ],
-        'startDatime'             => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['startDatime'],
-            'default'   => time(),
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ],
-        'stopDatime'              => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['stopDatime'],
-            'default'   => time(),
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard', 'mandatory' => true],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ],
-        'addDifferentBillingData' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['addDifferentBillingData'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => ['tl_class' => 'w50'],
-            'sql'       => "char(1) NOT NULL default ''"
-        ],
-        'billingGender'           => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['gender'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => ['male', 'female'],
-            'reference' => TL_MODE == 'FE' ? $GLOBALS['TL_LANG']['MSC']['haste_plus']['genderFe'] : $GLOBALS['TL_LANG']['MSC'],
-            'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'includeBlankOption' => true],
-            'sql'       => "varchar(10) NOT NULL default ''",
-        ],
-        'billingAcademicTitle'    => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['academicTitle'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => ['Dr.', 'Prof.'],
-            'eval'      => [
-                'maxlength'          => 20,
-                'includeBlankOption' => true,
-                'tl_class'           => 'w50'
-            ],
-            'sql'       => "varchar(20) NOT NULL default ''",
-        ],
-        'billingFirstname'        => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['firstname'],
-            'exclude'   => true,
-            'search'    => true,
-            'sorting'   => true,
-            'flag'      => 1,
-            'inputType' => 'text',
-            'eval'      => [
-                'mandatory' => true,
-                'maxlength' => 64,
-                'tl_class'  => 'w50',
-            ],
-            'sql'       => "varchar(64) NOT NULL default ''",
-        ],
-        'billingLastname'         => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['lastname'],
-            'exclude'   => true,
-            'search'    => true,
-            'sorting'   => true,
-            'flag'      => 1,
-            'inputType' => 'text',
-            'eval'      => [
-                'mandatory' => true,
-                'maxlength' => 64,
-                'tl_class'  => 'w50',
-            ],
-            'sql'       => "varchar(64) NOT NULL default ''",
-        ],
-        'billingCompany'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['company'],
-            'exclude'   => true,
-            'search'    => true,
-            'sorting'   => true,
-            'flag'      => 1,
-            'inputType' => 'text',
-            'eval'      => ['maxlength' => 128, 'tl_class' => 'w50'],
-            'sql'       => "varchar(128) NOT NULL default ''",
-        ],
-        'billingStreet'           => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['street'],
-            'exclude'   => true,
-            'search'    => true,
-            'inputType' => 'text',
-            'eval'      => ['maxlength' => 64, 'tl_class' => 'w50'],
-            'sql'       => "varchar(64) NOT NULL default ''",
-        ],
-        'billingPostal'           => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['postal'],
-            'exclude'   => true,
-            'search'    => true,
-            'inputType' => 'text',
-            'eval'      => ['maxlength' => 5, 'tl_class' => 'w50'],
-            'sql'       => "varchar(5) NOT NULL default ''",
-        ],
-        'billingCity'             => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['city'],
-            'exclude'   => true,
-            'filter'    => true,
-            'search'    => true,
-            'sorting'   => true,
-            'inputType' => 'text',
-            'eval'      => ['maxlength' => 32, 'tl_class' => 'w50'],
-            'sql'       => "varchar(32) NOT NULL default ''",
-        ],
-        'billingCountry'                 => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['country'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => \System::getCountries(),
-            'eval'      => [
-                'includeBlankOption'        => true,
-                'chosen'                    => true,
-                'tl_class'                  => 'w50',
-            ],
-            'sql'       => "varchar(2) NOT NULL default ''",
-        ],
-        'submissionLanguage'      => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_submission']['submissionLanguage'],
+        'submissionLanguage' => [
             'exclude'   => true,
             'filter'    => true,
             'search'    => true,
@@ -563,62 +332,34 @@ $dca = [
             'eval'      => ['tl_class' => 'w50', 'readonly' => true],
             'sql'       => "varchar(4) NOT NULL default ''",
         ],
+        'submissionOptInTokenId' => [
+            'exclude'   => true,
+            'filter'    => true,
+            'inputType' => 'text',
+            'eval'      => ['tl_class' => 'w50 clr', 'readonly' => true],
+            'sql'       => "varchar(32) NOT NULL default ''",
+        ],
+        'submissionOptInCache' => [
+            'exclude'   => true,
+            'filter'    => true,
+            'inputType' => 'text',
+            'eval'      => ['tl_class' => 'w50 clr'],
+            'sql'       => "blob NULL"
+        ],
     ],
 ];
 
-// add attachment field
-$activeBundles = \ModuleLoader::getActive();
-if (in_array('multifileupload', $activeBundles) || in_array('HeimrichHannotContaoMultiFileUploadBundle', $activeBundles)) {
-    $dca['fields']['attachments'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_submission']['attachments'],
-        'exclude'   => true,
-        'inputType' => 'multifileupload',
-        'eval'      => [
-            'explanation'    => &$GLOBALS['TL_LANG']['tl_submission']['attachmentsExplanation'],
-            'tl_class'       => 'clr',
-            'filesOnly'      => true,
-            'maxFiles'       => 5,
-            'fieldType'      => 'checkbox',
-            'extensions'     => \Config::get('uploadTypes'),
-            'maxUploadSize'  => '10MiB',
-            'uploadFolder'   => \HeimrichHannot\Submissions\Submissions::getDefaultAttachmentSRC(),
-            'addRemoveLinks' => true,
-            'multiple'       => true,
-        ],
-        'sql'       => "blob NULL",
-    ];
-}
-
-\HeimrichHannot\Haste\Dca\General::addAuthorFieldAndCallback('tl_submission');
-
-if (in_array('exporter', \ModuleLoader::getActive())) {
-    $dca['list']['global_operations']['export_csv'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
-        'export_csv',
-        $GLOBALS['TL_LANG']['MSC']['export_csv'],
-        'system/modules/exporter/assets/img/icon_export.png'
-    );
-
-    $dca['list']['global_operations']['export_xls'] = \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation(
-        'export_xls',
-        $GLOBALS['TL_LANG']['MSC']['export_xls'],
-        'system/modules/exporter/assets/img/icon_export.png'
-    );
-} elseif (version_compare(VERSION, '4.1', '>=') && in_array(\HeimrichHannot\ContaoExporterBundle\HeimrichHannotContaoExporterBundle::class,
-        \Contao\System::getContainer()->getParameter('kernel.bundles'), true)) {
-    System::getContainer()->get('huh.utils.array')->insertInArrayByName(
-        $dca['list']['global_operations'],
-        'all',
-        [
-            'export_csv' => \Contao\System::getContainer()
-                ->get('huh.exporter.action.backendexport')
-                ->getGlobalOperation('export_csv', ($GLOBALS['TL_LANG']['MSC']['export_csv'] ?? 'Export CSV')),
-
-            'export_xls' => \Contao\System::getContainer()
-                ->get('huh.exporter.action.backendexport')
-                ->getGlobalOperation('export_xls', $GLOBALS['TL_LANG']['MSC']['export_xls'] ?? 'Export XLS')
-        ]
-    );
-}
-
-// add fields to palette
-\HeimrichHannot\Submissions\Backend\SubmissionBackend::addFieldsToPalette();
+// todo: onloaddatacontainer hook if exporter is installed
+// System::getContainer()->get('huh.utils.array')->insertInArrayByName(
+//     $dca['list']['global_operations'],
+//     'all',
+//     [
+//         'export_csv' => \Contao\System::getContainer()
+//             ->get('huh.exporter.action.backendexport')
+//             ->getGlobalOperation('export_csv', ($GLOBALS['TL_LANG']['MSC']['export_csv'] ?? 'Export CSV')),
+//
+//         'export_xls' => \Contao\System::getContainer()
+//             ->get('huh.exporter.action.backendexport')
+//             ->getGlobalOperation('export_xls', $GLOBALS['TL_LANG']['MSC']['export_xls'] ?? 'Export XLS')
+//     ]
+// );

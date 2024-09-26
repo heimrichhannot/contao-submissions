@@ -25,6 +25,11 @@ class SubmissionModel extends Model
      */
     protected static array $archiveParentsCache = [];
 
+    public function getArchive(): SubmissionArchiveModel|Model|null
+    {
+        return SubmissionArchiveModel::findByPk($this->pid);
+    }
+
     public static function findSubmissionsByParent(
         string $table,
         int    $pid,
@@ -52,7 +57,7 @@ class SubmissionModel extends Model
 
     public static function getArchiveParent(int $submission): Model|null
     {
-        $archive = static::getArchive($submission);
+        $archive = static::legacyGetArchive($submission);
 
         if (!$archive)
         {
@@ -92,7 +97,7 @@ class SubmissionModel extends Model
      * TODO: Move the following into a manager class
      * ============================================= */
 
-    public static function getArchive($intSubmission): SubmissionArchiveModel|Model|null
+    public static function legacyGetArchive($intSubmission): SubmissionArchiveModel|Model|null
     {
         $submission = SubmissionModel::findByPk($intSubmission);
 
@@ -115,7 +120,7 @@ class SubmissionModel extends Model
     {
         $intSubmission = $intSubmission ?: \Input::get('id');
 
-        if (($objSubmissionArchive = SubmissionModel::getArchive($intSubmission)) !== null)
+        if (($objSubmissionArchive = SubmissionModel::legacyGetArchive($intSubmission)) !== null)
         {
             if ($objSubmissionArchive->nc_submission)
             {
@@ -137,7 +142,7 @@ class SubmissionModel extends Model
 
     public static function sendConfirmationNotification($intSubmission, $arrTokens = [])
     {
-        if (($objSubmissionArchive = SubmissionModel::getArchive($intSubmission)) !== null)
+        if (($objSubmissionArchive = SubmissionModel::legacyGetArchive($intSubmission)) !== null)
         {
             if ($objSubmissionArchive->nc_confirmation)
             {

@@ -2,28 +2,94 @@
 
 namespace HeimrichHannot\Submissions\DataContainer;
 
-use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
-use HeimrichHannot\Submissions\Util\SubmissionsDcaExtender;
+use Contao\Controller;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
+use Contao\CoreBundle\Intl\Countries;
+use Contao\DataContainer;
+use Contao\StringUtil;
+use Doctrine\DBAL\Connection;
+use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
+use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
+use HeimrichHannot\Submissions\Model\SubmissionModel;
+use HeimrichHannot\UtilsBundle\Util\Utils;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class SubmissionsContainer
 {
-    public static function getDefaultAttachmentSubFolderPattern(): string
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly Countries $countries,
+        private readonly RequestStack $requestStack,
+        private readonly Utils $utils,
+    ) {}
+
+    #[AsCallback(table: 'tl_submission', target: 'config.oncreate')]
+    public function onCreateCallback(string $table, int $id, array $fields, DataContainer $dc): void
+        // this is only relevant for creating submissions in the backend
     {
-        return '[dateAdded::date::Y]/[dateAdded::date::m]/[dateAdded::date::d]/[id]';
+        $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? 'en';
+
+        $this->connection->executeStatement(
+            "UPDATE tl_submission SET submissionLanguage=? WHERE id=?",
+            [$locale, $id]
+        );
     }
 
-    #[AsHook("loadDataContainer")]
-    public function onLoadDataContainer(string $table): void
+    #[AsCallback(table: 'tl_submission', target: 'config.onload')]
+    public function onLoadCallback(DataContainer $dc): void
     {
-        switch ($table) {
-            case 'tl_submission_archive':
-                SubmissionsDcaExtender::addOptionalSubmissionArchiveFields();
-                break;
-            case 'tl_form':
-                SubmissionsDcaExtender::addOptInSupport($table);
-                break;
-            case 'tl_submission':
-                SubmissionsDcaExtender::addOptInTokenIdField($table);
+        $this->modifyPalette($dc);
+    }
+
+    protected function modifyPalette(DataContainer $dc): void
+    {
+        Controller::loadDataContainer('tl_submission');
+        $dca = &$GLOBALS['TL_DCA']['tl_submission'];
+
+        $submission = SubmissionModel::findByPk($dca->id);
+        if (!$submission instanceof SubmissionModel) {
+            return;
         }
+
+        $archive = $submission->getArchive();
+        if (!$archive instanceof SubmissionArchiveModel) {
+            return;
+        }
+
+        $submissionFields = StringUtil::deserialize($archive->submissionFields, true);
+
+        // remove subpalette fields from $submissionFields
+        foreach ($dca['subpalettes'] ?? [] as $value)
+        {
+            $subpaletteFields = $this->utils->dca()->getPaletteFields($dc->table, $value);
+            $submissionFields = \array_diff($submissionFields, $subpaletteFields);
+        }
+
+        $dca['palettes']['default'] = \str_replace(
+            'submissionFields',
+            implode(',', $submissionFields),
+            '{general_legend},authorType,author;{submission_legend},submissionFields;{publish_legend},published;'
+        );
+
+        // mandatory overrides
+        $mandatoryOverrides = StringUtil::deserialize($archive->submissionFieldsMandatoryOverride, true);
+
+        foreach ($mandatoryOverrides as $override) {
+            $dca['fields'][$override['field']]['eval']['mandatory'] = $override['mandatory'];
+        }
+    }
+
+    #[AsCallback(table: 'tl_submission', target: 'fields.country.options')]
+    public function getCountryOptions(): array
+    {
+        return $this->countries->getCountries();
+    }
+
+    #[AsEventListener('huh.form_type.huh_submission.country.options')]
+    public function getFromTypeCountryOptions(FieldOptionsEvent $event): void
+    {
+        $event->setOptionsByKeyValue($this->countries->getCountries());
+        $event->setEmptyOption(true);
     }
 }
