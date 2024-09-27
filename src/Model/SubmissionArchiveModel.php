@@ -15,6 +15,11 @@ class SubmissionArchiveModel extends Model
         return static::findBy(['parentTable=?', 'pid=?'], [$table, $pid]);
     }
 
+    public static function findByParentTable(string $table): Collection|static|array|null
+    {
+        return static::findBy('parentTable', $table);
+    }
+
     public static function getSubmissionFieldsByParent(string $table, int $pid): ?array
     {
         $submissionArchiveModel = static::findByParent($table, $pid);

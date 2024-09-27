@@ -5,4 +5,4 @@ services:
 
   HeimrichHannot\Submissions\:
     # important: do not include FormType, which is optionally injected in SubmissionsPass
-    resource: '../src/{DataContainer,EventListener,Manager,Model,Util}/*'
+    resource: '../src/{Controller,DataContainer,EventListener,Manager,Model,Util}/*'

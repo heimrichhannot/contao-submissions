@@ -125,7 +125,7 @@ $dca = [
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => ['male', 'female', 'divers'],
-            'reference' => $GLOBALS['TL_LANG']['MSC']['salutation'],
+            'reference' => &$GLOBALS['TL_LANG']['MSC']['salutation'],
             'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr', 'substituteField' => true, 'includeBlankOption' => true],
             'sql'       => "varchar(10) NOT NULL default ''",
         ],

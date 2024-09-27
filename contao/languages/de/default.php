@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Backend-Module
+ */
+$GLOBALS['TL_LANG']['MOD']['huh_submissions'] = [
+    'Einsendungen',
+    'Einsendungsarchive verwalten'
+];
+
+/**
  * Verschiedenes (Miscellaneous)
  */
 $GLOBALS['TL_LANG']['MSC']['noSubmissionFields'] = 'Sie haben bisher keine neuen Felder zum DCA "tl_submission" hinzugefügt. Bitte lesen Sie in der README des Moduls "submissions" nach, wie Sie dies nachholen können.';

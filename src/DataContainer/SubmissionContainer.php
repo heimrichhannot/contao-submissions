@@ -3,6 +3,7 @@
 namespace HeimrichHannot\Submissions\DataContainer;
 
 use Contao\Controller;
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Intl\Countries;
 use Contao\DataContainer;
@@ -11,7 +12,6 @@ use Contao\DC_Table;
 use Contao\StringUtil;
 use Contao\System;
 use Doctrine\DBAL\Connection;
-use Haste\Dca\PaletteManipulator;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
@@ -20,7 +20,7 @@ use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class SubmissionsContainer
+class SubmissionContainer
 {
     public function __construct(
         private readonly Connection $connection,
@@ -86,11 +86,7 @@ class SubmissionsContainer
             $submissionFields = \array_diff($submissionFields, $subpaletteFields);
         }
 
-        // $dca['palettes']['default'] = \str_replace(
-        //     'submissionFields',
-        //     implode(',', $submissionFields),
-        //     '{submission_legend},submissionFields;{publish_legend},published;'
-        // );
+        // todo: remove fields that are not selected in the archive
 
         $pm = PaletteManipulator::create()
             ->addLegend('submission_legend', '');
@@ -99,9 +95,7 @@ class SubmissionsContainer
             $pm->addField($field, 'submission_legend', PaletteManipulator::POSITION_APPEND);
         }
 
-        $pm->addLegend('publish_legend', 'submission_legend')
-            ->addField('published', 'publish_legend', PaletteManipulator::POSITION_APPEND)
-            ->applyToPalette('default', 'tl_submission');
+        $pm->applyToPalette('default', 'tl_submission');
 
         // mandatory overrides
         $mandatoryOverrides = StringUtil::deserialize($archive->submissionFieldsMandatoryOverride, true);

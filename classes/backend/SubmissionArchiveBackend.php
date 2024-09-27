@@ -13,7 +13,7 @@ namespace HeimrichHannot\Submissions\Backend;
 use Contao\Controller;
 use Contao\Input;
 use Contao\System;
-use HeimrichHannot\Submissions\SubmissionArchiveModel;
+use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
 use HeimrichHannot\Submissions\Submissions;
 
 class SubmissionArchiveBackend extends \Contao\Backend

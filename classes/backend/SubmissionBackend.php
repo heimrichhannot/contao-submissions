@@ -20,6 +20,8 @@ class SubmissionBackend extends \Contao\Backend
 {
     protected static $arrSubmissionFieldsCache = [];
 
+    public static function addFieldsToPalette() {}
+
     public function listChildren($arrRow)
     {
         $strTitle = $arrRow['id'];

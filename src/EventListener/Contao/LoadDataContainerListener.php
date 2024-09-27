@@ -1,5 +1,7 @@
 <?php
 
+namespace HeimrichHannot\Submissions\EventListener\Contao;
+
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 

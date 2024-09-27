@@ -13,7 +13,7 @@ use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\ManagerPlugin\Config\ConfigPluginInterface;
-use HeimrichHannot\CleanerBundle\HeimrichHannotContaoCleanerBundle;
+use HeimrichHannot\Submissions\HeimrichHannotSubmissions;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 class Plugin implements BundlePluginInterface, ConfigPluginInterface
@@ -24,7 +24,7 @@ class Plugin implements BundlePluginInterface, ConfigPluginInterface
     public function getBundles(ParserInterface $parser): array
     {
         return [
-            BundleConfig::create(HeimrichHannotContaoCleanerBundle::class)
+            BundleConfig::create(HeimrichHannotSubmissions::class)
                 ->setLoadAfter([ContaoCoreBundle::class])
         ];
     }
