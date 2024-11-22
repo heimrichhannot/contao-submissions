@@ -10,11 +10,11 @@ use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
 use HeimrichHannot\UtilsBundle\Util\DcaUtil\GetDcaFieldsOptions;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 
-class SubmissionArchiveContainer
+readonly class SubmissionArchiveContainer
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly Utils $utils
+        private Connection $connection,
+        private Utils      $utils
     ) {}
 
     #[AsCallback(table: 'tl_submission_archive', target: 'fields.parentTable.options')]
@@ -95,7 +95,6 @@ class SubmissionArchiveContainer
         } catch (\Exception) {
             return [];
         }
-
 
         if (!$items) {
             return [];

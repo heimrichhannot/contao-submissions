@@ -13,7 +13,7 @@ namespace HeimrichHannot\Submissions\Util;
 use Contao\FilesModel;
 use Contao\StringUtil;
 use Contao\Validator;
-use HeimrichHannot\Submissions\SubmissionModel;
+use HeimrichHannot\Submissions\Model\SubmissionModel;
 
 class Tokens
 {
@@ -33,7 +33,7 @@ class Tokens
             }
 
             // Run the replacement again if there are more tags (see #4402)
-            if (strpos($strToken, '[') !== false) {
+            if (str_contains($strToken, '[')) {
                 $strToken = static::replace($strToken, $objSubmission);
             }
 
@@ -49,6 +49,7 @@ class Tokens
             $strBuffer .= $varValue;
         }
 
+        // todo: use insert tags service
         return \Controller::replaceInsertTags($strBuffer);
     }
 
