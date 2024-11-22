@@ -112,7 +112,7 @@ class SubmissionContainer
     }
 
     #[AsEventListener('huh.form_type.huh_submission.country.options')]
-    public function getFromTypeCountryOptions(FieldOptionsEvent $event): void
+    public function getFormTypeCountryOptions(FieldOptionsEvent $event): void
     {
         $event->setOptionsByKeyValue($this->countries->getCountries());
         $event->setEmptyOption(true);
@@ -155,7 +155,13 @@ class SubmissionContainer
         else // if utils v2 is used
         {
             $formatter = function ($dc, $field, $value) {
-                /** @var \HeimrichHannot\UtilsBundle\Form\FormUtil $formUtil */
+                /**
+                 * @noinspection MissingServiceXml
+                 * @noinspection PhpUndefinedClassInspection
+                 * @noinspection PhpFullyQualifiedNameUsageInspection
+                 * @noinspection PhpUndefinedNamespaceInspection
+                 * @var \HeimrichHannot\UtilsBundle\Form\FormUtil $formUtil
+                 */
                 $formUtil = System::getContainer()->get('huh.utils.form');
                 return $formUtil->prepareSpecialValueForOutput($field, $value, $dc);
             };

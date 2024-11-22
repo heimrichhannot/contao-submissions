@@ -108,7 +108,7 @@ class SubmissionArchiveContainer
     }
 
     #[AsCallback(table: 'tl_submission_archive', target: 'fields.submissionFields.options')]
-    public function getSubmissionFieldsOptions()
+    public function getSubmissionFieldsOptions(): array
     {
         $fields = $this->utils->dca()->getDcaFields(
             'tl_submission',

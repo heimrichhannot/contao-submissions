@@ -112,7 +112,6 @@ $dca = [
         'submissionFields' => [
             'exclude' => true,
             'inputType' => 'checkboxWizard',
-            'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getFieldsAsOptions'],
             'eval' => ['multiple' => true, 'tl_class' => 'wizard'],
             'sql' => "blob NULL",
         ],
@@ -122,7 +121,10 @@ $dca = [
             'eval'      => ['maxlength' => 128],
             'sql'       => "varchar(128) NOT NULL default ''",
         ],
-/*        'submissionFieldsMandatoryOverride' => [
+        /*>>>
+        todo: override mandatory property of fields
+        <<<*
+        'submissionFieldsMandatoryOverride' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_submission_archive']['submissionFieldsMandatoryOverride'],
             'inputType' => 'multiColumnEditor',
             'eval'      => [
@@ -143,8 +145,10 @@ $dca = [
                 ],
             ],
             'sql'       => "blob NULL",
-        ],*//*
+        ],
+        /*>>>
         todo: implement notifications
+        <<<*
         'nc_submission'                     => [
             'exclude'          => true,
             'inputType'        => 'select',
@@ -158,6 +162,7 @@ $dca = [
             'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getConfirmationNotificationsAsOptions'],
             'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql'              => "int(10) unsigned NOT NULL default '0'",
-        ],*/
+        ],
+        /*<=== \[T]/ ===>*/
     ],
 ];
