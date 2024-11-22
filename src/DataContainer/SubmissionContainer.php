@@ -20,13 +20,13 @@ use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class SubmissionContainer
+readonly class SubmissionContainer
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly Countries $countries,
-        private readonly RequestStack $requestStack,
-        private readonly Utils $utils,
+        private Connection   $connection,
+        private Countries    $countries,
+        private RequestStack $requestStack,
+        private Utils        $utils,
     ) {}
 
     #[AsCallback(table: 'tl_submission', target: 'config.oncreate')]
