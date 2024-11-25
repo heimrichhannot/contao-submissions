@@ -17,14 +17,15 @@ readonly class SubmissionArchiveContainer
         private Utils      $utils
     ) {}
 
+    /** @noinspection PhpUnused */
     #[AsCallback(table: 'tl_submission_archive', target: 'fields.parentTable.options')]
     public function getParentTableOptions(): array
     {
         $dca = [];
 
-        foreach ($GLOBALS['BE_MOD'] as $beModCategory => $beModList)
+        foreach ($GLOBALS['BE_MOD'] as /*$beModCategory =>*/ $beModList)
         {
-            foreach ($beModList as $beModName => $beMod)
+            foreach ($beModList as /*$beModName =>*/ $beMod)
             {
                 if (!\is_array($beMod) || !isset($beMod['tables']) || !\is_array($beMod['tables']))
                 {
@@ -39,9 +40,7 @@ readonly class SubmissionArchiveContainer
         }
 
         $dca = \array_unique($dca);
-
         \asort($dca);
-
         return \array_values($dca);
     }
 

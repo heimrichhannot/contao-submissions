@@ -18,6 +18,11 @@ $dca = [
                 'uuid' => 'unique',
             ],
         ],
+        /*'
+        'onload_callback'   => [
+            ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'checkPermission'],
+            ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'modifyPalette', true],
+        ],*/
     ],
     'list' => [
         'label' => [

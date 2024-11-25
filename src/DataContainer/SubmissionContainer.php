@@ -44,6 +44,10 @@ readonly class SubmissionContainer
     {
         $data = $event->getData();
 
+        if (!empty($data['email'])) {
+            $data['email'] = \mb_strtolower($data['email']);
+        }
+
         if (empty($data['submissionLanguage'])) {
             $data['submissionLanguage'] = $this->getLocale();
         }
@@ -118,6 +122,7 @@ readonly class SubmissionContainer
         $event->setEmptyOption(true);
     }
 
+    /** @noinspection PhpUnused */
     #[AsCallback(table: 'tl_submission', target: 'list.sorting.child_record')]
     public function onSortingChildRecordCallback(array $record): string
     {
@@ -163,14 +168,15 @@ readonly class SubmissionContainer
                  * @var \HeimrichHannot\UtilsBundle\Form\FormUtil $formUtil
                  */
                 $formUtil = System::getContainer()->get('huh.utils.form');
-                return $formUtil->prepareSpecialValueForOutput($field, $value, $dc);
+                return $formUtil?->prepareSpecialValueForOutput($field, $value, $dc) ?? '';
             };
         }
 
         $pregReplaceCallback = function ($matches) use ($submission, $dca, $dc, $formatter) {
-            $field = $dca['fields'][$matches[1]] ?? [];
-            $value = $submission->{$matches[1]} ?? null;
-            return $formatter($dc, $field, $value);
+            $fieldName = $matches[1];
+            // $field = $dca['fields'][$fieldName] ?? '';
+            $value = $submission->{$fieldName} ?? null;
+            return $formatter($dc, $fieldName, $value);
         };
 
         $title = $submissionArchive->titlePattern;

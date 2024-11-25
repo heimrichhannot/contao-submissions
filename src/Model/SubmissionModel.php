@@ -9,6 +9,7 @@ use HeimrichHannot\Haste\Dca\DC_HastePlus;
 use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\Haste\Util\Salutations;
 use HeimrichHannot\Haste\Util\Url;
+use HeimrichHannot\Submissions\Manager\TokenManager;
 use NotificationCenter\Model\Notification;
 
 /**
@@ -30,29 +31,24 @@ class SubmissionModel extends Model
         return SubmissionArchiveModel::findByPk($this->pid);
     }
 
-    public static function findSubmissionsByParent(
+    public static function findByParent(
         string $table,
         int    $pid,
         bool   $publishedOnly = false,
         array  $options = []
     ) {
         $archives = SubmissionArchiveModel::findByParent($table, $pid);
-
-        if ($archives === null)
-        {
+        if ($archives === null) {
             return null;
         }
 
-        if (!$publishedOnly)
-        {
-            return static::findByPid($archives->id, $options);
+        $findBy = ['tl_submission.pid=?'];
+
+        if ($publishedOnly) {
+            $findBy[] = 'tl_submission.published=1';
         }
 
-        return static::findBy(
-            ['tl_submission.published=1', 'tl_submission.pid=?'],
-            [$archives->id],
-            $options
-        );
+        return static::findBy($findBy, [$archives->id], $options);
     }
 
     public static function getArchiveParent(int $submission): Model|null
@@ -116,200 +112,96 @@ class SubmissionModel extends Model
         return $submissionArchive;
     }
 
-    public static function sendSubmissionNotification($intSubmission, $arrTokens = []): void
+    public static function sendSubmissionNotification($submissionId = null, $arrTokens = []): void
     {
-        $intSubmission = $intSubmission ?: \Input::get('id');
+        $submissionId = $submissionId ?: \Input::get('id');
 
-        if (($objSubmissionArchive = SubmissionModel::legacyGetArchive($intSubmission)) !== null)
+        $submissionArchive = SubmissionModel::legacyGetArchive($submissionId);
+
+        if (!$submissionArchive || !$submissionArchive->nc_submission)
         {
-            if ($objSubmissionArchive->nc_submission)
-            {
-                static::sendNotification($intSubmission, $objSubmissionArchive->nc_submission, $arrTokens);
-            }
-        }
-    }
-
-    public static function sendConfirmationNotificationBe(\DataContainer $objDc)
-    {
-        if (($objSubmission = static::findByPk($objDc->id)) !== null)
-        {
-            static::sendConfirmationNotification($objSubmission->id);
-
-            \Message::addConfirmation($GLOBALS['TL_LANG']['MSC']['confirmationNotificationSent']);
-            \Controller::redirect(Url::addQueryString('id=' . $objSubmission->pid, Url::removeQueryString(['key'])));
-        }
-    }
-
-    public static function sendConfirmationNotification($intSubmission, $arrTokens = [])
-    {
-        if (($objSubmissionArchive = SubmissionModel::legacyGetArchive($intSubmission)) !== null)
-        {
-            if ($objSubmissionArchive->nc_confirmation)
-            {
-                static::sendNotification($intSubmission, $objSubmissionArchive->nc_confirmation, $arrTokens);
-            }
-        }
-    }
-
-    public static function sendNotification($intSubmission, $intNotification, $arrTokens = [])
-    {
-        $arrTokens += static::generateTokens($intSubmission);
-
-        if (($objNotification = Notification::findByPk($intNotification)) !== null)
-        {
-            $objNotification->submission = $intSubmission;
-            $objNotification->send($arrTokens, $GLOBALS['TL_LANGUAGE']);
-        }
-    }
-
-    public static function generateTokens($intSubmission, $arrFields = [])
-    {
-        $arrTokens = [];
-        \Controller::loadDataContainer('tl_submission');
-        \System::loadLanguageFile('tl_submission');
-
-        $arrDca = &$GLOBALS['TL_DCA']['tl_submission'];
-
-        if (($objSubmission = SubmissionModel::findByPk($intSubmission)) !== null)
-        {
-            $objDc               = new DC_Hybrid('tl_submission');
-            $objDc->activeRecord = $objSubmission;
-
-            // fields
-            if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null)
-            {
-                \Controller::loadDataContainer('tl_submission');
-
-                $arrFields = empty($arrFields) ? deserialize($objSubmissionArchive->submissionFields, true) : $arrFields;
-
-                if (isset($GLOBALS['TL_HOOKS']['preGenerateSubmissionTokens'])
-                    && is_array($GLOBALS['TL_HOOKS']['preGenerateSubmissionTokens'])
-                )
-                {
-                    foreach ($GLOBALS['TL_HOOKS']['preGenerateSubmissionTokens'] as $arrCallback)
-                    {
-                        \System::importStatic($arrCallback[0])->{$arrCallback[1]}($objSubmission, $objSubmissionArchive, $arrFields);
-                    }
-                }
-            }
-
-            $arrSubmissionData = static::prepareData(
-                $objSubmission,
-                'tl_submission',
-                $GLOBALS['TL_DCA']['tl_submission'],
-                $objDc,
-                $arrFields,
-                Submissions::getSkipFields()
-            );
-
-            $arrTokens = static::tokenizeData($arrSubmissionData);
-
-            // salutation
-            $arrTokens['salutation_submission'] = Salutations::createSalutation(
-                $GLOBALS['TL_LANGUAGE'],
-                [
-                    'gender'   => $arrTokens['form_value_gender'],
-                    'title'    => $arrTokens['form_value_academicTitle'] ?: $arrTokens['form_value_title'],
-                    'firstname' => $arrTokens['form_value_firstname'],
-                    'lastname' => $arrTokens['form_value_lastname'],
-                ]
-            );
-
-            $arrTokens['tl_submission'] = $objSubmission->id;
+            return;
         }
 
-        return $arrTokens;
+        static::sendNotification($submissionId, $submissionArchive->nc_submission, $arrTokens);
     }
 
-    /**
-     * @deprecated Use HeimrichHannot\Haste\Util\FormSubmission::prepareData()
-     *
-     * @param \Model $objSubmission
-     * @param        $strTable
-     * @param array  $arrDca
-     * @param        $objDc
-     * @param array  $arrFields
-     *
-     * @return array
-     */
-    public static function prepareData(
-        \Model $objSubmission,
-        $strTable,
-        array $arrDca = [],
-        $objDc = null,
-        array $arrFields = [],
-        array $arrSkipFields = []
-    ) {
-        return FormSubmission::prepareData($objSubmission, $strTable, $arrDca, $objDc, $arrFields, $arrSkipFields);
-    }
-
-    /**
-     * @deprecated Use HeimrichHannot\Haste\Util\FormSubmission::prepareDataField()
-     *
-     * @param $strName
-     * @param $varValue
-     * @param $arrData
-     * @param $strTable
-     * @param $objDc
-     *
-     * @return array
-     */
-    public static function prepareDataField($strName, $varValue, $arrData, $strTable, $objDc)
+    public static function sendConfirmationNotificationBe(\DataContainer $objDc): void
     {
-        return FormSubmission::prepareDataField($strName, $varValue, $arrData, $strTable, $objDc);
+        $submission = static::findByPk($objDc->id);
+
+        if (!$submission)
+        {
+            return;
+        }
+
+        static::sendConfirmationNotification($submission->id);
+
+        \Message::addConfirmation($GLOBALS['TL_LANG']['MSC']['confirmationNotificationSent'] ?? 'Confirmation notification sent.');
+        \Controller::redirect(Url::addQueryString('id=' . $submission->pid, Url::removeQueryString(['key'])));
     }
 
-    /**
-     * @deprecated Use HeimrichHannot\Haste\Util\FormSubmission::tokenizeData()
-     *
-     * @param array  $arrSubmissionData
-     * @param string $strPrefix
-     *
-     * @return array
-     */
-    public static function tokenizeData(array $arrSubmissionData = [], $strPrefix = 'form')
+    public static function sendConfirmationNotification($intSubmission, $arrTokens = []): void
     {
-        return FormSubmission::tokenizeData($arrSubmissionData, $strPrefix);
+        $submissionArchive = SubmissionModel::legacyGetArchive($intSubmission);
+
+        if (!$submissionArchive || !$submissionArchive->nc_confirmation)
+        {
+            return;
+        }
+
+        static::sendNotification($intSubmission, $submissionArchive->nc_confirmation, $arrTokens);
     }
 
-    public static function generateEntityTokens(\Model $objEntity, array $arrDca, $objDc, $arrFields = [])
+    public static function sendNotification(int|string $submissionId, int|string $notificationId, $tokens = []): void
     {
-        return static::tokenizeData(static::prepareData($objEntity, 'tl_submission', $arrDca, $objDc, $arrFields));
+        $tokens += TokenManager::generateTokens($submissionId);
+
+        $notification = Notification::findByPk($notificationId);
+
+        $notification->submission = $submissionId;
+        $notification->send($tokens, $GLOBALS['TL_LANGUAGE']);
     }
 
     /**
      * Creates a new submission in a certain archive and assigns a logged in member (if existing)
      *
-     * @param $intPid
-     * @param $intMember
+     * @param $pid
+     * @param $member
      *
      * @return SubmissionModel
      */
-    public static function create($intPid, $intMember = null)
+    public static function create(int|string $pid, int|string $member = null): SubmissionModel
     {
-        $objSubmission               = new static();
-        $objSubmission->pid          = $intPid;
-        $objSubmission->dateAdded    = time();
-        $objSubmission->memberAuthor = $intMember;
+        $submission               = new SubmissionModel();
+        $submission->pid          = $pid;
+        $submission->dateAdded    = time();
+        $submission->memberAuthor = $member;
 
-        $objSubmission->save();
+        $submission->save();
 
-        if(is_array($GLOBALS['TL_DCA'][static::$strTable]['config']['oncreate_callback'])) {
+        $onCreateCallbacks = $GLOBALS['TL_DCA'][static::$strTable]['config']['oncreate_callback'] ?? [];
+
+        if (!empty($onCreateCallbacks))
+        {
             $dc = new DC_HastePlus(static::$strTable);
-            $dc->id = $objSubmission->id;
-            $dc->activeRecord = $objSubmission;
+            $dc->id = $submission->id;
+            $dc->activeRecord = $submission;
 
-            foreach ($GLOBALS['TL_DCA'][static::$strTable]['config']['oncreate_callback'] as $callback) {
-                if (is_array($callback)) {
-                    System::importStatic($callback[0]);
-                    $callbackObj = System::importStatic($callback[0]);
-                    $callbackObj->{$callback[1]}(static::$strTable, $objSubmission->id, $objSubmission->row(), $dc);
-                } elseif (is_callable($callback)) {
-                    $callback(static::$strTable, $objSubmission->id, $objSubmission->row(), $dc);
+            foreach ($onCreateCallbacks as $callback)
+            {
+                if (is_array($callback) && \sizeof($callback) == 2)
+                {
+                    [$class, $method] = $callback;
+                    System::importStatic($class)->{$method}(SubmissionModel::getTable(), $submission->id, $submission->row(), $dc);
+                }
+                elseif (is_callable($callback))
+                {
+                    $callback(SubmissionModel::getTable(), $submission->id, $submission->row(), $dc);
                 }
             }
         }
 
-        return $objSubmission;
+        return $submission;
     }
 }

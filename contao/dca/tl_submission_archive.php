@@ -8,7 +8,7 @@ DateAddedField::register('tl_submission');
 
 $dca = [
     'config'      => [
-        'dataContainer'     => 'Table',
+        'dataContainer'     => \Contao\DC_Table::class,
         'ctable'            => ['tl_submission'],
         'switchToEdit'      => true,
         'enableVersioning'  => true,
@@ -17,6 +17,11 @@ $dca = [
                 'id' => 'primary',
             ],
         ],
+        /*'
+        // todo: implement permission check
+        'onload_callback'   => [
+            ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'checkPermission'],
+        ],*/
     ],
     'list'        => [
         'label'             => [

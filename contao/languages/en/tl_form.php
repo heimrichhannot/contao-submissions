@@ -2,6 +2,8 @@
 
 $lang = &$GLOBALS['TL_LANG']['tl_form'];
 
+$lang['huh_submissions_legend'] = 'Submissions settings';
+
 $lang['storeAsSubmission'] = ['Store as submission', "Save submitted form data as submission. This option overrides the \"store data\" option!"];
 $lang['submissionArchive'] = ['Submission archive', "The submissin archive which should store the submission data."];
 

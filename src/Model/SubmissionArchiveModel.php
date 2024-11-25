@@ -55,4 +55,23 @@ class SubmissionArchiveModel extends Model
 
         return $modelClass::findByPk($archiveModel->pid);
     }
+
+    public static function findBySubmissionId(int|string $submissionId): SubmissionArchiveModel|Model|null
+    {
+        $submission = SubmissionModel::findByPk($submissionId);
+
+        if (!$submission)
+        {
+            return null;
+        }
+
+        $submissionArchive = $submission->getRelated('pid');
+
+        if (!$submissionArchive)
+        {
+            return null;
+        }
+
+        return $submissionArchive;
+    }
 }

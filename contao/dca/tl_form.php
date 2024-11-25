@@ -1,7 +1,6 @@
 <?php
 
-use HeimrichHannot\Haste\Dca\General;
-use HeimrichHannot\Submissions\Submissions;
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
 
 $dca = &$GLOBALS['TL_DCA']['tl_form'];
 $fields = &$dca['fields'];
@@ -12,10 +11,14 @@ $fields = &$dca['fields'];
 $dca['palettes']['__selector__'][] = 'storeAsSubmission';
 $dca['palettes']['__selector__'][] = 'huhSubAddOptIn';
 
-$dca['palettes']['default'] = str_replace(',storeValues', ',storeValues,storeAsSubmission', $dca['palettes']['default']);
-
 $dca['subpalettes']['storeAsSubmission'] = 'submissionArchive,huhSubAddOptIn';
 $dca['subpalettes']['huhSubAddOptIn']    = 'huhSubOptInNotification,huhSubOptInJumpTo,huhSubOptInField,huhSubOptInTokenInvalidJumpTo';
+
+PaletteManipulator::create()
+    ->addLegend('huh_submissions_legend', 'store_legend')
+    ->addField('storeAsSubmission', 'huh_submissions_legend', PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('default', 'tl_form')
+;
 
 /**
  * Fields
@@ -49,14 +52,11 @@ $fields['huhSubAddOptIn'] = [
 ];
 
 $fields['huhSubOptInNotification'] = [
-    'exclude'          => true,
-    'search'           => true,
-    'inputType'        => 'select',
-    'options_callback' => static function () {
-        return Submissions::getNotificationOptionsByType(Submissions::NOTIFICATION_TYPE_OPTIN);
-    },
-    'eval'             => ['chosen' => true, 'tl_class' => 'w50', "mandatory" => true],
-    'sql'              => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
+    'exclude'   => true,
+    'search'    => true,
+    'inputType' => 'select',
+    'eval'      => ['chosen' => true, 'tl_class' => 'w50', "mandatory" => false],
+    'sql'       => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
 ];
 
 $fields['huhSubOptInJumpTo'] = [
@@ -79,9 +79,6 @@ $fields['huhSubOptInTokenInvalidJumpTo']       = [
 
 $fields['huhSubOptInField'] = [
     'inputType'        => 'select',
-    'options_callback' => static function() {
-        return General::getFields('tl_submission', false, ['checkbox'], [], false);
-    },
     'default'          => 'published',
     'sql'              => "varchar(64) NOT NULL default ''",
     'eval'             => [
