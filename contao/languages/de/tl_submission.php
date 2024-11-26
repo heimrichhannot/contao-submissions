@@ -41,11 +41,12 @@ $lang['addDifferentBillingData'] = ['Abweichende Rechnungsdaten angeben', 'Wähl
 $lang['published']               = ['Aktiviert', 'Wählen Sie diese Option, um die Einsendung zu aktivieren.'];
 $lang['formHybridBlob']          = ['FormHybrid BLOB', 'Dieses Feld enthält Änderungen, die noch nicht final in den Datensatz gespeichert werden sollen. Wird bspw. bei Multistep-Formularen eingesetzt.'];
 $lang['submissionLanguage']      = ['Sprache der Einsendung', 'Dieses Feld enthält die Sprache der Einsendung.'];
-$lang['huhSubOptInTokenId']      = ['Opt-in Token-Id', 'Dieses Feld enthält den Identifier des Tokens, bis der Opt-in bestätigt wurde.'];
-$lang['huhSubOptInCache']        = ['Opt-in Cache', 'Dieses Feld speichert Daten für den Opt-in-Prozess zwischen.'];
-$lang['huhSubOptInCache']        = ['Opt-in Cache', 'Dieses Feld speichert Daten für den Opt-in-Prozess zwischen.'];
+$lang['huhSub_optInTokenId']      = ['Opt-in Token-Id', 'Dieses Feld enthält den Identifier des Tokens, bis der Opt-in bestätigt wurde.'];
+$lang['huhSub_optInCache']        = ['Opt-in Cache', 'Dieses Feld speichert Daten für den Opt-in-Prozess zwischen.'];
 
-// billing
+/**
+ * Billing fields
+ */
 $lang['billingGender']        = $lang['gender'];
 $lang['billingAcademicTitle'] = $lang['academicTitle'];
 $lang['billingFirstname']     = $lang['firstname'];
@@ -62,7 +63,6 @@ $lang['billingCountry']       = $lang['country'];
 $lang['general_legend']    = 'Allgemeine Einstellungen';
 $lang['submission_legend'] = 'Einsendung';
 $lang['publish_legend']    = 'Status';
-
 
 /**
  * Buttons

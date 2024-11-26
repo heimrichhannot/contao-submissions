@@ -2,15 +2,10 @@
 
 namespace HeimrichHannot\Submissions\Model;
 
+use Contao\CoreBundle\OptIn\OptInTokenInterface;
 use Contao\Model;
 use Contao\System;
-use HeimrichHannot\FormHybrid\DC_Hybrid;
-use HeimrichHannot\Haste\Dca\DC_HastePlus;
-use HeimrichHannot\Haste\Util\FormSubmission;
-use HeimrichHannot\Haste\Util\Salutations;
-use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Submissions\Manager\TokenManager;
-use NotificationCenter\Model\Notification;
 
 /**
  * @property int $id
@@ -31,62 +26,9 @@ class SubmissionModel extends Model
         return SubmissionArchiveModel::findByPk($this->pid);
     }
 
-    public static function findByParent(
-        string $table,
-        int    $pid,
-        bool   $publishedOnly = false,
-        array  $options = []
-    ) {
-        $archives = SubmissionArchiveModel::findByParent($table, $pid);
-        if ($archives === null) {
-            return null;
-        }
-
-        $findBy = ['tl_submission.pid=?'];
-
-        if ($publishedOnly) {
-            $findBy[] = 'tl_submission.published=1';
-        }
-
-        return static::findBy($findBy, [$archives->id], $options);
-    }
-
-    public static function getArchiveParent(int $submission): Model|null
+    public static function findOneByOptInToken(OptInTokenInterface $token): Model|null
     {
-        $archive = static::legacyGetArchive($submission);
-
-        if (!$archive)
-        {
-            return null;
-        }
-
-        if (!$archive->parentTable || !$archive->pid)
-        {
-            return null;
-        }
-
-        if (isset(static::$archiveParentsCache[$archive->id]))
-        {
-            return static::$archiveParentsCache[$archive->id];
-        }
-
-        $modelClass = Model::getClassFromTable($archive->parentTable);
-
-        if (!\class_exists($modelClass))
-        {
-            return null;
-        }
-
-        $archiveParent = $modelClass::findByPk($archive->pid);
-
-        if ($archiveParent === null)
-        {
-            return null;
-        }
-
-        static::$archiveParentsCache[$archive->id] = $archiveParent;
-
-        return $archiveParent;
+        return static::findOneBy('huhSub_optInTokenId', $token->getIdentifier());
     }
 
     /* =============================================

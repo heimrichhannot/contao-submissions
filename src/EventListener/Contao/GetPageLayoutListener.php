@@ -13,13 +13,14 @@ use Contao\PageModel;
 use Contao\PageRegular;
 use Contao\StringUtil;
 use Contao\System;
+use Exception;
 use HeimrichHannot\Submissions\Config\OptInConfig;
 use HeimrichHannot\Submissions\Event\SubmissionsBeforeSendConfirmationNotificationEvent;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
 use HeimrichHannot\Submissions\Util\Tokens;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
-#[AsHook("getPageLayout")]
+##[AsHook("getPageLayout")]
 readonly class GetPageLayoutListener
 {
     public function __construct(
@@ -39,12 +40,13 @@ readonly class GetPageLayoutListener
 
         $token->confirm();
 
-        if ($form->huhSubOptInField) {
-            $submission->{$form->huhSubOptInField} = "1";
+        if ($form->huhSub_optInField) {
+            $submission->{$form->huhSub_optInField} = "1";
         }
 
         /*
         todo: re-enable event when adding notifications
+        */
 
         $submissionData = $submission->row();
 
@@ -70,7 +72,7 @@ readonly class GetPageLayoutListener
             }
         }
 
-        /** @var tl_form $instance *-/
+        /** @var tl_form $instance */
         $instance = System::importStatic(tl_form::class);
         if ($instance) {
             $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache);
@@ -81,14 +83,13 @@ readonly class GetPageLayoutListener
                 $submissionCache['labels'] ?? []
             );
         }
-        */
 
         // clean database
-        $submission->huhSubOptInCache = \serialize(['form' => $submissionCache['form'] ?? '']);
+        $submission->huhSub_optInCache = \serialize(['form' => $submissionCache['form'] ?? '']);
         $submission->save();
 
         /** @var PageModel|null $jumpTo */
-        $jumpTo = $form->getRelated('huhSubOptInJumpTo');
+        $jumpTo = $form->getRelated('huhSub_optInJumpTo');
 
         if (!$jumpTo instanceof PageModel)
         {
@@ -108,12 +109,12 @@ readonly class GetPageLayoutListener
     {
         if (!$token = $this->optIn->find($tokenId))
         {
-            if ($submissions = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$tokenId]))
+            if ($submissions = SubmissionModel::findBy(["huhSub_optInTokenId=?"], [$tokenId]))
             {
                 while ($submissions->next())
                 {
-                    $submissions->huhSubOptInTokenId = '';
-                    $submissions->huhSubOptInCache = '';
+                    $submissions->huhSub_optInTokenId = '';
+                    $submissions->huhSub_optInCache = '';
                     $submissions->save();
                 }
             }
@@ -121,13 +122,13 @@ readonly class GetPageLayoutListener
             $this->abort('Invalid Token (huh:submissions:generatePage:01)');
         }
 
-        $submission = SubmissionModel::findBy(["huhSubOptInTokenId=?"], [$token->getIdentifier()]);
+        $submission = SubmissionModel::findBy(["huhSub_optInTokenId=?"], [$token->getIdentifier()]);
         if (!$submission || $submission->count() > 1) {
             $this->abort('Internal Server Error (huh:submissions:generatePage:02)');
         }
         $submission = $submission->current();
 
-        $submissionCache = StringUtil::deserialize($submission->huhSubOptInCache, true);
+        $submissionCache = StringUtil::deserialize($submission->huhSub_optInCache, true);
         if (!$form = FormModel::findByPk($submissionCache['form'])) {
             $this->abort('Internal Server error (huh:submissions:generatePage:03)');
         }
@@ -143,12 +144,18 @@ readonly class GetPageLayoutListener
         return [$token, $submission, $submissionCache, $form];
     }
 
+    /**
+     * @param string $errorCode
+     * @param FormModel|null $form
+     * @return never
+     * @throws Exception
+     */
     protected function abort(string $errorCode, FormModel $form = null): never
     {
-        if ($form && $form->huhSubOptInTokenInvalidJumpTo)
+        if ($form && $form->huhSub_optInTokenInvalidJumpTo)
         {
             /** @var PageModel|null $jumpTo */
-            $jumpTo = $form->getRelated('huhSubOptInTokenInvalidJumpTo');
+            $jumpTo = $form->getRelated('huhSub_optInTokenInvalidJumpTo');
             if ($jumpTo instanceof PageModel) {
                 Controller::redirect($jumpTo->getFrontendUrl());
             }

@@ -113,6 +113,7 @@ readonly class SubmissionArchiveContainer
             GetDcaFieldsOptions::create()
         );
 
+        // remove fields that are not allowed in submissions
         $noSubmissionFields = $this->utils->dca()->getDcaFields(
             'tl_submission',
             GetDcaFieldsOptions::create()

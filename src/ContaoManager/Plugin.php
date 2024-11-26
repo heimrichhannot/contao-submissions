@@ -13,10 +13,13 @@ use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\ManagerPlugin\Config\ConfigPluginInterface;
+use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
 use HeimrichHannot\Submissions\HeimrichHannotSubmissions;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderResolverInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class Plugin implements BundlePluginInterface, ConfigPluginInterface
+class Plugin implements BundlePluginInterface, ConfigPluginInterface, RoutingPluginInterface
 {
     /**
      * {@inheritDoc}
@@ -33,8 +36,17 @@ class Plugin implements BundlePluginInterface, ConfigPluginInterface
      * {@inheritdoc}
      * @throws \Exception
      */
-    public function registerContainerConfiguration(LoaderInterface $loader, array $managerConfig)
+    public function registerContainerConfiguration(LoaderInterface $loader, array $managerConfig): void
     {
         $loader->load('@HeimrichHannotSubmissions/config/services.yaml');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getRouteCollection(LoaderResolverInterface $resolver, KernelInterface $kernel)
+    {
+        $file = '@HeimrichHannotSubmissions/config/routes.yaml';
+        return $resolver->resolve($file)->load($file);
     }
 }

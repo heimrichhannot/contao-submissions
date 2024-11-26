@@ -1,0 +1,3 @@
+huh_submissions_controller:
+  resource: ../src/Controller
+  type: annotation

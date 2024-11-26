@@ -3,18 +3,19 @@
 namespace HeimrichHannot\Submissions\DataContainer;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
-use Contao\Database;
-use HeimrichHannot\Submissions\Config\NotificationConfig;
+use HeimrichHannot\Submissions\NotificationType\OptInChallengeNotificationType;
 use HeimrichHannot\UtilsBundle\Util\DcaUtil\GetDcaFieldsOptions;
 use HeimrichHannot\UtilsBundle\Util\Utils;
+use Terminal42\NotificationCenterBundle\NotificationCenter;
 
-class FormContainer
+readonly class FormContainer
 {
     public function __construct(
-        private readonly Utils $utils
+        private NotificationCenter $notificationCenter,
+        private Utils              $utils
     ) {}
 
-    #[AsCallback(table: 'tl_form', target: 'fields.huhSubOptInField.options')]
+    #[AsCallback(table: 'tl_form', target: 'fields.huhSub_optInField.options')]
     public function getHuhSubOptInFieldOptions(): array
     {
         return $this->utils->dca()->getDcaFields(
@@ -26,22 +27,9 @@ class FormContainer
         );
     }
 
-    #[AsCallback(table: 'tl_form', target: 'fields.huhSubOptInNotification.options')]
+    #[AsCallback(table: 'tl_form', target: 'fields.huhSub_optInNotification.options')]
     public function getHuhSubOptInNotificationOptions(): array
     {
-        return $this->getNCChoicesByType(NotificationConfig::TYPE_OPT_IN);
-    }
-
-    protected function getNCChoicesByType(string $type): array
-    {
-        $choices       = [];
-        $notifications = Database::getInstance()
-            ->execute("SELECT id,title FROM tl_nc_notification WHERE type='$type' ORDER BY title");
-
-        while ($notifications->next()) {
-            $choices[$notifications->id] = $notifications->title;
-        }
-
-        return $choices;
+        return $this->notificationCenter->getNotificationsForNotificationType(OptInChallengeNotificationType::NAME);
     }
 }

@@ -95,12 +95,15 @@ class Tokens
 
     public static function addAttachmentTokens(array $tokens, ?array $files): array
     {
-        if (!empty($files)) {
-            foreach ($files as $fieldName => $fileData) {
-                $fileModel = FilesModel::findByUuid($fileData['uuid']);
-                if ($fileModel) {
-                    $tokens['attachment_'.$fieldName] = $fileModel->path;
-                }
+        if (empty($files)) {
+            return $tokens;
+        }
+
+        foreach ($files as $fieldName => $fileData)
+        {
+            if ($fileModel = FilesModel::findByUuid($fileData['uuid']))
+            {
+                $tokens['attachment_'.$fieldName] = $fileModel->path;
             }
         }
 

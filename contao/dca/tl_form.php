@@ -8,23 +8,22 @@ $fields = &$dca['fields'];
 /**
  * Palettes
  */
-$dca['palettes']['__selector__'][] = 'storeAsSubmission';
-$dca['palettes']['__selector__'][] = 'huhSubAddOptIn';
+$dca['palettes']['__selector__'][] = 'huhSub_storeSubmission';
+$dca['palettes']['__selector__'][] = 'huhSub_optIn';
 
-$dca['subpalettes']['storeAsSubmission'] = 'submissionArchive,huhSubAddOptIn';
-$dca['subpalettes']['huhSubAddOptIn']    = 'huhSubOptInNotification,huhSubOptInJumpTo,huhSubOptInField,huhSubOptInTokenInvalidJumpTo';
+$dca['subpalettes']['huhSub_storeSubmission'] = 'huhSub_submissionArchive,huhSub_optIn';
+$dca['subpalettes']['huhSub_optIn']    = 'huhSub_optInNotification,huhSub_optInJumpTo,huhSub_optInField,huhSub_optInTokenInvalidJumpTo';
 
 PaletteManipulator::create()
     ->addLegend('huh_submissions_legend', 'store_legend')
-    ->addField('storeAsSubmission', 'huh_submissions_legend', PaletteManipulator::POSITION_APPEND)
+    ->addField('huhSub_storeSubmission', 'huh_submissions_legend', PaletteManipulator::POSITION_APPEND)
     ->applyToPalette('default', 'tl_form')
 ;
 
 /**
  * Fields
  */
-$fields['storeAsSubmission'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_form']['storeAsSubmission'],
+$fields['huhSub_storeSubmission'] = [
     'exclude'   => true,
     'filter'    => true,
     'inputType' => 'checkbox',
@@ -32,8 +31,7 @@ $fields['storeAsSubmission'] = [
     'sql'       => "char(1) NOT NULL default ''"
 ];
 
-$fields['submissionArchive'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_form']['submissionArchive'],
+$fields['huhSub_submissionArchive'] = [
     'exclude'    => true,
     'search'     => true,
     'inputType'  => 'select',
@@ -43,7 +41,7 @@ $fields['submissionArchive'] = [
     'sql'        => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
 ];
 
-$fields['huhSubAddOptIn'] = [
+$fields['huhSub_optIn'] = [
     'exclude'   => true,
     'filter'    => true,
     'inputType' => 'checkbox',
@@ -51,7 +49,7 @@ $fields['huhSubAddOptIn'] = [
     'sql'       => "char(1) NOT NULL default ''"
 ];
 
-$fields['huhSubOptInNotification'] = [
+$fields['huhSub_optInNotification'] = [
     'exclude'   => true,
     'search'    => true,
     'inputType' => 'select',
@@ -59,7 +57,7 @@ $fields['huhSubOptInNotification'] = [
     'sql'       => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
 ];
 
-$fields['huhSubOptInJumpTo'] = [
+$fields['huhSub_optInJumpTo'] = [
     'exclude'    => true,
     'inputType'  => 'pageTree',
     'foreignKey' => 'tl_page.title',
@@ -68,7 +66,7 @@ $fields['huhSubOptInJumpTo'] = [
     'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
 ];
 
-$fields['huhSubOptInTokenInvalidJumpTo']       = [
+$fields['huhSub_optInTokenInvalidJumpTo']       = [
     'exclude'    => true,
     'inputType'  => 'pageTree',
     'foreignKey' => 'tl_page.title',
@@ -77,7 +75,7 @@ $fields['huhSubOptInTokenInvalidJumpTo']       = [
     'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
 ];
 
-$fields['huhSubOptInField'] = [
+$fields['huhSub_optInField'] = [
     'inputType'        => 'select',
     'default'          => 'published',
     'sql'              => "varchar(64) NOT NULL default ''",

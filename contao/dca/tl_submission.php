@@ -1,6 +1,7 @@
 <?php
 
 use HeimrichHannot\UtilsBundle\Dca\DateAddedField;
+use Terminal42\NotificationCenterBundle\Token\TokenContext;
 
 $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
@@ -115,7 +116,11 @@ $dca = [
             'filter' => true,
             'flag' => \Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['tl_class' => 'w50', 'doNotCopy' => true, 'noSubmissionField' => true],
+            'eval' => [
+                'tl_class' => 'w50',
+                'doNotCopy' => true,
+                'noSubmissionField' => true,
+            ],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'type' => [
@@ -123,7 +128,11 @@ $dca = [
             'filter' => true,
             'inputType' => 'select',
             'reference' => &$GLOBALS['TL_LANG']['tl_submission']['reference']['type'],
-            'eval' => ['includeBlankOption' => true, 'mandatory' => true, 'tl_class' => 'w50'],
+            'eval' => [
+                'includeBlankOption' => true,
+                'mandatory' => true,
+                'tl_class' => 'w50',
+            ],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'gender' => [
@@ -272,6 +281,7 @@ $dca = [
                 'tl_class' => 'w50',
                 'substituteField' => true,
             ],
+            'nc_context' => TokenContext::Email,
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'phone' => [
@@ -336,20 +346,20 @@ $dca = [
             'eval' => ['tl_class' => 'w50', 'readonly' => true],
             'sql' => "varchar(4) NOT NULL default ''",
         ],
-        'submissionOptInTokenId' => [
+        'huhSub_optInTokenId' => [
             'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 clr', 'readonly' => true, 'noSubmissionField' => true],
             'sql' => "varchar(32) NOT NULL default ''",
         ],
-        'submissionOptInCache' => [
+        'huhSub_optInCache' => [
             'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 clr', 'noSubmissionField' => true],
             'sql' => "blob NULL",
-        ],
+        ]
     ],
 ];
 

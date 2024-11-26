@@ -21,7 +21,7 @@ readonly class SendNotificationMessageListener
 
     public function __invoke(Message $message, array &$tokens, ?string $language, Gateway $gatewayModel): bool
     {
-        if (!isset($tokens['formconfig_id']) || !($tokens['formconfig_storeAsSubmission'] ?? false)) {
+        if (!isset($tokens['formconfig_id']) || !($tokens['formconfig_huhSub_storeSubmission'] ?? false)) {
             return true;
         }
 
@@ -33,7 +33,7 @@ readonly class SendNotificationMessageListener
             $tokens['form_uuid'] = $uuid;
         }
 
-        $addOptIn = $tokens['formconfig_huhSubAddOptIn'] ?? false;
+        $addOptIn = $tokens['formconfig_huhSub_optIn'] ?? false;
         $optInId = $tokens['formconfig_optInIdentifier'] ?? null;
         $request = $this->requestStack->getCurrentRequest();
 
