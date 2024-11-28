@@ -1,5 +1,6 @@
 <?php
 
+use Contao\DC_Table;
 use HeimrichHannot\UtilsBundle\Dca\DateAddedField;
 use Terminal42\NotificationCenterBundle\Token\TokenContext;
 
@@ -11,7 +12,7 @@ DateAddedField::register('tl_submission')->setEvalValue('noSubmissionField', tru
 
 $dca = [
     'config'   => [
-        'dataContainer'     => 'Table',
+        'dataContainer'     => DC_Table::class,
         'ptable'            => 'tl_submission_archive',
         'enableVersioning'  => true,
         'doNotCopyRecords'  => true,

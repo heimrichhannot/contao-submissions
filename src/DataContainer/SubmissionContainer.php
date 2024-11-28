@@ -122,7 +122,7 @@ readonly class SubmissionContainer
             return \sprintf(
                 '<div class="tl_content_left">%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span></div>',
                 $title,
-                Date::parse(\Config::get('datimFormat'), \trim($record['dateAdded']))
+                Date::parse(Config::get('datimFormat'), \trim($record['dateAdded']))
             );
         };
 
@@ -174,6 +174,7 @@ readonly class SubmissionContainer
         $title = \str_replace('%%', '__PERCENT__', $title);
         $title = \preg_replace_callback('/%([^%]+)%/i', $pregReplaceCallback, $title);
         $title = \str_replace('__PERCENT__', '%', $title);
+        $title = \trim($title);
 
         return $genHtml($title);
     }

@@ -1,5 +1,6 @@
 <?php
 
+use Contao\DC_Table;
 use HeimrichHannot\UtilsBundle\Dca\DateAddedField;
 
 $dca = &$GLOBALS['TL_DCA']['tl_submission_archive'];
@@ -10,7 +11,7 @@ DateAddedField::register('tl_submission')->setEvalValue('noSubmissionField', tru
 
 $dca = [
     'config'      => [
-        'dataContainer'     => \Contao\DC_Table::class,
+        'dataContainer'     => DC_Table::class,
         'ctable'            => ['tl_submission'],
         'switchToEdit'      => true,
         'enableVersioning'  => true,
@@ -120,8 +121,8 @@ $dca = [
         'titlePattern' => [
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 128],
-            'sql'       => "varchar(128) NOT NULL default ''",
+            'eval'      => ['maxlength' => 256],
+            'sql'       => "varchar(256) NOT NULL default ''",
         ],
         /*>>>
         todo: override mandatory property of fields

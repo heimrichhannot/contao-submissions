@@ -38,7 +38,7 @@ readonly class NotificationManager
 
         foreach ($submittedData as $k => $v)
         {
-            if (!\array_key_exists($k, $submissibleFields)) {
+            if (!\in_array($k, $submissibleFields)) {
                 continue;
             }
 

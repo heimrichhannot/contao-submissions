@@ -7,7 +7,7 @@ $lang = &$GLOBALS['TL_LANG']['tl_submission'];
  */
 $lang['pid']                     = ['Archiv', 'Wählen Sie hier das Einsendungsarchiv aus'];
 $lang['type']                    = ['Typ', 'Wählen Sie hier den Typ der Einsendung aus.'];
-$lang['gender']                  = TL_MODE == 'FE' ? ['Anrede', 'Wählen Sie hier eine Anrede aus.'] : ['Geschlecht', 'Geben Sie hier das Geschlecht ein.'];
+$lang['gender']                  = ['Geschlecht', 'Geben Sie hier das Geschlecht ein.'];
 $lang['genderFe']                = ['Anrede', 'Wählen Sie hier eine Anrede aus.'];
 $lang['academicTitle']           = ['Akademischer Titel', 'Geben Sie hier einen akademischen Titel ein.'];
 $lang['additionalTitle']         = ['Zusätzlicher Titel', 'Geben Sie hier einen zusätzlichen akademischen Titel ein.'];
