@@ -4,7 +4,9 @@ use HeimrichHannot\UtilsBundle\Dca\DateAddedField;
 
 $dca = &$GLOBALS['TL_DCA']['tl_submission_archive'];
 
-DateAddedField::register('tl_submission');
+DateAddedField::register('tl_submission')->setEvalValue('noSubmissionField', true);
+
+// todo: implement permission check
 
 $dca = [
     'config'      => [
@@ -17,14 +19,9 @@ $dca = [
                 'id' => 'primary',
             ],
         ],
-        /*'
-        // todo: implement permission check
-        'onload_callback'   => [
-            ['HeimrichHannot\Submissions\Backend\SubmissionArchiveBackend', 'checkPermission'],
-        ],*/
     ],
     'list'        => [
-        'label'             => [
+        'label' => [
             'fields' => ['title'],
             'format' => '%s',
         ],
@@ -151,23 +148,6 @@ $dca = [
             ],
             'sql'       => "blob NULL",
         ],
-        /*>>>
-        todo: implement notifications
-        <<<*
-        'nc_submission'                     => [
-            'exclude'          => true,
-            'inputType'        => 'select',
-            'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getNotificationsAsOptions'],
-            'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
-            'sql'              => "int(10) unsigned NOT NULL default '0'",
-        ],
-        'nc_confirmation'                   => [
-            'exclude'          => true,
-            'inputType'        => 'select',
-            'options_callback' => ['HeimrichHannot\Submissions\Submissions', 'getConfirmationNotificationsAsOptions'],
-            'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
-            'sql'              => "int(10) unsigned NOT NULL default '0'",
-        ],
-        /*<=== \[T]/ ===>*/
+        */
     ],
 ];

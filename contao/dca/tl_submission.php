@@ -5,7 +5,9 @@ use Terminal42\NotificationCenterBundle\Token\TokenContext;
 
 $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
-DateAddedField::register('tl_submission');
+DateAddedField::register('tl_submission')->setEvalValue('noSubmissionField', true);
+
+// todo: check permission
 
 $dca = [
     'config'   => [
@@ -19,23 +21,18 @@ $dca = [
                 'uuid' => 'unique',
             ],
         ],
-        /*'
-        'onload_callback'   => [
-            ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'checkPermission'],
-            ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'modifyPalette', true],
-        ],*/
     ],
     'list' => [
         'label' => [
             'fields' => ['id'],
             'format' => '%s',
         ],
-        'sorting'           => [
-            'mode'                  => 4,
-            'fields'                => ['dateAdded DESC'],
-            'headerFields'          => ['title'],
-            'panelLayout'           => 'filter;search,limit',
-            'filter'                => [['tstamp>?', 0]],
+        'sorting' => [
+            'mode'         => 4,
+            'fields'       => ['dateAdded DESC'],
+            'headerFields' => ['title'],
+            'panelLayout'  => 'filter;search,limit',
+            'filter'       => [['tstamp>?', 0]],
         ],
         'global_operations' => [
             'all' => [
@@ -44,7 +41,7 @@ $dca = [
                 'attributes' => 'onclick="Backend.getScrollOffset();"',
             ],
         ],
-        'operations'        => [
+        'operations' => [
             'copy'   => [
                 'href'  => 'act=copy',
                 'icon'  => 'copy.svg',
@@ -59,15 +56,6 @@ $dca = [
                 'href'  => 'act=edit',
                 'icon'  => 'edit.svg',
             ],
-            // TODO
-//            'send_confirmation' => [
-//                'label'           => &$GLOBALS['TL_LANG']['tl_submission']['send_confirmation'],
-//                'icon'            => 'system/modules/submissions/assets/img/icon_send_confirmation.png',
-//                'href'            => 'key=send_confirmation',
-//                'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['sendConfirmationConfirm']
-//                    . '\'))return false;Backend.getScrollOffset()"',
-//                'button_callback' => ['HeimrichHannot\Submissions\Backend\SubmissionBackend', 'sendConfirmation'],
-//            ],
             'show'   => [
                 'href'  => 'act=show',
                 'icon'  => 'show.svg',

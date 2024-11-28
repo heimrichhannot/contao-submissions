@@ -11,7 +11,7 @@ use NotificationCenter\Model\Gateway;
 use NotificationCenter\Model\Message;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-#[AsHook("sendNotificationMessage")]
+##[AsHook("sendNotificationMessage")]
 readonly class SendNotificationMessageListener
 {
     public function __construct(

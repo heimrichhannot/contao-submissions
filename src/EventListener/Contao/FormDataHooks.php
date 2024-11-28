@@ -44,7 +44,7 @@ readonly class FormDataHooks
             return;
         }
 
-        $form->nc_notification = $form->huhSub_optInNotification;
+        $form->nc_notification = '0';
 
         $token = $this->optIn->create(
             OptInConfig::TOKEN_PREFIX,
@@ -107,10 +107,18 @@ readonly class FormDataHooks
         $optInUrl = $this->router->generate('huh_submissions_opt_in', [
             'formId' => $form->id,
             'tokenIdentifier' => $optInToken->getIdentifier(),
-            'jtf' => ($GLOBALS['objPage'] ?? System::getContainer()->get('contao.routing.page_finder')?->getCurrentPage())?->id
+            'from' => ($GLOBALS['objPage'] ?? System::getContainer()->get('contao.routing.page_finder')?->getCurrentPage())?->id
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $this->notificationManager->send($submittedData, $formData, $files, $labels, $form, $optInUrl);
+        $this->notificationManager->send(
+            $submittedData,
+            $formData,
+            $files,
+            $labels,
+            $form,
+            $optInToken->getIdentifier(),
+            $optInUrl
+        );
     }
 
     #[AsHook("storeFormData")]
@@ -127,24 +135,25 @@ readonly class FormDataHooks
         // Remove fields that do not exist
         $data = \array_intersect_key($data, \array_flip(Database::getInstance()->getFieldNames('tl_submission')));
 
-        if (!empty($_SESSION['FILES']))
+        if (empty($_SESSION['FILES'])) {
+            return $data;
+        }
+
+        Controller::loadDataContainer('tl_submission');
+
+        foreach ($_SESSION['FILES'] as $field => $fieldData)
         {
-            Controller::loadDataContainer('tl_submission');
+            if (empty($data[$field]) || empty($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
+                continue;
+            }
 
-            foreach ($_SESSION['FILES'] as $field => $fieldData)
-            {
-                if (empty($data[$field]) || empty($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
-                    continue;
-                }
+            $data[$field] = StringUtil::uuidToBin($fieldData['uuid']);
 
-                $data[$field] = StringUtil::uuidToBin($fieldData['uuid']);
+            $multiple = (bool)($GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['multiple'] ?? false);
+            $fieldType = $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['fieldType'] ?? null;
 
-                $multiple = (bool)($GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['multiple'] ?? false);
-                $fieldType = $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['fieldType'] ?? null;
-
-                if ($multiple || $fieldType === 'checkbox') {
-                    $data[$field] = \serialize([$fieldData['uuid']]);
-                }
+            if ($multiple || $fieldType === 'checkbox') {
+                $data[$field] = \serialize([$fieldData['uuid']]);
             }
         }
 

@@ -2,14 +2,17 @@
 
 namespace HeimrichHannot\Submissions\Controller;
 
+use Contao\Controller;
 use Contao\CoreBundle\Controller\AbstractController;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\CoreBundle\OptIn\OptIn;
 use Contao\FilesModel;
+use Contao\Form;
 use Contao\FormModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use HeimrichHannot\Submissions\Event\SubmissionsBeforeSendConfirmationNotificationEvent;
+use HeimrichHannot\Submissions\Manager\NotificationManager;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
 use HeimrichHannot\Submissions\Util\Tokens;
 use HeimrichHannot\UtilsBundle\Util\Utils;
@@ -23,6 +26,7 @@ use Terminal42\NotificationCenterBundle\EventListener\ProcessFormDataListener;
 class OptInController extends AbstractController
 {
     public function __construct(
+        private readonly NotificationManager $notificationManager,
         private readonly OptIn $optIn,
         private readonly ProcessFormDataListener $processFormDataListener,
         private readonly Utils $utils
@@ -43,32 +47,32 @@ class OptInController extends AbstractController
     {
         $this->initializeContaoFramework();
 
-        $form = FormModel::findByPk($formId);
+        $formModel = FormModel::findByPk($formId);
 
-        if (!$form) {
+        if (!$formModel) {
             throw $this->createNotFoundException();
         }
 
         $optInToken = $this->optIn->find($tokenIdentifier);
 
         if (!$optInToken) {
-            throw $this->abort($form);
+            throw $this->abort($formModel);
         }
 
         $submission = SubmissionModel::findOneByOptInToken($optInToken);
 
         if (!$submission) {
-            throw $this->abort($form);
+            throw $this->abort($formModel);
         }
 
         $subCache = StringUtil::deserialize($submission->huhSub_optInCache, true);
 
-        if ($form->id !== $subCache['form']) {
+        if ($formModel->id !== $subCache['form']) {
             throw $this->createAccessDeniedException();
         }
 
         if ($optInToken->isConfirmed()) {
-            throw $this->abort($form, 'Token already confirmed');
+            throw $this->abort($formModel, 'Token already confirmed');
         }
 
         if (!$optInToken->isValid()) {
@@ -77,26 +81,26 @@ class OptInController extends AbstractController
 
         $optInToken->confirm();
 
-        if ($form->huhSub_optInField) {
-            $submission->{$form->huhSub_optInField} = "1";
+        if ($formModel->huhSub_optInField) {
+            $submission->{$formModel->huhSub_optInField} = "1";
         }
 
-        $submission->huhSub_optInCache = \serialize(['form' => $form->id]);
+        $submission->huhSub_optInCache = \serialize(['form' => $formModel->id]);
         $submission->save();
 
-        $this->sendNotification($form, $submission, $subCache);
+        $this->sendNotification($formModel, $submission, $subCache);
 
-        $jumpTo = $form->getRelated('huhSub_optInJumpTo');
+        $jumpTo = $formModel->getRelated('huhSub_optInJumpTo');
 
         if (!$jumpTo instanceof PageModel) {
-            $jumpToPageId = $request->query->get('jtf');  // jump to fallback
+            $jumpToPageId = $request->query->get('from');  // jump to fallback
 
             if ($jumpToPageId) {
                 $jumpTo = PageModel::findByPk($jumpToPageId);
             }
 
             if (!$jumpTo instanceof PageModel) {
-                $jumpTo = $form->getRelated('jumpTo');
+                $jumpTo = $formModel->getRelated('jumpTo');
             }
         }
 
@@ -104,10 +108,10 @@ class OptInController extends AbstractController
             return new Response('Opt-In successful', Response::HTTP_OK);
         }
 
-        return $this->redirect($jumpTo->getFrontendUrl());
+        Controller::redirect($jumpTo->getFrontendUrl());
     }
 
-    protected function sendNotification($form, $submission, $subCache): void
+    protected function sendNotification(FormModel $formModel, SubmissionModel $submission, array $subCache): void
     {
         $subData = $submission->row();
 
@@ -118,7 +122,7 @@ class OptInController extends AbstractController
 
         try
         {
-            $event = new SubmissionsBeforeSendConfirmationNotificationEvent($submission, $subCache, $form, $subData);
+            $event = new SubmissionsBeforeSendConfirmationNotificationEvent($formModel, $submission, $subCache, $subData);
 
             $this->container->get('event_dispatcher')->dispatch($event, $event::class);
 
@@ -134,7 +138,15 @@ class OptInController extends AbstractController
             $this->utils->container()->log($e->getMessage(), __METHOD__, TL_ERROR);
         }
 
-        $this->processFormDataListener->__invoke($subData, $form->row(), $files, $subCache['labels'] ?? [], $form);
+        $subData = $this->notificationManager->filterSubmittedData($subData);
+
+        $this->processFormDataListener->__invoke(
+            $subData,
+            $formModel->row(),
+            $files,
+            $subCache['labels'] ?? [],
+            new Form($formModel)
+        );
     }
 
     protected function abort(FormModel $form, string $message = 'Not Found'): \RuntimeException

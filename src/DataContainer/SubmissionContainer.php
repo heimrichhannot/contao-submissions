@@ -2,6 +2,7 @@
 
 namespace HeimrichHannot\Submissions\DataContainer;
 
+use Contao\Config;
 use Contao\Controller;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
@@ -63,11 +64,6 @@ readonly class SubmissionContainer
     #[AsCallback(table: 'tl_submission', target: 'config.onload')]
     public function onLoadCallback(DataContainer $dc): void
     {
-        $this->modifyPalette($dc);
-    }
-
-    protected function modifyPalette(DataContainer $dc): void
-    {
         Controller::loadDataContainer('tl_submission');
         $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
@@ -90,14 +86,9 @@ readonly class SubmissionContainer
             $submissionFields = \array_diff($submissionFields, $subpaletteFields);
         }
 
-        // todo: remove fields that are not selected in the archive
+        $pm = PaletteManipulator::create()->addLegend('submission_legend', '');
 
-        $pm = PaletteManipulator::create()
-            ->addLegend('submission_legend', '');
-
-        foreach ($submissionFields as $field) {
-            $pm->addField($field, 'submission_legend', PaletteManipulator::POSITION_APPEND);
-        }
+        $pm->addField($submissionFields, 'submission_legend', PaletteManipulator::POSITION_APPEND);
 
         $pm->applyToPalette('default', 'tl_submission');
 
@@ -109,6 +100,7 @@ readonly class SubmissionContainer
         }
     }
 
+    /** @noinspection PhpUnused */
     #[AsCallback(table: 'tl_submission', target: 'fields.country.options')]
     public function getCountryOptions(): array
     {
@@ -174,7 +166,6 @@ readonly class SubmissionContainer
 
         $pregReplaceCallback = function ($matches) use ($submission, $dca, $dc, $formatter) {
             $fieldName = $matches[1];
-            // $field = $dca['fields'][$fieldName] ?? '';
             $value = $submission->{$fieldName} ?? null;
             return $formatter($dc, $fieldName, $value);
         };
@@ -185,5 +176,20 @@ readonly class SubmissionContainer
         $title = \str_replace('__PERCENT__', '%', $title);
 
         return $genHtml($title);
+    }
+
+    /** @noinspection PhpUnused */
+    #[AsCallback(table: 'tl_submission', target: 'list.label.group')]
+    public function onListLabelGroupCallback(
+        string        $group,
+        ?string       $mode,
+        string        $field,
+        array         $recordData,
+        DataContainer $dc
+    ): string {
+        return \sprintf(
+            '<div class="tl_content_left">%s</div>',
+            Date::parse(Config::get('dateFormat'), $recordData['dateAdded'])
+        );
     }
 }

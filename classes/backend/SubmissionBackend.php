@@ -242,6 +242,8 @@ class SubmissionBackend extends \Contao\Backend
 
     public static function modifyPalette(\DataContainer $objDc, $blnFrontend = false, $skipCache = false)
     {
+        return;
+
         \Controller::loadDataContainer('tl_submission');
         $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 

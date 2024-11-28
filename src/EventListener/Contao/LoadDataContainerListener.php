@@ -3,7 +3,6 @@
 namespace HeimrichHannot\Submissions\EventListener\Contao;
 
 use Contao\Controller;
-use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Input;
 use Contao\System;
@@ -13,9 +12,7 @@ use HeimrichHannot\UtilsBundle\Util\Utils;
 #[AsHook("loadDataContainer")]
 readonly class LoadDataContainerListener
 {
-    public function __construct(
-        private Utils $utils
-    ) {}
+    public function __construct(private Utils $utils) {}
 
     public function __invoke(string $table): void
     {
@@ -31,25 +28,18 @@ readonly class LoadDataContainerListener
 
     protected function loadTlSubmission(): void
     {
+        /*
+         * // private DcaManager $dcaManager,
+         *
+
         $dca = &$GLOBALS['TL_DCA']['tl_submission'];
-        $fields = [];
 
-        foreach ($dca['fields'] as $field => $data)
-        {
-            $isSubmissionField = !\filter_var(
-                $data['eval']['noSubmissionField'] ?? false,
-                FILTER_VALIDATE_BOOLEAN,
-                FILTER_NULL_ON_FAILURE
-            );
-
-            if ($isSubmissionField) {
-                $fields[] = $field;
-            }
-        }
+        $fields = $this->dcaManager->getSubmissibleFields('tl_submission');
 
         PaletteManipulator::create()
             ->addField($fields, 'submission_legend', PaletteManipulator::POSITION_APPEND)
             ->applyToPalette('default', 'tl_submission');
+        */
     }
 
     protected function loadTlSubmissionArchive(): void

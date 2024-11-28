@@ -6,15 +6,14 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Model\Collection;
 use Doctrine\DBAL\Connection;
+use HeimrichHannot\Submissions\Manager\DcaManager;
 use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
-use HeimrichHannot\UtilsBundle\Util\DcaUtil\GetDcaFieldsOptions;
-use HeimrichHannot\UtilsBundle\Util\Utils;
 
 readonly class SubmissionArchiveContainer
 {
     public function __construct(
         private Connection $connection,
-        private Utils      $utils
+        private DcaManager $dcaManager,
     ) {}
 
     /** @noinspection PhpUnused */
@@ -51,28 +50,30 @@ readonly class SubmissionArchiveContainer
             return [];
         }
 
-        return $this->utils->dca()->getDcaFields(
-            $dc->activeRecord->parentTable,
-            GetDcaFieldsOptions::create()
-                ->setAllowedInputTypes(['text'])
-        );
+        $fields = $this->dcaManager->getSubmissibleFields($dc->activeRecord->parentTable);
+
+        return \array_combine($fields, $fields);
     }
 
     #[AsCallback(table: 'tl_submission_archive', target: 'fields.pid.options')]
-    public function getPidOptions(\DataContainer $dc)
+    public function getPidOptions(DataContainer $dc)
     {
-        if (!$dc->activeRecord->parentTable || !$dc->activeRecord->parentField) {
+        $record = $dc->activeRecord;
+        $pTable = $record->parentTable;
+        $pField = $record->parentField;
+
+        if (!$pTable || !$pField) {
             return [];
         }
 
-        $archives = SubmissionArchiveModel::findByParentTable($dc->activeRecord->parentTable);
+        $archives = SubmissionArchiveModel::findByParentTable($pTable);
         if (!$archives instanceof Collection) {
             return [];
         }
 
         $pids = $archives->fetchEach('pid');
 
-        if (false !== $pos = \array_search($dc->activeRecord->pid, $pids)) {
+        if (false !== $pos = \array_search($record->pid, $pids)) {
             unset($pids[$pos]);
         }
 
@@ -85,13 +86,16 @@ readonly class SubmissionArchiveContainer
             $sqlWhere = "id NOT IN ($sqlPids)";
         }
 
-        try {
+        try
+        {
             $items = $this->connection->executeQuery(<<<SQL
-                SELECT id, {$dc->activeRecord->parentField} 
-                  FROM {$dc->activeRecord->parentTable} 
+                SELECT id, $pField as field
+                  FROM $pTable
                  WHERE $sqlWhere
             SQL)?->fetchAllAssociative();
-        } catch (\Exception) {
+        }
+        catch (\Exception)
+        {
             return [];
         }
 
@@ -100,7 +104,7 @@ readonly class SubmissionArchiveContainer
         }
 
         $itemIds = \array_column($items, 'id');
-        $itemFields = \array_column($items, $dc->activeRecord->parentField);
+        $itemFields = \array_column($items, 'field');
 
         return \array_combine($itemIds, $itemFields);
     }
@@ -108,18 +112,8 @@ readonly class SubmissionArchiveContainer
     #[AsCallback(table: 'tl_submission_archive', target: 'fields.submissionFields.options')]
     public function getSubmissionFieldsOptions(): array
     {
-        $fields = $this->utils->dca()->getDcaFields(
-            'tl_submission',
-            GetDcaFieldsOptions::create()
-        );
+        $fields = $this->dcaManager->getSubmissibleFields('tl_submission');
 
-        // remove fields that are not allowed in submissions
-        $noSubmissionFields = $this->utils->dca()->getDcaFields(
-            'tl_submission',
-            GetDcaFieldsOptions::create()
-                ->setEvalConditions(['noSubmissionField' => true])
-        );
-
-        return \array_diff($fields, $noSubmissionFields);
+        return \array_combine($fields, $fields);
     }
 }

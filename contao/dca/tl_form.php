@@ -37,7 +37,7 @@ $fields['huhSub_submissionArchive'] = [
     'inputType'  => 'select',
     'foreignKey' => 'tl_submission_archive.title',
     'relation'   => ['type' => 'hasOne', 'table' => 'tl_submission_archive'],
-    'eval'       => ['chosen' => true, 'tl_class' => 'w50', "mandatory" => true],
+    'eval'       => ['chosen' => true, 'tl_class' => 'w50 clr', "mandatory" => true],
     'sql'        => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
 ];
 
@@ -53,7 +53,7 @@ $fields['huhSub_optInNotification'] = [
     'exclude'   => true,
     'search'    => true,
     'inputType' => 'select',
-    'eval'      => ['chosen' => true, 'tl_class' => 'w50', "mandatory" => false],
+    'eval'      => ['chosen' => true, 'tl_class' => 'w50 clr', "mandatory" => false],
     'sql'       => ['type' => 'integer', 'notnull' => true, 'unsigned' => true, 'default' => 0]
 ];
 
@@ -61,16 +61,7 @@ $fields['huhSub_optInJumpTo'] = [
     'exclude'    => true,
     'inputType'  => 'pageTree',
     'foreignKey' => 'tl_page.title',
-    'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
-    'sql'        => "int(10) unsigned NOT NULL default 0",
-    'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
-];
-
-$fields['huhSub_optInTokenInvalidJumpTo']       = [
-    'exclude'    => true,
-    'inputType'  => 'pageTree',
-    'foreignKey' => 'tl_page.title',
-    'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
+    'eval'       => ['fieldType' => 'radio', 'tl_class' => 'w50'],
     'sql'        => "int(10) unsigned NOT NULL default 0",
     'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
 ];
@@ -80,8 +71,17 @@ $fields['huhSub_optInField'] = [
     'default'          => 'published',
     'sql'              => "varchar(64) NOT NULL default ''",
     'eval'             => [
-        'tl_class'           => 'w50',
+        'tl_class'           => 'w50 clr',
         'chosen'             => true,
         'includeBlankOption' => true,
     ],
+];
+
+$fields['huhSub_optInTokenInvalidJumpTo']       = [
+    'exclude'    => true,
+    'inputType'  => 'pageTree',
+    'foreignKey' => 'tl_page.title',
+    'eval'       => ['fieldType' => 'radio', 'tl_class' => 'w50'],
+    'sql'        => "int(10) unsigned NOT NULL default 0",
+    'relation'   => ['type' => 'hasOne', 'load' => 'lazy']
 ];
