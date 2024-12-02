@@ -1,8 +1,6 @@
 # Submissions
 A generic module to store and handle submissions in Contao. You can use it with all of your modules to simplify submission handling.
 
-[Screenshots](docs/screenshots.md)
-
 ## Features
 
 - Directly store form generator submissions.
