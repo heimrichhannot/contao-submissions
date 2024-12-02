@@ -93,7 +93,7 @@ readonly class FormDataHooks
         $submission = SubmissionModel::findOneByOptInToken($optInToken);
 
         if (!$submission) {
-            $this->utils->container()->log('Could not fetch submission for given token.', __METHOD__, TL_ERROR);
+            $this->utils->container()->log('Could not fetch submission for given token.', __METHOD__, 'TL_ERROR');
             return;
         }
 

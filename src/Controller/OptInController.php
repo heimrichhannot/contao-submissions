@@ -136,7 +136,7 @@ class OptInController extends AbstractController
                 throw $e;
             }
 
-            $this->utils->container()->log($e->getMessage(), __METHOD__, TL_ERROR);
+            $this->utils->container()->log($e->getMessage(), __METHOD__, 'TL_ERROR');
         }
 
         $subData = $this->notificationManager->filterSubmittedData($subData);
