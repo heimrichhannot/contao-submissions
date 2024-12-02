@@ -30,6 +30,7 @@ readonly class SubmissionContainer
         private Utils        $utils,
     ) {}
 
+    /** @noinspection PhpUnused */
     #[AsCallback(table: 'tl_submission', target: 'config.oncreate')]
     public function onCreateCallback(string $table, int $id, array $fields, DataContainer $dc): void
         // this is only relevant for creating submissions in the backend
@@ -86,17 +87,20 @@ readonly class SubmissionContainer
             $submissionFields = \array_diff($submissionFields, $subpaletteFields);
         }
 
-        $pm = PaletteManipulator::create()->addLegend('submission_legend', '');
-
-        $pm->addField($submissionFields, 'submission_legend', PaletteManipulator::POSITION_APPEND);
-
-        $pm->applyToPalette('default', 'tl_submission');
+        PaletteManipulator::create()
+            ->addLegend('submission_legend', '')
+            ->addField($submissionFields, 'submission_legend', PaletteManipulator::POSITION_APPEND)
+            ->applyToPalette('default', 'tl_submission');
 
         // mandatory overrides
         $mandatoryOverrides = StringUtil::deserialize($archive->submissionFieldsMandatoryOverride, true);
 
-        foreach ($mandatoryOverrides as $override) {
-            $dca['fields'][$override['field']]['eval']['mandatory'] = $override['mandatory'];
+        foreach ($mandatoryOverrides as $override)
+        {
+            if (!empty($dca['fields'][$override['field'] ?? null]) && isset($override['mandatory']))
+            {
+                $dca['fields'][$override['field'] ?? null]['eval']['mandatory'] = $override['mandatory'] ? '1' : '';
+            }
         }
     }
 
@@ -142,32 +146,10 @@ readonly class SubmissionContainer
         $dc->id = $submission->id;
         $dc->activeRecord = $submission;
 
-        if (\method_exists($this->utils, 'formatter'))
-            // if utils v3 is used
-        {
-            $formatter = function ($dc, $field, $value) {
-                return $this->utils->formatter()->formatDcaFieldValue($dc, $field, $value);
-            };
-        }
-        else // if utils v2 is used
-        {
-            $formatter = function ($dc, $field, $value) {
-                /**
-                 * @noinspection MissingServiceXml
-                 * @noinspection PhpUndefinedClassInspection
-                 * @noinspection PhpFullyQualifiedNameUsageInspection
-                 * @noinspection PhpUndefinedNamespaceInspection
-                 * @var \HeimrichHannot\UtilsBundle\Form\FormUtil $formUtil
-                 */
-                $formUtil = System::getContainer()->get('huh.utils.form');
-                return $formUtil?->prepareSpecialValueForOutput($field, $value, $dc) ?? '';
-            };
-        }
-
-        $pregReplaceCallback = function ($matches) use ($submission, $dca, $dc, $formatter) {
+        $pregReplaceCallback = function ($matches) use ($submission, $dca, $dc) {
             $fieldName = $matches[1];
             $value = $submission->{$fieldName} ?? null;
-            return $formatter($dc, $fieldName, $value);
+            return $this->utils->formatter()->formatDcaFieldValue($dc, $fieldName, $value);
         };
 
         $title = $submissionArchive->titlePattern;
