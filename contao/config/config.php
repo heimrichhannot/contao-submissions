@@ -7,8 +7,7 @@ use HeimrichHannot\Submissions\Model\SubmissionModel;
  * Backend modules
  */
 $GLOBALS['BE_MOD']['content']['huh_submissions'] = [
-    'tables' => ['tl_submission_archive', 'tl_submission'],
-    'icon' => 'bundles/heimrichhannotsubmissions/img/icon_submission.png',
+    'tables' => ['tl_submission_archive', 'tl_submission']
 ];
 
 
