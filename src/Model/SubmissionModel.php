@@ -4,8 +4,6 @@ namespace HeimrichHannot\Submissions\Model;
 
 use Contao\CoreBundle\OptIn\OptInTokenInterface;
 use Contao\Model;
-use Contao\System;
-use HeimrichHannot\Submissions\Manager\TokenManager;
 
 /**
  * @property int $id
@@ -16,9 +14,9 @@ class SubmissionModel extends Model
 {
     protected static $strTable = 'tl_submission';
 
-    public function getArchive(): SubmissionArchiveModel|Model|null
+    public function archive(): SubmissionArchiveModel|Model|null
     {
-        return SubmissionArchiveModel::findByPk($this->pid);
+        return $this->getRelated('pid');
     }
 
     public static function findOneByOptInToken(OptInTokenInterface $token): Model|null

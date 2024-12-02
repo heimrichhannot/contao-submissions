@@ -6,15 +6,14 @@ use Contao\Controller;
 use Contao\CoreBundle\Controller\AbstractController;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\CoreBundle\OptIn\OptIn;
-use Contao\FilesModel;
 use Contao\Form;
 use Contao\FormModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use HeimrichHannot\Submissions\Event\SubmissionsBeforeSendConfirmationNotificationEvent;
 use HeimrichHannot\Submissions\Manager\NotificationManager;
+use HeimrichHannot\Submissions\Manager\SimpleTokensManager;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
-use HeimrichHannot\Submissions\Util\Tokens;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +28,7 @@ class OptInController extends AbstractController
         private readonly NotificationManager $notificationManager,
         private readonly OptIn $optIn,
         private readonly ProcessFormDataListener $processFormDataListener,
+        private readonly SimpleTokensManager $simpleTokensManager,
         private readonly Utils $utils
     ) {}
 
@@ -118,7 +118,8 @@ class OptInController extends AbstractController
         $files = $subCache['files'] ?? [];
         $files = \is_array($files) ? $files : StringUtil::deserialize($files, true);
 
-        Tokens::addAttachmentTokens($subData, $files);
+        $attachmentTokens = $this->simpleTokensManager->generateAttachmentTokens($files);
+        $subData = \array_merge($subData, $attachmentTokens);
 
         try
         {

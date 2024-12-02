@@ -1,5 +1,6 @@
 <?php
 
+use Contao\DataContainer;
 use Contao\DC_Table;
 use HeimrichHannot\UtilsBundle\Dca\DateAddedField;
 use Terminal42\NotificationCenterBundle\Token\TokenContext;
@@ -79,7 +80,6 @@ $dca = [
             ],
         ],
         'pid' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_submission']['pid'],
             'foreignKey' => 'tl_submission_archive.title',
             'sql' => "int(10) unsigned NOT NULL default '0'",
             'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
@@ -103,7 +103,7 @@ $dca = [
             'exclude' => true,
             'toggle' => true,
             'filter' => true,
-            'flag' => \Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
             'eval' => [
                 'tl_class' => 'w50',
@@ -126,6 +126,7 @@ $dca = [
         ],
         'gender' => [
             'exclude' => true,
+            'filter' => true,
             'inputType' => 'select',
             'options' => ['male', 'female', 'divers'],
             'reference' => &$GLOBALS['TL_LANG']['MSC']['salutation'],
@@ -337,14 +338,15 @@ $dca = [
         ],
         'huhSub_optInTokenId' => [
             'exclude' => true,
-            'filter' => true,
+            'filter' => false,
+            'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 clr', 'readonly' => true, 'noSubmissionField' => true],
             'sql' => "varchar(32) NOT NULL default ''",
         ],
         'huhSub_optInCache' => [
             'exclude' => true,
-            'filter' => true,
+            'filter' => false,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 clr', 'noSubmissionField' => true],
             'sql' => "blob NULL",

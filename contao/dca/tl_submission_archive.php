@@ -66,39 +66,13 @@ $dca = [
     ],
     'palettes'    => [
         '__selector__' => [],
-        'default' => '{general_legend},title,parentTable,parentField,pid;'
-            . '{fields_legend},submissionFields,titlePattern,submissionFieldsMandatoryOverride;'
-            . '{notification_legend},nc_submission,nc_confirmation;',
+        'default' => '{general_legend},title,titlePattern;'
+            . '{fields_legend},submissionFields,submissionFieldsMandatoryOverride;',
     ],
     'subpalettes' => [],
     'fields'      => [
         'id' => [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
-        ],
-        'parentTable' => [
-            'inputType' => 'select',
-            'sql' => "varchar(255) NOT NULL default ''",
-            'eval' => [
-                'tl_class' => 'w50',
-                'chosen' => true,
-                'submitOnChange' => true,
-                'includeBlankOption' => true,
-            ],
-        ],
-        'parentField' => [
-            'inputType' => 'select',
-            'sql' => "varchar(255) NOT NULL default ''",
-            'eval' => [
-                'tl_class' => 'w50',
-                'chosen' => true,
-                'submitOnChange' => true,
-                'includeBlankOption' => true,
-            ],
-        ],
-        'pid' => [
-            'inputType' => 'select',
-            'sql' => "int(10) unsigned NOT NULL default '0'",
-            'eval' => ['tl_class' => 'w50', 'chosen' => true, 'includeBlankOption' => true],
         ],
         'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
@@ -109,7 +83,7 @@ $dca = [
             'sorting'   => true,
             'flag'      => 1,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'eval'      => ['mandatory' => true, 'maxlength' => 255],
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
         'submissionFields' => [

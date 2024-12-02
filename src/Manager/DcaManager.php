@@ -5,10 +5,10 @@ namespace HeimrichHannot\Submissions\Manager;
 use HeimrichHannot\UtilsBundle\Util\DcaUtil\GetDcaFieldsOptions;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 
-class DcaManager
+readonly class DcaManager
 {
     public function __construct(
-        private readonly Utils $utils
+        private Utils $utils
     ) {}
 
     public function getSubmissibleFields(string $table): array

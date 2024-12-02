@@ -11,12 +11,11 @@ use Contao\StringUtil;
 use Contao\Validator;
 use HeimrichHannot\Submissions\Config\OptInConfig;
 use HeimrichHannot\Submissions\Manager\NotificationManager;
+use HeimrichHannot\Submissions\Manager\SimpleTokensManager;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
-use HeimrichHannot\Submissions\Util\Tokens;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use System;
 
 readonly class FormDataHooks
 {
@@ -24,6 +23,7 @@ readonly class FormDataHooks
         private NotificationManager $notificationManager,
         private OptIn $optIn,
         private RouterInterface $router,
+        private SimpleTokensManager $simpleTokensManager,
         private Utils $utils
     ) {}
 
@@ -67,7 +67,8 @@ readonly class FormDataHooks
             $submittedData['uuid'] = StringUtil::binToUuid($submittedData['uuid']);
         }
 
-        $submittedData = Tokens::addAttachmentTokens($submittedData, $files);
+        $attachmentTokens = $this->simpleTokensManager->generateAttachmentTokens($files);
+        $submittedData = \array_merge($submittedData, $attachmentTokens);
 
         if (!$form->huhSub_storeSubmission || !$form->huhSub_submissionArchive) {
             return;

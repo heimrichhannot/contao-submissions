@@ -72,7 +72,7 @@ readonly class SubmissionContainer
             return;
         }
 
-        $archive = $submission->getArchive();
+        $archive = $submission->archive();
         if (!$archive instanceof SubmissionArchiveModel) {
             return;
         }
@@ -127,7 +127,7 @@ readonly class SubmissionContainer
         };
 
         $submission = SubmissionModel::findByPk($record['id']);
-        $submissionArchive = $submission?->getArchive();
+        $submissionArchive = $submission?->archive();
 
         if (!$submission instanceof SubmissionModel
             || !$submissionArchive instanceof SubmissionArchiveModel
