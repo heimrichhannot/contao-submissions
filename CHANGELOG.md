@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [prepare v2] - 2024-12-02
+- Added: Support for Contao 5
+- Changed: Minimum Contao version is now 4.13
+- Changed: Minimum PHP version is now 8.2
+- Changed: Minimum Notification center version is now v2
+- Changed: This is now a proper Contao bundle
+- Removed: Parent entity on submission archive
+- Removed: Settings to override mandatory field property
+- Removed: formhybrid
+
 ## [1.24.1] - 2024-03-21
 - Fixed: warnings with php 8
 

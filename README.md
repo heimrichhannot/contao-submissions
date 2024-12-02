@@ -1,145 +1,70 @@
 # Submissions
-A generic module to store and handle submissions in Contao. You can use it with all of your modules to simplify submission handling. Works great with [heimrichhannot/frontendedit](https://github.com/heimrichhannot/contao-frontendedit),
-[heimrichhannot/formhybrid_list](https://github.com/heimrichhannot/contao-formhybrid_list) and
-[heimrichhannot/formhybrid](https://github.com/heimrichhannot/contao-formhybrid).
+A generic module to store and handle submissions in Contao. You can use it with all of your modules to simplify submission handling.
 
 [Screenshots](docs/screenshots.md)
 
 ## Features
 
-- a new submissions entity (organized in archives)
-- opportunity to specify a parent entity for each archive (e.g. an event)
-- submissions are highly customizable by defining new fields in your dca (palette is created with no code at all)
-- every archive can specify its own submission field list
-- rich interfaces (e.g. SubmissionModel)
-- handling for notification center messages ([terminal42/contao-notification_center](https://github.com/terminal42/contao-notification_center))
-- easily export submissions as CSV and Excel file (using [heimrichhannot/contao-exporter](https://github.com/heimrichhannot/contao-exporter))
-- optional cleaner support for periodically removing unpublished (aka inactive) submissions (using TL_CRON or your server's cron, using [heimrichhannot/contao-entity_cleaner](https://github.com/heimrichhannot/contao-entity_cleaner))
-- specify a member (frontend) or a user (backend) to be the author of the submission
-- Form generator support including opt-in process (contao 4.7+ only)
+- Directly store form generator submissions.
+- Submissions organized in archives using a dedicated DCA.
+- Highly customizable: define new fields on the data container.
+- Auto-creates palettes for your fields.
+- Ships with an optional automated double opt-in process.
+- Notification Center 2.0 support ([terminal42/contao-notification_center](https://github.com/terminal42/contao-notification_center))
 
 ## Install
 
 1. Install with composer or contao manager
 
-    composer require heimrichhannot/contao-submissions
+```bash
+composer require heimrichhannot/contao-submissions
+```
 
 2. Update database
 
 ## Usage
 
-You will find a new backend menu entry named "Submissions". Create a new archive with a title and select the fields, 
-your submissions should contain.
+In the backend, you will find a new menu item called “Submissions”. Create a new archive with a title and select the
+fields that should be contained in your submissions.
 
 ### Form generator
-You can store your form generator submissions directly as submission. Just active 
-"store as submission" and select the submission archive. Form field names must be 
-the same as the fields names of the submission entity.
+You can save your form generator submissions directly as a submission. Simply activate "Save as submission" and select
+the submission archive. The names of the form fields must be the same as the field names of the saved entity.
 
-For submitted files `form_attachment_*`-Notification-Center-Tokens are generated.
+Use `##form_attachment_*##` tokens in your notification center notifications to include attachments in your emails.
 
-If you on contao 4.7 or higher, you can also set up an **double opt-in** process for your submission.
-Create an opt-in notification in notification center and select it in the form configuration.
-You can also choose a jump to page to which the user is redirected when the opt-in-url 
-is called and the opt-in was successful. If you want to check a property on successful
-opt-ins, you can set the confirmation field property (e.g. set the publish field to true).
+Use the built-in double opt-in process to verify submissions.
+Create an opt-in challenge notification in notification center and select it on your form in the form generator.
+You can also define a jump to page to which the user is redirected when the opt-in is successful.
+If you want to bump a property at successful opt-in, set a boolean confirmation field (i.e. to set the field `publish` to true).
 
-You can use following notification tokens in the opt-in-notification:
+Use the following notification tokens in the opt-in notification:
 
-| Token      | Description               |
-|------------|---------------------------|
-| optInToken | Contains the opt-in token |
-| optInUrl   | Contains the opt-in url   |
-
-
-### Formhybrid
-
-To use this bundle with formhybrid, we recommend to install 
-[Submissions Creator](https://github.com/heimrichhannot/contao-submissions_creator).
-
-## Further information
-
-### Fields
-
-#### tl_submission:
-
-Name | Description
----- | -----------
-authorType | Specifies whether a frontend member or a backend user is athor of the submission
-author | Specifies the author
-type | Specified the type of the submission
-gender | Specifies a gender
-academicTitle | Specifies an academicTitle
-additionalTitle | Specifies an additionalTitle
-firstname | Specifies a firstname
-lastname | Specifies a lastname
-company | Specifies a company
-dateOfBirth | Specifies a dateOfBirth
-street | Specifies a street
-street2 | Specifies a street2
-postal | Specifies a postal
-city | Specifies a city
-country | Specifies a country
-email | Specifies an email
-phone | Specifies a phone
-fax | Specifies a fax
-subject | Specifies a subject
-notes | Specifies notes
-message | Specifies a message
-agreement | Specifies whether some constraint is agreed
-privacy | Specifies whether some privacy constraint is agreed
-captcha | Specifies a captcha (for use in frontend modules)
-startDate | Specifies a startDate
-stopDate | Specifies a stopDate
-startDatime | Specifies a startDatime
-stopDatime | Specifies a stopDatime
-billingGender | Specifies a billingGender
-billingFirstname | Specifies a billingFirstname
-billingLastname | Specifies a billingLastname
-billingCompany | Specifies a billingCompany
-billingStreet | Specifies a billingStreet
-billingPostal | Specifies a billingPostal
-billingCity | Specifies a billingCity
-attachments | Specifies an attachment
-published | Determines whether the submission is published (aka inactive)
-formHybridBlob | Can be used in combination with [heimrichhannot/formhybrid](https://github.com/heimrichhannot/contao-formhybrid) to temporarily save submission data to a blob before really saving it to database.
-
-##### Add custom fields
-
-After adding new fields, run
-
-```\HeimrichHannot\Submissions\Backend\SubmissionBackend::addFieldsToPalette();```
-
-in your dca in order to add the new fields to the default palette.
-
-### tl_submission_archive
-
-Name | Description
----- | -----------
-parentTable | Specifies the parent table (if necessary)
-parentField | Specifies the parent table's label field
-pid | Stores the id of the parent entity
-title | Specifies the title of the archive
-submissionFields | Specifies the fields visible in the forms of submissions of the current archive
-titlePattern | Specifies a pattern for the archive's submission's label (e.g. "%title% %someotherfield%")
-nc_submission | Specifies a notification being sent when submitting a submission (sorry for the poor expression ^^). Could be used for informing some customer that a submission had been made.
-nc_confirmation | Specifies a notification being sent to the author of the submission. Can be resent in the list view of the archive via backend.
+| Token             | Description                                                                                                              |
+|-------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `##optin_token##` | To be replaced with the opt-in token                                                                                     |
+| `##optin_url##`   | To be replaced with the absolute opt-in url                                                                              |
+| `##email##`       | Same as `##form_email##`, but guaranteed to be in a valid email address format. Intended use as recipient email address. |
 
 
+## Development
 
-## Developers
+### Fields on tl_submission
+
+Take a look at [`dca/tl_submission.php`](https://github.com/heimrichhannot/contao-submissions/blob/master/dca/tl_submission.php#L94) for all available fields.
+
+Adjust the dca to your needs.
+
+Mark fields as `noSubmissionField` to make them unavailable for use as submission fields.
+
+```php
+$dca = &$GLOBALS['TL_DCA']['tl_submission'];
+
+$dca['fields']['my_field']['eval']['noSubmissionField'] = true;
+```
 
 ### Events
 
-These events are implemented as symfony events and only usable in contao 4+.
-
-| Event                                               | Description                                                                           |
-|-----------------------------------------------------|---------------------------------------------------------------------------------------|
-| SubmissionsBeforeSendConfirmationNotificationEvent  | Is dispatched before the success notification is sent. Needs double opt-in activated. |
-
-
-### Hooks
-
-| Name                        | Arguments                                         | Description                                                                                                         |
-|-----------------------------|---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| preGenerateSubmissionTokens | $objSubmission, $objSubmissionArchive, $arrFields | Triggered just before the token generation for notifications is started. Could be used for changing the field list. |
+| Event                                              | Description                                                                     |
+|----------------------------------------------------|---------------------------------------------------------------------------------|
+| SubmissionsBeforeSendConfirmationNotificationEvent | Dispatched before success notification is sent. Requires enabled double opt-in. |
