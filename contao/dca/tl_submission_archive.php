@@ -40,13 +40,13 @@ $dca = [
             ],
         ],
         'operations' => [
-            'edit' => [
-                'href' => 'table=tl_submission',
-                'icon' => 'edit.svg',
-            ],
             'editheader' => [
                 'href' => 'act=edit',
                 'icon' => 'header.svg',
+            ],
+            'edit' => [
+                'href' => 'table=tl_submission',
+                'icon' => 'edit.svg',
             ],
             'copy' => [
                 'href' => 'act=copy',
