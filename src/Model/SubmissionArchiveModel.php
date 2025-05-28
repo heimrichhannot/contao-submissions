@@ -6,6 +6,14 @@ use Contao\Model;
 use Contao\Model\Collection;
 use Contao\StringUtil;
 
+/**
+ * @property int $id
+ * @property int $tstamp
+ * @property string $title
+ * @property string $submissionFields
+ * @property int $dateAdded
+ * @property string $titlePattern
+ */
 class SubmissionArchiveModel extends Model
 {
     protected static $strTable = 'tl_submission_archive';

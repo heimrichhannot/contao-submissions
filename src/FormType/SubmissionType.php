@@ -2,10 +2,13 @@
 
 namespace HeimrichHannot\Submissions\FormType;
 
+use Contao\Controller;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\DataContainer;
 use Contao\FormModel;
+use Contao\StringUtil;
 use HeimrichHannot\FormTypeBundle\FormType\AbstractFormType;
+use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
 
 class SubmissionType extends AbstractFormType
 {
@@ -26,4 +29,41 @@ class SubmissionType extends AbstractFormType
             ->addField('huhSub_optIn', 'huh_submissions_legend', PaletteManipulator::POSITION_APPEND)
             ->applyToPalette('default', 'tl_form');
     }
+
+    public function getDefaultFields(FormModel $formModel): array
+    {
+        if (!$formModel->huhSub_submissionArchive) {
+            return [];
+        }
+
+        $archive = SubmissionArchiveModel::findByPk($formModel->huhSub_submissionArchive);
+        if (!$archive) {
+            return [];
+        }
+
+        $fields = StringUtil::deserialize($archive->submissionFields, true);
+
+        Controller::loadDataContainer('tl_submission');
+        Controller::loadLanguageFile('tl_submission');
+
+        $return = [];
+        foreach ($fields as $field) {
+            $return[] = [
+                'name' => $field,
+                'label' => $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['label'][0] ?? '',
+                'type' => 'text',
+            ];
+        }
+        $return[] = [
+            'type' => 'captcha',
+        ];
+        $return[] = [
+            'type' => 'submit',
+            'slabel' => 'Anmelden',
+        ];
+
+        return $return;
+    }
+
+
 }
