@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [prepare v2] - 2024-12-02
 - Added: Support for Contao 5
+- Added: form type
 - Changed: Minimum Contao version is now 4.13
 - Changed: Minimum PHP version is now 8.2
 - Changed: Minimum Notification center version is now v2

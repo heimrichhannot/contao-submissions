@@ -14,11 +14,6 @@ $dca['palettes']['__selector__'][] = 'huhSub_optIn';
 $dca['subpalettes']['huhSub_storeSubmission'] = 'huhSub_submissionArchive,huhSub_optIn';
 $dca['subpalettes']['huhSub_optIn']    = 'huhSub_optInNotification,huhSub_optInJumpTo,huhSub_optInField,huhSub_optInTokenInvalidJumpTo';
 
-PaletteManipulator::create()
-    ->addLegend('huh_submissions_legend', 'store_legend')
-    ->addField('huhSub_storeSubmission', 'huh_submissions_legend', PaletteManipulator::POSITION_APPEND)
-    ->applyToPalette('default', 'tl_form')
-;
 
 /**
  * Fields

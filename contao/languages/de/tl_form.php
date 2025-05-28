@@ -1,5 +1,7 @@
 <?php
 
+use HeimrichHannot\Submissions\FormType\SubmissionType;
+
 $lang = &$GLOBALS['TL_LANG']['tl_form'];
 
 $lang['huh_submissions_legend'] = 'Submissions-Einstellungen';
@@ -15,3 +17,5 @@ $lang['huhSub_optInNotification'] = [
 $lang['huhSub_optInJumpTo'] = ['Double Opt-in Erfolg-Weiterleitungsseite', "Wählen Sie die Seite aus, auf welche nach erfolgreichem Double Opt-in weitergeleitet werden soll."];
 $lang['huhSub_optInTokenInvalidJumpTo'] = ['"Token bereits bestätigt"-Weiterleitungsseite', "Wählen Sie die Seite aus, auf welche weitergeleitet werden soll, wenn der Token bereits bestätigt wurde."];
 $lang['huhSub_optInField'] = ['Double Opt-in Bestätigungsfeld', "Wählen Sie hier ein Feld aus, welches bei erfolgreichem Double Opt-in auf true gesetzt werden soll."];
+
+$lang['FORMTYPE'][SubmissionType::TYPE] = 'Einsendung';

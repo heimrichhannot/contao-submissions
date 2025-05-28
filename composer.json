@@ -20,7 +20,8 @@
         "php": "^8.2",
         "contao/core-bundle": "^4.13 || ^5.0",
         "terminal42/notification_center": "^2.0",
-        "heimrichhannot/contao-utils-bundle": "^3.6"
+        "heimrichhannot/contao-utils-bundle": "^3.6",
+        "heimrichhannot/contao-form-type-bundle": "^0.1 || ^0.2 "
     },
     "suggest": {
         "heimrichhannot/contao-frontendedit": "Offers full CRUD (create, read, update, delete) functionality which could be used for submissions.",

@@ -7,9 +7,11 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\CoreBundle\OptIn\OptIn;
 use Contao\Database;
 use Contao\Form;
+use Contao\FormModel;
 use Contao\StringUtil;
 use Contao\Validator;
 use HeimrichHannot\Submissions\Config\OptInConfig;
+use HeimrichHannot\Submissions\FormType\SubmissionType;
 use HeimrichHannot\Submissions\Manager\NotificationManager;
 use HeimrichHannot\Submissions\Manager\SimpleTokensManager;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
@@ -30,7 +32,7 @@ readonly class FormDataHooks
     #[AsHook("prepareFormData")]
     public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form): void
     {
-        if (!$form->huhSub_storeSubmission || !$form->huhSub_submissionArchive) {
+        if (!$this->preCheck($form)) {
             return;
         }
 
@@ -63,16 +65,17 @@ readonly class FormDataHooks
         array  $labels,
         Form   $form
     ): void {
+        if (!$this->preCheck($form)) {
+            return;
+        }
+
+
         if (!empty($submittedData['uuid']) && Validator::isBinaryUuid($submittedData['uuid'])) {
             $submittedData['uuid'] = StringUtil::binToUuid($submittedData['uuid']);
         }
 
         $attachmentTokens = $this->simpleTokensManager->generateAttachmentTokens($files);
         $submittedData = \array_merge($submittedData, $attachmentTokens);
-
-        if (!$form->huhSub_storeSubmission || !$form->huhSub_submissionArchive) {
-            return;
-        }
 
         if (!$form->huhSub_optIn || !$form->huhSub_optInNotification) {
             return;
@@ -125,7 +128,7 @@ readonly class FormDataHooks
     #[AsHook("storeFormData")]
     public function onStoreFormData(array $data, Form $form): array
     {
-        if (!$form->huhSub_storeSubmission || !$form->huhSub_submissionArchive) {
+        if (!$this->preCheck($form)) {
             return $data;
         }
 
@@ -159,5 +162,18 @@ readonly class FormDataHooks
         }
 
         return $data;
+    }
+
+    private function preCheck(Form|FormModel $form): bool
+    {
+        if (SubmissionType::TYPE === $form->formType) {
+            return true;
+        }
+
+        if ($form->huhSub_storeSubmission && $form->huhSub_submissionArchive) {
+            return true;
+        }
+
+        return false;
     }
 }
