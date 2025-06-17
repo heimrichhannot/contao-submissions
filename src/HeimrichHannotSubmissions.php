@@ -23,9 +23,18 @@ class HeimrichHannotSubmissions extends Bundle
         return \dirname(__DIR__);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getContainerExtensionClass(): string
+    {
+        return DependencyInjection\HeimrichHannotSubmissionsExtension::class;
+    }
+
     public function getContainerExtension(): ?ExtensionInterface
     {
-        return new DependencyInjection\HeimrichHannotSubmissionsExtension();
+        $this->extension ??= $this->createContainerExtension() ?: null;
+        return $this->extension;
     }
 
     public function build(ContainerBuilder $container): void
