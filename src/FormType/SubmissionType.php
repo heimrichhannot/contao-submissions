@@ -48,11 +48,13 @@ class SubmissionType extends AbstractFormType
 
         $return = [];
         foreach ($fields as $field) {
-            $return[] = [
+            $fieldConfig = [
                 'name' => $field,
                 'label' => $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['label'][0] ?? '',
                 'type' => 'text',
             ];
+            $this->fieldType($field, $fieldConfig);
+            $return[] = $fieldConfig;
         }
         $return[] = [
             'type' => 'captcha',
@@ -63,6 +65,37 @@ class SubmissionType extends AbstractFormType
         ];
 
         return $return;
+    }
+
+    private function fieldType(string $fieldName, array &$fieldConfig): void
+    {
+        $field = $GLOBALS['TL_DCA']['tl_submission']['fields'][$fieldName] ?? [];
+        if (empty($field)) {
+            return;
+        }
+
+        switch ($field['inputType']) {
+            case 'select':
+                $fieldConfig['type'] = 'select';
+                $options = [];
+                if (isset($field['options']) && is_array($field['options'])) {
+                    foreach ($field['options'] as $key => $option) {
+                        $value = is_string($key)
+                            ? $key
+                            : (($field['eval']['isAssociative'] ?? false) ? $key : $option);
+
+                        $label = $field['reference'][$value] ?? $option;
+                        $options[] = [
+                            'value' => $value,
+                            'label' => $label,
+                        ];
+                    }
+                }
+                $fieldConfig['options'] = serialize($options);
+                break;
+
+
+        }
     }
 
 
