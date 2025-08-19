@@ -24,7 +24,7 @@ readonly class NotificationManager
 
         return \array_filter(
             $submittedData,
-            static fn ($k) => \array_key_exists($k, $submissibleFields),
+            static fn ($k) => \in_array($k, $submissibleFields),
             ARRAY_FILTER_USE_KEY
         );
     }

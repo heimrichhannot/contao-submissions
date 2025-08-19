@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Removed: Parent entity on submission archive
 - Removed: Settings to override mandatory field property
 - Removed: formhybrid
+- Fixed: empty notification center tokens
 
 ## [1.24.1] - 2024-03-21
 - Fixed: warnings with php 8
