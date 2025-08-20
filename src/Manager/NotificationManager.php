@@ -24,8 +24,8 @@ readonly class NotificationManager
 
         return \array_filter(
             $submittedData,
-            static fn ($k) => \in_array($k, $submissibleFields),
-            ARRAY_FILTER_USE_KEY
+            static fn ($k) => \in_array($k, $submissibleFields, true),
+            \ARRAY_FILTER_USE_KEY
         );
     }
 
@@ -38,7 +38,7 @@ readonly class NotificationManager
 
         foreach ($submittedData as $k => $v)
         {
-            if (!\in_array($k, $submissibleFields)) {
+            if (!\in_array($k, $submissibleFields, true)) {
                 continue;
             }
 
@@ -76,7 +76,7 @@ readonly class NotificationManager
         string     $optInUrl
     ): void {
         $notificationId = $formData['huhSub_optInNotification'] ?? 0;
-        if (!\is_numeric($notificationId) || $notificationId <= 0) {
+        if (!\is_numeric($notificationId) || $notificationId < 1) {
             return;
         }
         $notificationId = (int) $notificationId;
@@ -100,19 +100,23 @@ readonly class NotificationManager
         $tokens['raw_data'] = \implode("\n", $rawData);
         $tokens['raw_data_filled'] = \implode("\n", $rawDataFilled);
 
-        foreach ($this->fileUploadNormalizer->normalize($files) as $k => $files) {
+        foreach ($this->fileUploadNormalizer->normalize($files) as $k => $fileDefinitions)
+        {
             $vouchers = [];
 
-            foreach ($files as $file) {
-                $fileItem = \is_resource($file['stream']) ?
-                    FileItem::fromStream($file['stream'], $file['name'], $file['type'], $file['size']) :
-                    FileItem::fromPath($file['tmp_name'], $file['name'], $file['type'], $file['size']);
+            foreach ($fileDefinitions as $arrFile)
+            {
+                $fileItem = \is_resource($arrFile['stream']) ?
+                    FileItem::fromStream($arrFile['stream'], $arrFile['name'], $arrFile['type'], $arrFile['size']) :
+                    FileItem::fromPath($arrFile['tmp_name'], $arrFile['name'], $arrFile['type'], $arrFile['size']);
 
-                $vouchers[] = $this->notificationCenter->getBulkyGoodsStorage()->store($fileItem);
+                $voucher = $this->notificationCenter->getBulkyGoodsStorage()->store($fileItem);
+
+                $vouchers[] = $voucher;
+                $bulkyItemVouchers[] = $voucher;
             }
 
             $tokens['form_'.$k] = \implode(',', $vouchers);
-            $bulkyItemVouchers = \array_merge($bulkyItemVouchers, $vouchers);
         }
 
         // Make sure we don't pass any objects as tokens

@@ -9,6 +9,7 @@ use Contao\Database;
 use Contao\Form;
 use Contao\FormModel;
 use Contao\StringUtil;
+use Contao\System;
 use Contao\Validator;
 use HeimrichHannot\Submissions\Config\OptInConfig;
 use HeimrichHannot\Submissions\FormType\SubmissionType;
@@ -68,7 +69,6 @@ readonly class FormDataHooks
         if (!$this->preCheck($form)) {
             return;
         }
-
 
         if (!empty($submittedData['uuid']) && Validator::isBinaryUuid($submittedData['uuid'])) {
             $submittedData['uuid'] = StringUtil::binToUuid($submittedData['uuid']);
