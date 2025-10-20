@@ -3,9 +3,16 @@
 /**
  * Extend default palette
  */
-$GLOBALS['TL_DCA']['tl_user']['palettes']['extend'] = str_replace('fop;', 'fop;{submissions_legend},submissionss,submissionsp;', $GLOBALS['TL_DCA']['tl_user']['palettes']['extend']);
-$GLOBALS['TL_DCA']['tl_user']['palettes']['custom'] = str_replace('fop;', 'fop;{submissions_legend},submissionss,submissionsp;', $GLOBALS['TL_DCA']['tl_user']['palettes']['custom']);
 
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
+
+PaletteManipulator::create()
+    ->addLegend('submissions_legend', 'amg_legend', PaletteManipulator::POSITION_AFTER)
+    ->addField('submissionss', 'submissions_legend', PaletteManipulator::POSITION_APPEND)
+    ->addField('submissionsp', 'submissions_legend', PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('extend', 'tl_user')
+    ->applyToPalette('custom', 'tl_user')
+;
 
 /**
  * Add fields to tl_user
