@@ -33,6 +33,10 @@ class ListExportOperationButton
             return '';
         }
 
+        if (!$archive->allowExport) {
+            return '';
+        }
+
         $href = $this->urlGenerator->generate(ExportController::class, ['archive' => $archive->id]);
 
         return sprintf(

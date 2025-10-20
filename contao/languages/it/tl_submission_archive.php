@@ -31,7 +31,6 @@ $arrLang['general_legend'] = 'Impostazioni generali';
 $arrLang['fields_legend'] = 'Campi del documento';
 $arrLang['notification_legend'] = 'Campi della conferma';
 $arrLang['clean_legend'] = 'Ripulire';
-$arrLang['attachment_legend'] = 'Impostazioni per gli allegati';
 
 /**
  * Buttons

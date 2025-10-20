@@ -4,20 +4,17 @@ namespace HeimrichHannot\Submissions\Controller\Backend;
 
 use Contao\Controller;
 use Contao\CoreBundle\Controller\AbstractController;
-use Contao\DataContainer;
+use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\DC_Table;
-use Contao\Input;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
-use HeimrichHannot\UtilsBundle\Util\FormatterUtil\FormatDcaFieldValueOptions;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use function Deployer\parse;
 
 #[Route(path: '%contao.backend.route_prefix%/huh_submissions/archive/{archive}/export', name: self::class, defaults: [
     '_scope' => 'backend',
@@ -35,6 +32,10 @@ class ExportController extends AbstractController
 
     public function __invoke(SubmissionArchiveModel $archive): Response
     {
+        if (!$archive->allowExport) {
+            throw new AccessDeniedException("Exporting submissions is not allowed for this archive.");
+        }
+
         $fields = StringUtil::deserialize($archive->submissionFields, true);
         $fields[] = 'dateAdded';
         $fields = array_unique($fields);
