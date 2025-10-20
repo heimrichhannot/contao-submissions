@@ -42,31 +42,20 @@ $dca = [
                 'class'      => 'header_edit_all',
                 'attributes' => 'onclick="Backend.getScrollOffset();"',
             ],
+            'export' => [
+                'icon' => 'bundles/heimrichhannotsubmissions/backend/img/export.svg',
+            ],
         ],
         'operations' => [
-            'copy'   => [
-                'href'  => 'act=copy',
-                'icon'  => 'copy.svg',
-            ],
-            'delete' => [
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null)
-                    . '\'))return false;Backend.getScrollOffset()"',
-            ],
-            'edit'   => [
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg',
-            ],
-            'show'   => [
-                'href'  => 'act=show',
-                'icon'  => 'show.svg',
-            ],
+            'edit',
+            'copy',
+            'delete',
             'toggle' => [
                 'href'         => 'act=toggle&amp;field=published',
                 'icon'         => 'visible.svg',
                 'showInHeader' => true,
             ],
+            'show',
         ],
     ],
     'palettes' => [
