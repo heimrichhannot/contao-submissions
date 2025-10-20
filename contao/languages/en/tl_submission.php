@@ -58,3 +58,4 @@ $lang['delete']            = ['Delete submission', 'Delete submission ID %s'];
 $lang['toggle']            = ['Activate submission', 'Activate/deactivate submission ID %s'];
 $lang['send_confirmation'] = ['Send confirmation notification', 'Send confirmation notification for submission ID %s'];
 $lang['show']              = ['Submission details', 'Show submission details ID %s'];
+$lang['export']              = ['Export (CSV)', 'Export submissions as CSV'];

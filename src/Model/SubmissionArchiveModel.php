@@ -13,6 +13,7 @@ use Contao\StringUtil;
  * @property string $submissionFields
  * @property int $dateAdded
  * @property string $titlePattern
+ * @property bool $allowExport
  */
 class SubmissionArchiveModel extends Model
 {

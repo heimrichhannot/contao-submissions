@@ -24,6 +24,7 @@ $arrLang['attachmentMaxUploadSize']    = ['Maximale Dateigröße von Anlagen (in
 $arrLang['attachmentExtensions']       = ['Erlaubte Dateitypen', 'Hier können Sie eine kommagetrennte Liste von Dateitypen eingeben, die hochgeladen werden dürfen.'];
 $arrLang['attachmentFieldType']        = ['Feldtyp von Anlagen', 'Wählen Sie aus welchen Feldtyp die Anlagen im Backend haben sollen.'];
 $arrLang['attachmentSubFolderPattern'] = ['Anlagen in Unterordner verschieben (Muster)', 'Geben Sie ein Muster an das auf Basis der Einsendung in ein Unterverzeichnis übersetzt werden soll. Anlagen werden anschließend in das Verzeichnis verschoben. Leer lassen um Anlagen im Upload-Verzeichnis zu belassen.'];
+$arrLang['allowExport']                = ['Export erlauben', 'Erlauben Sie hier das Exportieren von Einsendungen aus diesem Archiv.'];
 
 
 $arrLang['nc_submission']   = ['Benachrichtigung versenden', 'Wählen Sie hier eine Benachrichtigung aus, die nach dem erfolgreichen Einsenden verschickt werden soll.'];
@@ -36,7 +37,7 @@ $arrLang['general_legend']      = 'Allgemeine Einstellungen';
 $arrLang['fields_legend']       = 'Einsendungsfelder';
 $arrLang['notification_legend'] = 'Benachrichtigungen';
 $arrLang['clean_legend']        = 'Säuberung';
-$arrLang['attachment_legend']   = 'Einstellungen für Dateianlagen';
+$arrLang['advanced_legend']   = 'Erweiterte Einstellungen';
 
 /**
  * Buttons

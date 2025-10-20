@@ -67,7 +67,8 @@ $dca = [
     'palettes'    => [
         '__selector__' => [],
         'default' => '{general_legend},title,titlePattern;'
-            . '{fields_legend},submissionFields,submissionFieldsMandatoryOverride;',
+            . '{fields_legend},submissionFields,submissionFieldsMandatoryOverride;'
+            . '{advanced_legend},allowExport',
     ],
     'subpalettes' => [],
     'fields'      => [
@@ -97,6 +98,15 @@ $dca = [
             'inputType' => 'text',
             'eval'      => ['maxlength' => 256],
             'sql'       => "varchar(256) NOT NULL default ''",
+        ],
+        'allowExport' => [
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => ['tl_class' => 'w50'],
+            'sql'       => [
+                'type'    => 'boolean',
+                'default' => '0',
+            ],
         ],
         /*>>>
         todo: override mandatory property of fields

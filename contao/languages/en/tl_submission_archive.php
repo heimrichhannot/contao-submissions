@@ -19,6 +19,7 @@ $arrLang['attachmentMaxUploadSize'] = ['Maximum file size of attachments (in MB)
 $arrLang['attachmentExtensions'] = ['Allowed file types', 'Specify a comma separated list of file types that can be uploaded.'];
 $arrLang['attachmentFieldType'] = ['Fieldtype of attachments', 'Select what type of field the attachment field has in the back end.'];
 $arrLang['attachmentSubFolderPattern'] = ['Move attachments into subfolders (pattern)', 'Enter a pattern which is to be translated on the basis of the submission in a subdirectory. Attachments will be moved to the directory. Leave blank if you don`t want attachments to be moved.'];
+$arrLang['allowExport'] = ['Allow export', 'Here you can allow the export of submissions from this archive.'];
 
 $arrLang['nc_submission'] = ['Send notification', 'Select an notification to be sent after the successful sending.'];
 $arrLang['nc_confirmation'] = ['Send a confirmation notification', 'Select the notification that will be sent as an acknowledgment to the authors of the submission.'];
@@ -30,6 +31,7 @@ $arrLang['general_legend'] = 'General';
 $arrLang['fields_legend'] = 'Submission fields';
 $arrLang['notification_legend'] = 'Notifications';
 $arrLang['clean_legend'] = 'Cleaning';
+$arrLang['advanced_legend'] = 'Advanced settings';
 
 /**
  * Buttons
