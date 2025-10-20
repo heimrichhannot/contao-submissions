@@ -74,3 +74,4 @@ $lang['delete']            = ['Einsendung löschen', 'Einsendung ID %s löschen'
 $lang['toggle']            = ['Einsendung veröffentlichen', 'Einsendung ID %s veröffentlichen/verstecken'];
 $lang['send_confirmation'] = ['Bestätigungsbenachrichtigung verschicken', 'Bestätigungsbenachrichtigung für Einsendung ID %s verschicken'];
 $lang['show']              = ['Einsendung-Details', 'Einsendung-Details ID %s anzeigen'];
+$lang['export']              = ['Exportieren (CSV)', 'Einsendungen als Excel-kompatible CSV-Datei exportieren'];
