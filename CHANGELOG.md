@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+
+
+## [2.0.0-beta.7] - 2025-10-21
+- Added: permission handling ([#8](https://github.com/heimrichhannot/contao-submissions/pull/8))
+- Added: csv export ([#7](https://github.com/heimrichhannot/contao-submissions/pull/7))
+- Changed: dropped support for Contao 4 ([#8](https://github.com/heimrichhannot/contao-submissions/pull/8))
+
 ## [prepare v2] - 2024-12-02
 - Added: Support for Contao 5
 - Added: form type

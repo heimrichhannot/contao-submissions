@@ -7,7 +7,7 @@ A generic module to store and handle submissions in Contao. You can use it with 
 - Submissions organized in archives using a dedicated DCA.
 - Highly customizable: define new fields on the data container.
 - Auto-creates palettes for your fields.
-- Ships with an optional automated double opt-in process.
+- Feature set includes opt-in process, permissions handling and (csv) export.
 - Notification Center 2.0 support ([terminal42/contao-notification_center](https://github.com/terminal42/contao-notification_center))
 
 ## Install
@@ -31,6 +31,8 @@ the submission archive. The names of the form fields must be the same as the fie
 
 Use `##form_attachment_*##` tokens in your notification center notifications to include attachments in your emails.
 
+### Opt in process
+
 Use the built-in double opt-in process to verify submissions.
 Create an opt-in challenge notification in notification center and select it on your form in the form generator.
 You can also define a jump to page to which the user is redirected when the opt-in is successful.
@@ -44,6 +46,13 @@ Use the following notification tokens in the opt-in notification:
 | `##optin_url##`   | To be replaced with the absolute opt-in url                                                                              |
 | `##email##`       | Same as `##form_email##`, but guaranteed to be in a valid email address format. Intended use as recipient email address. |
 
+
+### Export
+
+Active "Allow export" in the submission archive settings to enable CSV export of submissions.
+Afterwards you will find an "Export" button in the submission list view.
+
+![export_operation.png](docs/img/export_operation.png)
 
 ## Development
 
