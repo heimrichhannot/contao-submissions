@@ -16,7 +16,6 @@ use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: '%contao.backend.route_prefix%/huh_submissions/archive/{archive}/export', name: self::class, defaults: [
@@ -28,7 +27,6 @@ class ExportController extends AbstractController
         private readonly Connection $connection,
         private readonly Utils $utils,
         private readonly TranslatorInterface $translator,
-        private readonly AuthorizationCheckerInterface $auth,
     )
     {
 
@@ -36,7 +34,7 @@ class ExportController extends AbstractController
 
     public function __invoke(SubmissionArchiveModel $archive): Response
     {
-        if (!$this->auth->isGranted(
+        if (!$this->isGranted(
             ContaoCorePermissions::DC_PREFIX.SubmissionArchiveModel::getTable(),
             new ReadAction(SubmissionArchiveModel::getTable(), $archive->row()))
         ) {
