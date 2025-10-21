@@ -5,6 +5,8 @@ namespace HeimrichHannot\Submissions\Controller\Backend;
 use Contao\Controller;
 use Contao\CoreBundle\Controller\AbstractController;
 use Contao\CoreBundle\Exception\AccessDeniedException;
+use Contao\CoreBundle\Security\ContaoCorePermissions;
+use Contao\CoreBundle\Security\DataContainer\ReadAction;
 use Contao\DC_Table;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
@@ -32,6 +34,13 @@ class ExportController extends AbstractController
 
     public function __invoke(SubmissionArchiveModel $archive): Response
     {
+        if (!$this->isGranted(
+            ContaoCorePermissions::DC_PREFIX.SubmissionArchiveModel::getTable(),
+            new ReadAction(SubmissionArchiveModel::getTable(), $archive->row()))
+        ) {
+            throw new AccessDeniedException("You are not allowed to access this submission archive.");
+        }
+
         if (!$archive->allowExport) {
             throw new AccessDeniedException("Exporting submissions is not allowed for this archive.");
         }

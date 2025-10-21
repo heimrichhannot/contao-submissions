@@ -3,7 +3,14 @@
 /**
  * Extend default palette
  */
-$GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = str_replace('fop;', 'fop;{submissions_legend},submissionss,submissionsp;', $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default']);
+
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
+
+PaletteManipulator::create()
+    ->addLegend('submissions_legend', 'amg_legend', PaletteManipulator::POSITION_AFTER)
+    ->addField('submissionss', 'submissions_legend', PaletteManipulator::POSITION_APPEND)
+    ->addField('submissionsp', 'submissions_legend', PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('default', 'tl_user_group');
 
 
 /**

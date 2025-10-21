@@ -2,14 +2,14 @@
     "name": "heimrichhannot/contao-submissions",
     "description": "A generic module to store and handle submissions in contao.",
     "keywords": ["contao", "submissions", "form", "module", "developer"],
-    "type": "contao-module",
+    "type": "contao-bundle",
     "homepage": "https://github.com/heimrichhannot/contao-submissions",
     "license": "LGPL-3.0-or-later",
     "authors": [
         {
             "name": "Heimrich & Hannot",
             "email": "digitales@heimrich-hannot.de",
-            "homepage": "http://www.heimrich-hannot.de",
+            "homepage": "https://www.heimrich-hannot.de",
             "role": "Developer"
         }
     ],
@@ -18,15 +18,10 @@
     },
     "require": {
         "php": "^8.2",
-        "contao/core-bundle": "^4.13 || ^5.0",
+        "contao/core-bundle": "^5.3",
         "terminal42/notification_center": "^2.0",
         "heimrichhannot/contao-utils-bundle": "^3.6",
         "heimrichhannot/contao-form-type-bundle": "^0.1 || ^0.2 "
-    },
-    "suggest": {
-        "heimrichhannot/contao-frontendedit": "Offers full CRUD (create, read, update, delete) functionality which could be used for submissions.",
-        "heimrichhannot/contao-exporter": "Offers exporter functionality.",
-        "heimrichhannot/contao-cleaner": "This module adds cleaner functionality for periodically removing arbitrary entities fulfilling a certain condition (using TL_CRON or your server's cron)."
     },
     "autoload": {
         "psr-4": {
