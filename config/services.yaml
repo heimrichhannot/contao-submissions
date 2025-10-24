@@ -6,3 +6,7 @@ services:
   HeimrichHannot\Submissions\:
     # important: do not include FormType, which is optionally injected in SubmissionsPass
     resource: '../src/{Config,Controller,DataContainer,EventListener,FormType,Manager,Migration,NotificationType,Security}/*'
+
+  HeimrichHannot\Submissions\EventListener\Integration\FieldsetDuplicationListener:
+    calls:
+      - setFieldHelper: ['@?inspiredminds.fieldsetduplication.helper.field']
