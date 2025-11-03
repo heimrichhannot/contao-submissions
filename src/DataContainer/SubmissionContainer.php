@@ -46,7 +46,7 @@ readonly class SubmissionContainer
         $data = $event->getData();
 
         if (!empty($data['email'])) {
-            $data['email'] = \mb_strtolower($data['email']);
+            $data['email'] = \mb_strtolower((string) $data['email']);
         }
 
         if (empty($data['submissionLanguage'])) {
@@ -124,7 +124,7 @@ readonly class SubmissionContainer
         $genHtml = (fn($title) => \sprintf(
             '<div class="tl_content_left">%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span></div>',
             $title,
-            Date::parse(Config::get('datimFormat'), \trim($record['dateAdded']))
+            Date::parse(Config::get('datimFormat'), \trim((string) $record['dateAdded']))
         ));
 
         $submission = SubmissionModel::findByPk($record['id']);

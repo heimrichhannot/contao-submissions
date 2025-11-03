@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use Contao\Rector\Set\ContaoLevelSetList;
 use Contao\Rector\Set\ContaoSetList;
+use Rector\CodingStyle\Rector\FuncCall\FunctionFirstClassCallableRector;
 use Rector\Config\RectorConfig;
+use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
@@ -33,12 +35,13 @@ return RectorConfig::configure()
         symfony: true,
     )
     ->withSets([
-        LevelSetList::UP_TO_PHP_74,
-        ContaoLevelSetList::UP_TO_CONTAO_49,
+        LevelSetList::UP_TO_PHP_82,
+        ContaoLevelSetList::UP_TO_CONTAO_53,
         ContaoSetList::FQCN,
         ContaoSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])
     ->withSkip([
-        \Rector\Php81\Rector\Array_\FirstClassCallableRector::class,
+        FirstClassCallableRector::class,
+        FunctionFirstClassCallableRector::class
     ])
     ;

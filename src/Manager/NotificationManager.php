@@ -51,7 +51,7 @@ readonly class NotificationManager
                 }
             }
 
-            $label = isset($labels[$k]) && \is_string($labels[$k]) ? StringUtil::decodeEntities($labels[$k]) : ucfirst($k);
+            $label = isset($labels[$k]) && \is_string($labels[$k]) ? StringUtil::decodeEntities($labels[$k]) : ucfirst((string) $k);
 
             $tokens['formlabel_'.$k] = $label;
             $tokens['form_'.$k] = $v;
