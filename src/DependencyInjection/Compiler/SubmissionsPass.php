@@ -13,8 +13,7 @@ class SubmissionsPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         if (!\class_exists(HeimrichHannotFormTypeBundle::class)
-            || !$container->has('huh.form_type'))
-        {
+            || !$container->has('huh.form_type')) {
             return;
         }
 

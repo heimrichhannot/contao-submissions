@@ -13,8 +13,7 @@ class ListExportOperationButton
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly RequestStack $requestStack,
-    )
-    {
+    ) {
     }
 
     #[AsCallback(table: 'tl_submission', target: 'list.global_operations.export.button')]
@@ -24,7 +23,7 @@ class ListExportOperationButton
         $table = $this->requestStack->getCurrentRequest()?->get('table');
         $act = $this->requestStack->getCurrentRequest()?->get('act');
 
-        if ($do !== 'huh_submissions' || $table !== 'tl_submission' || null !== $act) {
+        if ('huh_submissions' !== $do || 'tl_submission' !== $table || null !== $act) {
             return '';
         }
 
@@ -37,7 +36,9 @@ class ListExportOperationButton
             return '';
         }
 
-        $href = $this->urlGenerator->generate(ExportController::class, ['archive' => $archive->id]);
+        $href = $this->urlGenerator->generate(ExportController::class, [
+            'archive' => $archive->id,
+        ]);
 
         return sprintf(
             '<a href="%s" class="%s" title="%s"%s>%s</a>',

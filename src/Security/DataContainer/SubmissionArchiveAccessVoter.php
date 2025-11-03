@@ -15,9 +15,8 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
 class SubmissionArchiveAccessVoter extends AbstractDataContainerVoter
 {
     public function __construct(
-        private readonly AccessDecisionManagerInterface $accessDecisionManager
-    )
-    {
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
+    ) {
     }
 
     protected function getTable(): string
@@ -40,14 +39,13 @@ class SubmissionArchiveAccessVoter extends AbstractDataContainerVoter
                 [SubmissionPermissions::USER_CAN_CREATE]
             ),
             $action instanceof ReadAction,
-                $action instanceof UpdateAction => $this->accessDecisionManager->decide(
+            $action instanceof UpdateAction => $this->accessDecisionManager->decide(
                 $token,
                 [SubmissionPermissions::USER_CAN_EDIT],
                 $action->getCurrentId()
             ),
-            $action instanceof DeleteAction =>
-                $this->accessDecisionManager->decide($token, [SubmissionPermissions::USER_CAN_EDIT], $action->getCurrentId()) &&
-                $this->accessDecisionManager->decide($token, [SubmissionPermissions::USER_CAN_DELETE]),
+            $action instanceof DeleteAction => $this->accessDecisionManager->decide($token, [SubmissionPermissions::USER_CAN_EDIT], $action->getCurrentId())
+                && $this->accessDecisionManager->decide($token, [SubmissionPermissions::USER_CAN_DELETE]),
         };
     }
 }

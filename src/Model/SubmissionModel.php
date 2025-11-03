@@ -19,7 +19,7 @@ class SubmissionModel extends Model
         return $this->getRelated('pid');
     }
 
-    public static function findOneByOptInToken(OptInTokenInterface $token): Model|null
+    public static function findOneByOptInToken(OptInTokenInterface $token): ?Model
     {
         return static::findOneBy('huhSub_optInTokenId', $token->getIdentifier());
     }

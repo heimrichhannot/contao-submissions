@@ -16,8 +16,9 @@ readonly class FormContainer
 {
     public function __construct(
         private NotificationCenter $notificationCenter,
-        private Utils              $utils,
-    ) {}
+        private Utils $utils,
+    ) {
+    }
 
     public function onConfigOnload(?DataContainer $dc): void
     {

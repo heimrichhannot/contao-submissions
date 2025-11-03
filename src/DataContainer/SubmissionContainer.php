@@ -23,19 +23,22 @@ use Symfony\Component\HttpFoundation\RequestStack;
 readonly class SubmissionContainer
 {
     public function __construct(
-        private Connection   $connection,
-        private Countries    $countries,
+        private Connection $connection,
+        private Countries $countries,
         private RequestStack $requestStack,
-        private Utils        $utils,
-    ) {}
+        private Utils $utils,
+    ) {
+    }
 
-    /** @noinspection PhpUnused */
+    /**
+     * @noinspection PhpUnused
+     */
     #[AsCallback(table: 'tl_submission', target: 'config.oncreate')]
     public function onCreateCallback(string $table, int $id, array $fields, DataContainer $dc): void
-        // this is only relevant for creating submissions in the backend
+    // this is only relevant for creating submissions in the backend
     {
         $this->connection->executeStatement(
-            "UPDATE tl_submission SET submissionLanguage=? WHERE id=?",
+            'UPDATE tl_submission SET submissionLanguage=? WHERE id=?',
             [$this->getLocale(), $id]
         );
     }
@@ -80,8 +83,7 @@ readonly class SubmissionContainer
         $submissionFields = StringUtil::deserialize($archive->submissionFields, true);
 
         // remove subpalette fields from $submissionFields
-        foreach ($dca['subpalettes'] ?? [] as $value)
-        {
+        foreach ($dca['subpalettes'] ?? [] as $value) {
             $subpaletteFields = $this->utils->dca()->getPaletteFields($dc->table, $value);
             $submissionFields = \array_diff($submissionFields, $subpaletteFields);
         }
@@ -94,16 +96,16 @@ readonly class SubmissionContainer
         // mandatory overrides
         $mandatoryOverrides = StringUtil::deserialize($archive->submissionFieldsMandatoryOverride, true);
 
-        foreach ($mandatoryOverrides as $override)
-        {
-            if (!empty($dca['fields'][$override['field'] ?? null]) && isset($override['mandatory']))
-            {
+        foreach ($mandatoryOverrides as $override) {
+            if (!empty($dca['fields'][$override['field'] ?? null]) && isset($override['mandatory'])) {
                 $dca['fields'][$override['field'] ?? null]['eval']['mandatory'] = $override['mandatory'] ? '1' : '';
             }
         }
     }
 
-    /** @noinspection PhpUnused */
+    /**
+     * @noinspection PhpUnused
+     */
     #[AsCallback(table: 'tl_submission', target: 'fields.country.options')]
     public function getCountryOptions(): array
     {
@@ -117,11 +119,13 @@ readonly class SubmissionContainer
         $event->setEmptyOption(true);
     }
 
-    /** @noinspection PhpUnused */
+    /**
+     * @noinspection PhpUnused
+     */
     #[AsCallback(table: 'tl_submission', target: 'list.sorting.child_record')]
     public function onSortingChildRecordCallback(array $record): string
     {
-        $genHtml = (fn($title) => \sprintf(
+        $genHtml = (fn ($title) => \sprintf(
             '<div class="tl_content_left">%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span></div>',
             $title,
             Date::parse(Config::get('datimFormat'), \trim((string) $record['dateAdded']))
@@ -132,8 +136,7 @@ readonly class SubmissionContainer
 
         if (!$submission instanceof SubmissionModel
             || !$submissionArchive instanceof SubmissionArchiveModel
-            || !$submissionArchive->titlePattern)
-        {
+            || !$submissionArchive->titlePattern) {
             return $genHtml($record['id'] ?: '');
         }
 
@@ -146,6 +149,7 @@ readonly class SubmissionContainer
         $pregReplaceCallback = function ($matches) use ($submission, $dc) {
             $fieldName = $matches[1];
             $value = $submission->{$fieldName} ?? null;
+
             return $this->utils->formatter()->formatDcaFieldValue($dc, $fieldName, $value);
         };
 
@@ -158,14 +162,16 @@ readonly class SubmissionContainer
         return $genHtml($title);
     }
 
-    /** @noinspection PhpUnused */
+    /**
+     * @noinspection PhpUnused
+     */
     #[AsCallback(table: 'tl_submission', target: 'list.label.group')]
     public function onListLabelGroupCallback(
-        string        $group,
-        ?string       $mode,
-        string        $field,
-        array         $recordData,
-        DataContainer $dc
+        string $group,
+        ?string $mode,
+        string $field,
+        array $recordData,
+        DataContainer $dc,
     ): string {
         return \sprintf(
             '<div class="tl_content_left">%s</div>',

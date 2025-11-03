@@ -15,7 +15,10 @@ class OptInChallengeNotificationType implements NotificationTypeInterface
     public const TOKEN_OPT_IN_TOKEN = 'optin_token';
     public const TOKEN_OPT_IN_URL = 'optin_url';
 
-    public function __construct(private readonly TokenDefinitionFactoryInterface $factory) {}
+    public function __construct(
+        private readonly TokenDefinitionFactoryInterface $factory,
+    ) {
+    }
 
     public function getName(): string
     {

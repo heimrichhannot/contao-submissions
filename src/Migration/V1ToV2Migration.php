@@ -19,8 +19,9 @@ class V1ToV2Migration extends AbstractMigration
     ];
 
     public function __construct(
-        private readonly Connection $connection
-    ) {}
+        private readonly Connection $connection,
+    ) {
+    }
 
     public function shouldRun(): bool
     {
@@ -32,8 +33,7 @@ class V1ToV2Migration extends AbstractMigration
 
         $columns = $schemaManger->listTableColumns('tl_form');
 
-        foreach (self::TL_FORM_REFACTOR_NAMES_MAP as $oldName => $newName)
-        {
+        foreach (self::TL_FORM_REFACTOR_NAMES_MAP as $oldName => $newName) {
             if (isset($columns[$oldName]) || isset($columns[\strtolower($oldName)])) {
                 return true;
             }
@@ -48,13 +48,11 @@ class V1ToV2Migration extends AbstractMigration
 
         $columns = $schemaManger->listTableColumns('tl_form');
 
-        foreach (self::TL_FORM_REFACTOR_NAMES_MAP as $oldName => $newName)
-        {
+        foreach (self::TL_FORM_REFACTOR_NAMES_MAP as $oldName => $newName) {
             $oldCol = $columns[$oldName] ?? $columns[\strtolower($oldName)] ?? null;
             $newCol = $columns[$newName] ?? $columns[\strtolower($newName)] ?? null;
 
-            if (!$oldCol || $newCol)
-            {
+            if (!$oldCol || $newCol) {
                 continue;
             }
 

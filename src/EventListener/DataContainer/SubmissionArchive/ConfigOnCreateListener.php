@@ -17,11 +17,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class ConfigOnCreateListener
 {
     public function __construct(
-        private readonly RequestStack                  $requestStack,
+        private readonly RequestStack $requestStack,
         private readonly AuthorizationCheckerInterface $auth,
         private readonly TokenStorageInterface $tokenStorage,
-    )
-    {
+    ) {
     }
 
     public function __invoke(string $table, int $id, array $row, DataContainer $dc): void
@@ -46,24 +45,21 @@ class ConfigOnCreateListener
         $newRecords = $objSessionBag->get('new_records');
 
         if (
-            is_array($newRecords['tl_submission_archive'] ?? null) &&
-            in_array($insertId, $newRecords['tl_submission_archive'])
+            is_array($newRecords['tl_submission_archive'] ?? null)
+            && in_array($insertId, $newRecords['tl_submission_archive'])
         ) {
             $db = Database::getInstance();
 
             // Add the permissions on group level
-            if ($user->inherit != 'custom')
-            {
-                $objGroup = $db->execute("SELECT id, submissionss, submissionsp FROM tl_user_group WHERE id IN("
+            if ('custom' != $user->inherit) {
+                $objGroup = $db->execute('SELECT id, submissionss, submissionsp FROM tl_user_group WHERE id IN('
                     . implode(',', array_map('\intval', $user->groups))
-                    . ")");
+                    . ')');
 
-                while ($objGroup->next())
-                {
+                while ($objGroup->next()) {
                     $listPermissions = StringUtil::deserialize($objGroup->submissionsp);
 
-                    if (is_array($listPermissions) && in_array('create', $listPermissions))
-                    {
+                    if (is_array($listPermissions) && in_array('create', $listPermissions)) {
                         $listSelects = array_map(
                             '\intval',
                             StringUtil::deserialize($objGroup->submissionss, true)
@@ -71,34 +67,31 @@ class ConfigOnCreateListener
                         $listSelects[] = $insertId;
 
                         $db
-                            ->prepare("UPDATE tl_user_group SET submissionss=? WHERE id=?")
+                            ->prepare('UPDATE tl_user_group SET submissionss=? WHERE id=?')
                             ->execute(serialize($listSelects), $objGroup->id);
                     }
                 }
             }
 
             // Add the permissions on user level
-            if ($user->inherit != 'group')
-            {
+            if ('group' != $user->inherit) {
                 $objUser = $db
-                    ->prepare("SELECT submissionss, submissionsp FROM tl_user WHERE id=?")
+                    ->prepare('SELECT submissionss, submissionsp FROM tl_user WHERE id=?')
                     ->limit(1)
                     ->execute($user->id);
 
                 $listPermissions = StringUtil::deserialize($objUser->submissionsp);
 
-                if (is_array($listPermissions) && in_array('create', $listPermissions))
-                {
+                if (is_array($listPermissions) && in_array('create', $listPermissions)) {
                     $listSelects = array_map(
                         '\intval',
                         StringUtil::deserialize($objUser->submissionss, true)
                     );
                     $listSelects[] = $insertId;
 
-                    $db->prepare("UPDATE tl_user SET submissionss=? WHERE id=?")->execute(serialize($listSelects), $user->id);
+                    $db->prepare('UPDATE tl_user SET submissionss=? WHERE id=?')->execute(serialize($listSelects), $user->id);
                 }
             }
         }
     }
-
 }

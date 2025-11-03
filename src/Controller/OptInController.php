@@ -29,13 +29,14 @@ class OptInController extends AbstractController
         private readonly OptIn $optIn,
         private readonly ProcessFormDataListener $processFormDataListener,
         private readonly SimpleTokensManager $simpleTokensManager,
-        private readonly Utils $utils
-    ) {}
+        private readonly Utils $utils,
+    ) {
+    }
 
     public static function getSubscribedServices(): array
     {
         $services = parent::getSubscribedServices();
-        $services['kernel'] = '?'.KernelInterface::class;
+        $services['kernel'] = '?' . KernelInterface::class;
 
         return $services;
     }
@@ -82,10 +83,12 @@ class OptInController extends AbstractController
         $optInToken->confirm();
 
         if ($formModel->huhSub_optInField) {
-            $submission->{$formModel->huhSub_optInField} = "1";
+            $submission->{$formModel->huhSub_optInField} = '1';
         }
 
-        $submission->huhSub_optInCache = \serialize(['form' => $formModel->id]);
+        $submission->huhSub_optInCache = \serialize([
+            'form' => $formModel->id,
+        ]);
         $submission->save();
 
         $this->sendNotification($formModel, $submission, $subCache);
@@ -121,18 +124,14 @@ class OptInController extends AbstractController
         $attachmentTokens = $this->simpleTokensManager->generateAttachmentTokens($files);
         $subData = \array_merge($subData, $attachmentTokens);
 
-        try
-        {
+        try {
             $event = new SubmissionsBeforeSendConfirmationNotificationEvent($formModel, $submission, $subCache, $subData);
 
             $this->container->get('event_dispatcher')->dispatch($event, $event::class);
 
             $subData = $event->getSubmissionData();
-        }
-        catch (\Exception $e)
-        {
-            if ($this->container->get('kernel')?->isDebug())
-            {
+        } catch (\Exception $e) {
+            if ($this->container->get('kernel')?->isDebug()) {
                 throw $e;
             }
 

@@ -27,22 +27,20 @@ class ExportController extends AbstractController
         private readonly Connection $connection,
         private readonly Utils $utils,
         private readonly TranslatorInterface $translator,
-    )
-    {
-
+    ) {
     }
 
     public function __invoke(SubmissionArchiveModel $archive): Response
     {
         if (!$this->isGranted(
-            ContaoCorePermissions::DC_PREFIX.SubmissionArchiveModel::getTable(),
+            ContaoCorePermissions::DC_PREFIX . SubmissionArchiveModel::getTable(),
             new ReadAction(SubmissionArchiveModel::getTable(), $archive->row()))
         ) {
-            throw new AccessDeniedException("You are not allowed to access this submission archive.");
+            throw new AccessDeniedException('You are not allowed to access this submission archive.');
         }
 
         if (!$archive->allowExport) {
-            throw new AccessDeniedException("Exporting submissions is not allowed for this archive.");
+            throw new AccessDeniedException('Exporting submissions is not allowed for this archive.');
         }
 
         $fields = StringUtil::deserialize($archive->submissionFields, true);
@@ -61,9 +59,9 @@ class ExportController extends AbstractController
             $this->addRowToCsvHandle(
                 $handle,
                 array_map(
-                    fn($field) => (
+                    fn ($field) =>
                         $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['label'][0] ??
-                        $this->translator->trans('tl_submission.' . $field . '.0', [], 'contao_tl_submission')),
+                        $this->translator->trans('tl_submission.' . $field . '.0', [], 'contao_tl_submission'),
                     $fields
                 )
             );
@@ -96,13 +94,15 @@ class ExportController extends AbstractController
             $fields = array_combine(array_flip($fields), $fields);
 
             $dc = new class($archive) extends DC_Table {
-                /** @noinspection PhpMissingParentConstructorInspection */
-                public function __construct($archive)
-                {
+                /**
+                 * @noinspection PhpMissingParentConstructorInspection
+                 */
+                public function __construct(
+                    $archive,
+                ) {
                     $this->intId = $archive->id;
                     $this->strTable = SubmissionModel::getTable();
                 }
-
             };
 
             while ($row = $result->fetchAssociative()) {
@@ -120,9 +120,9 @@ class ExportController extends AbstractController
         fputcsv(
             stream: $handle,
             fields: $fields,
-            separator: ";",
+            separator: ';',
             enclosure: '"',
-            escape: "\\",
+            escape: '\\',
             eol: "\r\n",
         );
     }

@@ -12,7 +12,7 @@ use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
 
 class SubmissionType extends AbstractFormType
 {
-    const TYPE = 'huh_submission';
+    public const TYPE = 'huh_submission';
 
     public function getType(): string
     {
@@ -93,10 +93,6 @@ class SubmissionType extends AbstractFormType
                 }
                 $fieldConfig['options'] = serialize($options);
                 break;
-
-
         }
     }
-
-
 }

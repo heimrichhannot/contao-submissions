@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @package HeimrichHannot Contao Submissions Bundle
  * @copyright Heimrich & Hannot GmbH, 2024
  * @license https://spdx.org/licenses/LGPL-3.0-or-later.html LGPL-3.0-or-later
  */
@@ -21,19 +20,15 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class Plugin implements BundlePluginInterface, ConfigPluginInterface, RoutingPluginInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getBundles(ParserInterface $parser): array
     {
         return [
             BundleConfig::create(HeimrichHannotSubmissions::class)
-                ->setLoadAfter([ContaoCoreBundle::class])
+                ->setLoadAfter([ContaoCoreBundle::class]),
         ];
     }
 
     /**
-     * {@inheritdoc}
      * @throws \Exception
      */
     public function registerContainerConfiguration(LoaderInterface $loader, array $managerConfig): void
@@ -47,6 +42,7 @@ class Plugin implements BundlePluginInterface, ConfigPluginInterface, RoutingPlu
     public function getRouteCollection(LoaderResolverInterface $resolver, KernelInterface $kernel)
     {
         $file = '@HeimrichHannotSubmissions/config/routes.yaml';
+
         return $resolver->resolve($file)->load($file);
     }
 }

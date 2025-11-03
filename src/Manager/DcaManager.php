@@ -8,17 +8,18 @@ use HeimrichHannot\UtilsBundle\Util\Utils;
 readonly class DcaManager
 {
     public function __construct(
-        private Utils $utils
-    ) {}
+        private Utils $utils,
+    ) {
+    }
 
     /**
      * Retrieves the list of fields from the specified table that are allowed
      * to be used in submissions. Removes fields explicitly flagged as not
      * permissible for submissions.
      *
-     * @param string $table The name of the table to retrieve fields from.
+     * @param string $table the name of the table to retrieve fields from
      *
-     * @return array An array of field names allowed for submissions.
+     * @return array an array of field names allowed for submissions
      */
     public function getSubmissibleFields(string $table): array
     {
@@ -31,7 +32,9 @@ readonly class DcaManager
         $noSubmissionFields = $this->utils->dca()->getDcaFields(
             $table,
             GetDcaFieldsOptions::create()
-                ->setEvalConditions(['noSubmissionField' => true])
+                ->setEvalConditions([
+                    'noSubmissionField' => true,
+                ])
         );
 
         if (empty($noSubmissionFields)) {

@@ -9,11 +9,12 @@ use Symfony\Contracts\EventDispatcher\Event;
 class SubmissionsBeforeSendConfirmationNotificationEvent extends Event
 {
     public function __construct(
-        private readonly FormModel       $formModel,
+        private readonly FormModel $formModel,
         private readonly SubmissionModel $submission,
-        private readonly array           $submissionCache,
-        private array                    $submissionData
-    ) {}
+        private readonly array $submissionCache,
+        private array $submissionData,
+    ) {
+    }
 
     public function getFormModel(): FormModel
     {

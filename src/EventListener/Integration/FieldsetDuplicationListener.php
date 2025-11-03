@@ -19,8 +19,7 @@ class FieldsetDuplicationListener
         private readonly RequestStack $requestStack,
         private readonly Connection $connection,
         private readonly EventDispatcherInterface $eventDispatcher,
-    )
-    {
+    ) {
     }
 
     public function setFieldHelper(FieldHelper $helper): void
@@ -29,7 +28,7 @@ class FieldsetDuplicationListener
     }
 
     /**
-     * We need to restore the options added through an options event listener for duplicated fields
+     * We need to restore the options added through an options event listener for duplicated fields.
      */
     #[AsEventListener('huh.form_type.huh_submission.load_form_field')]
     public function onLoadFormFieldEvent(LoadFormFieldEvent $event): void
@@ -51,7 +50,6 @@ class FieldsetDuplicationListener
         $intPos = strpos($name, '_duplicate_');
         $originalName = substr($name, 0, $intPos);
 
-
         if (!\is_array($arrOptions = $widget->options) || empty($arrOptions)) {
             $arrOptions = [];
         }
@@ -71,7 +69,7 @@ class FieldsetDuplicationListener
 
             if ($event->isEmptyOption()) {
                 $options = \array_merge([
-                    $event->createOptions('', $event->getEmptyOptionLabel())
+                    $event->createOptions('', $event->getEmptyOptionLabel()),
                 ], $options);
             }
 
@@ -109,7 +107,7 @@ class FieldsetDuplicationListener
             // Collect the fields
             foreach ($fieldset['fields'] as $field) {
                 foreach ($postData as $name => $value) {
-                    if (preg_match('/^('.preg_quote((string) $field['name']).')(_duplicate_(\d+))?$/', (string) $name, $matches)) {
+                    if (preg_match('/^(' . preg_quote((string) $field['name']) . ')(_duplicate_(\d+))?$/', (string) $name, $matches)) {
                         $index = (int) ($matches[3] ?? 0) + 1;
                         $fieldsetFields[$index][$field['name']] = $value;
                     }
@@ -134,7 +132,7 @@ class FieldsetDuplicationListener
 
             foreach ($allFields as $field) {
                 if ($this->fieldHelper->isFieldsetStart((object) $field)) {
-                    $depth++;
+                    ++$depth;
                     if ($depth > 1) {
                         continue;
                     }
@@ -153,7 +151,7 @@ class FieldsetDuplicationListener
                 }
 
                 if ($this->fieldHelper->isFieldsetStop((object) $field)) {
-                    $depth--;
+                    --$depth;
                     if ($depth >= 1) {
                         continue;
                     }

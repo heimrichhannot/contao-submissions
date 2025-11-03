@@ -27,10 +27,11 @@ readonly class FormDataHooks
         private OptIn $optIn,
         private RouterInterface $router,
         private SimpleTokensManager $simpleTokensManager,
-        private Utils $utils
-    ) {}
+        private Utils $utils,
+    ) {
+    }
 
-    #[AsHook("prepareFormData")]
+    #[AsHook('prepareFormData')]
     public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form): void
     {
         if (!$this->preCheck($form)) {
@@ -58,13 +59,13 @@ readonly class FormDataHooks
         $submittedData['huhSub_optInTokenId'] = $token->getIdentifier();
     }
 
-    #[AsHook("processFormData", priority: 200)]
+    #[AsHook('processFormData', priority: 200)]
     public function onProcessFormData(
-        array  &$submittedData,
-        array  &$formData,
+        array &$submittedData,
+        array &$formData,
         ?array $files,
-        array  $labels,
-        Form   $form
+        array $labels,
+        Form $form,
     ): void {
         if (!$this->preCheck($form)) {
             return;
@@ -97,13 +98,14 @@ readonly class FormDataHooks
 
         if (!$submission) {
             $this->utils->container()->log('Could not fetch submission for given token.', __METHOD__, 'TL_ERROR');
+
             return;
         }
 
         $submission->huhSub_optInCache = \serialize([
             'labels' => $labels,
             'files' => $files,
-            'form' => $form->id
+            'form' => $form->id,
         ]);
 
         $submission->save();
@@ -111,7 +113,7 @@ readonly class FormDataHooks
         $optInUrl = $this->router->generate('huh_submissions_opt_in', [
             'formId' => $form->id,
             'tokenIdentifier' => $optInToken->getIdentifier(),
-            'from' => ($GLOBALS['objPage'] ?? System::getContainer()->get('contao.routing.page_finder')?->getCurrentPage())?->id
+            'from' => ($GLOBALS['objPage'] ?? System::getContainer()->get('contao.routing.page_finder')?->getCurrentPage())?->id,
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $this->notificationManager->send(
@@ -125,7 +127,7 @@ readonly class FormDataHooks
         );
     }
 
-    #[AsHook("storeFormData")]
+    #[AsHook('storeFormData')]
     public function onStoreFormData(array $data, Form $form): array
     {
         if (!$this->preCheck($form)) {
@@ -145,18 +147,17 @@ readonly class FormDataHooks
 
         Controller::loadDataContainer('tl_submission');
 
-        foreach ($_SESSION['FILES'] as $field => $fieldData)
-        {
+        foreach ($_SESSION['FILES'] as $field => $fieldData) {
             if (empty($data[$field]) || empty($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
                 continue;
             }
 
             $data[$field] = StringUtil::uuidToBin($fieldData['uuid']);
 
-            $multiple = (bool)($GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['multiple'] ?? false);
+            $multiple = (bool) ($GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['multiple'] ?? false);
             $fieldType = $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['eval']['fieldType'] ?? null;
 
-            if ($multiple || $fieldType === 'checkbox') {
+            if ($multiple || 'checkbox' === $fieldType) {
                 $data[$field] = \serialize([$fieldData['uuid']]);
             }
         }

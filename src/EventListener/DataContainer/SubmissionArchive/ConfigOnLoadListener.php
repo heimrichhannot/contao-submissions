@@ -12,8 +12,7 @@ class ConfigOnLoadListener
 {
     public function __construct(
         private readonly TokenStorageInterface $tokenStorage,
-    )
-    {
+    ) {
     }
 
     public function __invoke(?DataContainer $dc = null): void

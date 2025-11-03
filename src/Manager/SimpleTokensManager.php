@@ -8,18 +8,15 @@ class SimpleTokensManager
 {
     public function generateAttachmentTokens(?array $files): array
     {
-        if (empty($files))
-        {
+        if (empty($files)) {
             return [];
         }
 
         $tokens = [];
 
-        foreach ($files as $fieldName => $fileData)
-        {
-            if ($fileModel = FilesModel::findByUuid($fileData['uuid']))
-            {
-                $tokens['attachment_'.$fieldName] = $fileModel->path;
+        foreach ($files as $fieldName => $fileData) {
+            if ($fileModel = FilesModel::findByUuid($fileData['uuid'])) {
+                $tokens['attachment_' . $fieldName] = $fileModel->path;
             }
         }
 

@@ -13,10 +13,11 @@ use Terminal42\NotificationCenterBundle\Parcel\Stamp\BulkyItemsStamp;
 readonly class NotificationManager
 {
     public function __construct(
-        private DcaManager           $dcaManager,
+        private DcaManager $dcaManager,
         private FileUploadNormalizer $fileUploadNormalizer,
-        private NotificationCenter   $notificationCenter,
-    ) {}
+        private NotificationCenter $notificationCenter,
+    ) {
+    }
 
     public function filterSubmittedData(array $submittedData): array
     {
@@ -36,8 +37,7 @@ readonly class NotificationManager
         $rawData = [];
         $rawDataFilled = [];
 
-        foreach ($submittedData as $k => $v)
-        {
+        foreach ($submittedData as $k => $v) {
             if (!\in_array($k, $submissibleFields, true)) {
                 continue;
             }
@@ -53,13 +53,13 @@ readonly class NotificationManager
 
             $label = isset($labels[$k]) && \is_string($labels[$k]) ? StringUtil::decodeEntities($labels[$k]) : ucfirst((string) $k);
 
-            $tokens['formlabel_'.$k] = $label;
-            $tokens['form_'.$k] = $v;
+            $tokens['formlabel_' . $k] = $label;
+            $tokens['form_' . $k] = $v;
 
-            $rawData[] = $label.': '.(\is_array($v) ? \implode(', ', $v) : $v);
+            $rawData[] = $label . ': ' . (\is_array($v) ? \implode(', ', $v) : $v);
 
             if (\is_array($v) || ('' !== (string) $v)) {
-                $rawDataFilled[] = $label.': '.(\is_array($v) ? \implode(', ', $v) : $v);
+                $rawDataFilled[] = $label . ': ' . (\is_array($v) ? \implode(', ', $v) : $v);
             }
         }
 
@@ -67,13 +67,13 @@ readonly class NotificationManager
     }
 
     public function send(
-        array      $submittedData,
-        array      $formData,
-        array|null $files,
-        array      $labels,
-        Form       $form,
-        string     $optInToken,
-        string     $optInUrl
+        array $submittedData,
+        array $formData,
+        ?array $files,
+        array $labels,
+        Form $form,
+        string $optInToken,
+        string $optInUrl,
     ): void {
         $notificationId = $formData['huhSub_optInNotification'] ?? 0;
         if (!\is_numeric($notificationId) || $notificationId < 1) {
@@ -94,18 +94,16 @@ readonly class NotificationManager
         $tokens[OptInChallengeNotificationType::TOKEN_OPT_IN_URL] = $optInUrl;
 
         foreach ($formData as $k => $v) {
-            $tokens['formconfig_'.$k] = \is_string($v) ? StringUtil::decodeEntities($v) : $v;
+            $tokens['formconfig_' . $k] = \is_string($v) ? StringUtil::decodeEntities($v) : $v;
         }
 
         $tokens['raw_data'] = \implode("\n", $rawData);
         $tokens['raw_data_filled'] = \implode("\n", $rawDataFilled);
 
-        foreach ($this->fileUploadNormalizer->normalize($files) as $k => $fileDefinitions)
-        {
+        foreach ($this->fileUploadNormalizer->normalize($files) as $k => $fileDefinitions) {
             $vouchers = [];
 
-            foreach ($fileDefinitions as $arrFile)
-            {
+            foreach ($fileDefinitions as $arrFile) {
                 $fileItem = \is_resource($arrFile['stream']) ?
                     FileItem::fromStream($arrFile['stream'], $arrFile['name'], $arrFile['type'], $arrFile['size']) :
                     FileItem::fromPath($arrFile['tmp_name'], $arrFile['name'], $arrFile['type'], $arrFile['size']);
@@ -116,7 +114,7 @@ readonly class NotificationManager
                 $bulkyItemVouchers[] = $voucher;
             }
 
-            $tokens['form_'.$k] = \implode(',', $vouchers);
+            $tokens['form_' . $k] = \implode(',', $vouchers);
         }
 
         // Make sure we don't pass any objects as tokens
