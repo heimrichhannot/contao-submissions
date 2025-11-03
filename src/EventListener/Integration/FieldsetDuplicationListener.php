@@ -2,7 +2,6 @@
 
 namespace HeimrichHannot\Submissions\EventListener\Integration;
 
-use Codefog\HasteBundle\Formatter;
 use Doctrine\DBAL\Connection;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
@@ -19,7 +18,6 @@ class FieldsetDuplicationListener
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly Connection $connection,
-        private readonly Formatter $formatter,
         private readonly EventDispatcherInterface $eventDispatcher,
     )
     {
@@ -54,8 +52,7 @@ class FieldsetDuplicationListener
         $originalName = substr($name, 0, $intPos);
 
 
-        if (!\is_array($arrOptions = $widget->options) || empty($arrOptions))
-        {
+        if (!\is_array($arrOptions = $widget->options) || empty($arrOptions)) {
             $arrOptions = [];
         }
 
@@ -69,12 +66,10 @@ class FieldsetDuplicationListener
             )
         );
 
-        if ($event->isDirty())
-        {
+        if ($event->isDirty()) {
             $options = $event->getOptions();
 
-            if ($event->isEmptyOption())
-            {
+            if ($event->isEmptyOption()) {
                 $options = \array_merge([
                     $event->createOptions('', $event->getEmptyOptionLabel())
                 ], $options);
@@ -125,11 +120,6 @@ class FieldsetDuplicationListener
         }
 
         $event->setData($storeData);
-    }
-
-    public function onFieldOptionsListener()
-    {
-
     }
 
     public function getDuplicateFields(array $allFields): array
