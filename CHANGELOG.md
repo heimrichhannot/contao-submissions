@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 
 
+## [2.0.0-beta.8] - 2025-11-03
+- Added: fieldset duplication support ([#9](https://github.com/heimrichhannot/contao-submissions/pull/9))
+- Changed: add quality ci pipeline
+
 ## [2.0.0-beta.7] - 2025-10-21
 - Added: permission handling ([#8](https://github.com/heimrichhannot/contao-submissions/pull/8))
 - Added: csv export ([#7](https://github.com/heimrichhannot/contao-submissions/pull/7))
