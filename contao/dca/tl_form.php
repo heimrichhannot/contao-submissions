@@ -1,7 +1,5 @@
 <?php
 
-use Contao\CoreBundle\DataContainer\PaletteManipulator;
-
 $dca = &$GLOBALS['TL_DCA']['tl_form'];
 $fields = &$dca['fields'];
 

@@ -8,6 +8,7 @@
 
 namespace HeimrichHannot\Submissions;
 
+use HeimrichHannot\Submissions\DependencyInjection\HeimrichHannotSubmissionsExtension;
 use HeimrichHannot\Submissions\DependencyInjection\Compiler\SubmissionsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -28,7 +29,7 @@ class HeimrichHannotSubmissions extends Bundle
      */
     public function getContainerExtensionClass(): string
     {
-        return DependencyInjection\HeimrichHannotSubmissionsExtension::class;
+        return HeimrichHannotSubmissionsExtension::class;
     }
 
     public function getContainerExtension(): ?ExtensionInterface

@@ -11,7 +11,6 @@ use Contao\DataContainer;
 use Contao\Date;
 use Contao\DC_Table;
 use Contao\StringUtil;
-use Contao\System;
 use Doctrine\DBAL\Connection;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
@@ -122,13 +121,11 @@ readonly class SubmissionContainer
     #[AsCallback(table: 'tl_submission', target: 'list.sorting.child_record')]
     public function onSortingChildRecordCallback(array $record): string
     {
-        $genHtml = function($title) use ($record) {
-            return \sprintf(
-                '<div class="tl_content_left">%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span></div>',
-                $title,
-                Date::parse(Config::get('datimFormat'), \trim($record['dateAdded']))
-            );
-        };
+        $genHtml = (fn($title) => \sprintf(
+            '<div class="tl_content_left">%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span></div>',
+            $title,
+            Date::parse(Config::get('datimFormat'), \trim($record['dateAdded']))
+        ));
 
         $submission = SubmissionModel::findByPk($record['id']);
         $submissionArchive = $submission?->archive();

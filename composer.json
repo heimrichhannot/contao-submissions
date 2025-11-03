@@ -34,5 +34,13 @@
     },
     "extra": {
         "contao-manager-plugin": "HeimrichHannot\\Submissions\\ContaoManager\\Plugin"
+    },
+    "require-dev": {
+        "rector/rector": "^2.2",
+        "contao/contao-rector": "dev-main",
+        "symplify/easy-coding-standard": "^12.6",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-symfony": "^2.0",
+        "contao/manager-plugin": "^2.13"
     }
 }

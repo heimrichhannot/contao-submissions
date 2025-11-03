@@ -3,8 +3,6 @@
 namespace HeimrichHannot\Submissions\Model;
 
 use Contao\Model;
-use Contao\Model\Collection;
-use Contao\StringUtil;
 
 /**
  * @property int $id

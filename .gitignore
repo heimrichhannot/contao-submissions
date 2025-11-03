@@ -4,3 +4,5 @@
 .vscode
 .history
 *.code-workspace
+vendor
+composer.lock
