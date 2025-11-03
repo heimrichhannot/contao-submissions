@@ -1,14 +1,17 @@
 # Submissions
-A generic module to store and handle submissions in Contao. You can use it with all of your modules to simplify submission handling.
+A generic module to store form submissions in Contao. In contract to Leads the storage is dca based.
 
 ## Features
 
-- Directly store form generator submissions.
-- Submissions organized in archives using a dedicated DCA.
+- Directly store form generator submissions (with included form type)
+- Submissions organized in archives using a dedicated DCA including permissions handling
 - Highly customizable: define new fields on the data container.
 - Auto-creates palettes for your fields.
-- Feature set includes opt-in process, permissions handling and (csv) export.
+- Bundles double opt-in process.
+- Export your submissions as (excel compatible) CSV
 - Notification Center 2.0 support ([terminal42/contao-notification_center](https://github.com/terminal42/contao-notification_center))
+- Integrated support for following extensions:
+  - [Contao Fieldset Duplication](https://packagist.org/packages/inspiredminds/contao-fieldset-duplication) - store data as blob for group widget, multi column editor or multi column wizard fields.
 
 ## Install
 
