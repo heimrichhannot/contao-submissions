@@ -13,6 +13,7 @@ class OptInChallengeNotificationType implements NotificationTypeInterface
     public const NAME = 'huh_submissions_challenge_optin';
 
     public const TOKEN_OPT_IN_TOKEN = 'optin_token';
+
     public const TOKEN_OPT_IN_URL = 'optin_url';
 
     public function __construct(

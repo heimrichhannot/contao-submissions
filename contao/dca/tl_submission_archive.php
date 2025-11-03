@@ -10,18 +10,18 @@ DateAddedField::register('tl_submission')->setEvalValue('noSubmissionField', tru
 // todo: implement permission check
 
 $dca = [
-    'config'      => [
-        'dataContainer'     => DC_Table::class,
-        'ctable'            => ['tl_submission'],
-        'switchToEdit'      => true,
-        'enableVersioning'  => true,
-        'sql'               => [
+    'config' => [
+        'dataContainer' => DC_Table::class,
+        'ctable' => ['tl_submission'],
+        'switchToEdit' => true,
+        'enableVersioning' => true,
+        'sql' => [
             'keys' => [
                 'id' => 'primary',
             ],
         ],
     ],
-    'list'        => [
+    'list' => [
         'label' => [
             'fields' => ['title'],
             'format' => '%s',
@@ -48,47 +48,57 @@ $dca = [
             'show',
         ],
     ],
-    'palettes'    => [
+    'palettes' => [
         '__selector__' => [],
         'default' => '{general_legend},title,titlePattern;'
             . '{fields_legend},submissionFields,submissionFieldsMandatoryOverride;'
             . '{advanced_legend},allowExport',
     ],
     'subpalettes' => [],
-    'fields'      => [
+    'fields' => [
         'id' => [
-            'sql' => "int(10) unsigned NOT NULL auto_increment",
+            'sql' => 'int(10) unsigned NOT NULL auto_increment',
         ],
         'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-        'title'                             => [
-            'exclude'   => true,
-            'search'    => true,
-            'sorting'   => true,
-            'flag'      => 1,
+        'title' => [
+            'exclude' => true,
+            'search' => true,
+            'sorting' => true,
+            'flag' => 1,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => true, 'maxlength' => 255],
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'eval' => [
+                'mandatory' => true,
+                'maxlength' => 255,
+            ],
+            'sql' => "varchar(255) NOT NULL default ''",
         ],
         'submissionFields' => [
             'exclude' => true,
             'inputType' => 'checkboxWizard',
-            'eval' => ['multiple' => true, 'tl_class' => 'wizard'],
-            'sql' => "blob NULL",
+            'eval' => [
+                'multiple' => true,
+                'tl_class' => 'wizard',
+            ],
+            'sql' => 'blob NULL',
         ],
         'titlePattern' => [
-            'exclude'   => true,
+            'exclude' => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 256],
-            'sql'       => "varchar(256) NOT NULL default ''",
+            'eval' => [
+                'maxlength' => 256,
+            ],
+            'sql' => "varchar(256) NOT NULL default ''",
         ],
         'allowExport' => [
-            'exclude'   => true,
+            'exclude' => true,
             'inputType' => 'checkbox',
-            'eval'      => ['tl_class' => 'w50'],
-            'sql'       => [
-                'type'    => 'boolean',
+            'eval' => [
+                'tl_class' => 'w50',
+            ],
+            'sql' => [
+                'type' => 'boolean',
                 'default' => '0',
             ],
         ],

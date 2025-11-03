@@ -12,12 +12,12 @@ DateAddedField::register('tl_submission')->setEvalValue('noSubmissionField', tru
 // todo: check permission
 
 $dca = [
-    'config'   => [
-        'dataContainer'     => DC_Table::class,
-        'ptable'            => 'tl_submission_archive',
-        'enableVersioning'  => true,
-        'doNotCopyRecords'  => true,
-        'sql'               => [
+    'config' => [
+        'dataContainer' => DC_Table::class,
+        'ptable' => 'tl_submission_archive',
+        'enableVersioning' => true,
+        'doNotCopyRecords' => true,
+        'sql' => [
             'keys' => [
                 'id' => 'primary',
                 'uuid' => 'unique',
@@ -30,16 +30,16 @@ $dca = [
             'format' => '%s',
         ],
         'sorting' => [
-            'mode'         => 4,
-            'fields'       => ['dateAdded DESC'],
+            'mode' => 4,
+            'fields' => ['dateAdded DESC'],
             'headerFields' => ['title'],
-            'panelLayout'  => 'filter;search,limit',
-            'filter'       => [['tstamp>?', 0]],
+            'panelLayout' => 'filter;search,limit',
+            'filter' => [['tstamp>?', 0]],
         ],
         'global_operations' => [
             'all' => [
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
+                'href' => 'act=select',
+                'class' => 'header_edit_all',
                 'attributes' => 'onclick="Backend.getScrollOffset();"',
             ],
             'export' => [
@@ -51,19 +51,19 @@ $dca = [
             'copy',
             'delete',
             'toggle' => [
-                'href'         => 'act=toggle&amp;field=published',
-                'icon'         => 'visible.svg',
+                'href' => 'act=toggle&amp;field=published',
+                'icon' => 'visible.svg',
                 'showInHeader' => true,
             ],
             'show',
         ],
     ],
     'palettes' => [
-        'default' => '{submission_legend};{publish_legend},published;'
+        'default' => '{submission_legend};{publish_legend},published;',
     ],
-    'fields'   => [
+    'fields' => [
         'id' => [
-            'sql' => "int(10) unsigned NOT NULL auto_increment",
+            'sql' => 'int(10) unsigned NOT NULL auto_increment',
             'eval' => [
                 'noSubmissionField' => true,
             ],
@@ -71,13 +71,16 @@ $dca = [
         'pid' => [
             'foreignKey' => 'tl_submission_archive.title',
             'sql' => "int(10) unsigned NOT NULL default '0'",
-            'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
+            'relation' => [
+                'type' => 'belongsTo',
+                'load' => 'eager',
+            ],
             'eval' => [
                 'noSubmissionField' => true,
             ],
         ],
         'uuid' => [
-            'sql' => "binary(16) NULL",
+            'sql' => 'binary(16) NULL',
             'eval' => [
                 'noSubmissionField' => true,
             ],
@@ -173,7 +176,11 @@ $dca = [
             'sorting' => true,
             'flag' => 1,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval' => [
+                'maxlength' => 128,
+                'tl_class' => 'w50',
+                'substituteField' => true,
+            ],
             'sql' => "varchar(128) NOT NULL default ''",
         ],
         'position' => [
@@ -182,7 +189,11 @@ $dca = [
             'sorting' => true,
             'flag' => 1,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 128, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval' => [
+                'maxlength' => 128,
+                'tl_class' => 'w50',
+                'substituteField' => true,
+            ],
             'sql' => "varchar(128) NOT NULL default ''",
         ],
         'dateOfBirth' => [
@@ -200,28 +211,44 @@ $dca = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval' => [
+                'maxlength' => 64,
+                'tl_class' => 'w50',
+                'substituteField' => true,
+            ],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'streetNumber' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval' => [
+                'maxlength' => 64,
+                'tl_class' => 'w50',
+                'substituteField' => true,
+            ],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'street2' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 64, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval' => [
+                'maxlength' => 64,
+                'tl_class' => 'w50',
+                'substituteField' => true,
+            ],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'postal' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 5, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval' => [
+                'maxlength' => 5,
+                'tl_class' => 'w50',
+                'substituteField' => true,
+            ],
             'sql' => "varchar(5) NOT NULL default ''",
         ],
         'city' => [
@@ -230,7 +257,11 @@ $dca = [
             'search' => true,
             'sorting' => true,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 32, 'tl_class' => 'w50', 'substituteField' => true],
+            'eval' => [
+                'maxlength' => 32,
+                'tl_class' => 'w50',
+                'substituteField' => true,
+            ],
             'sql' => "varchar(32) NOT NULL default ''",
         ],
         'country' => [
@@ -293,27 +324,40 @@ $dca = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 128, 'tl_class' => 'w50'],
+            'eval' => [
+                'maxlength' => 128,
+                'tl_class' => 'w50',
+            ],
             'sql' => "varchar(128) NOT NULL default ''",
         ],
         'message' => [
             'exclude' => true,
             'inputType' => 'textarea',
-            'eval' => ['tl_class' => 'long clr'],
-            'sql' => "text NULL",
+            'eval' => [
+                'tl_class' => 'long clr',
+            ],
+            'sql' => 'text NULL',
         ],
         'agreement' => [
             'exclude' => true,
             'filter' => true,
             'inputType' => 'checkbox',
-            'eval' => ['mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true],
+            'eval' => [
+                'mandatory' => true,
+                'tl_class' => 'w50',
+                'doNotCopy' => true,
+            ],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'privacy' => [
             'exclude' => true,
             'filter' => true,
             'inputType' => 'checkbox',
-            'eval' => ['mandatory' => true, 'tl_class' => 'w50', 'doNotCopy' => true],
+            'eval' => [
+                'mandatory' => true,
+                'tl_class' => 'w50',
+                'doNotCopy' => true,
+            ],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'submissionLanguage' => [
@@ -322,7 +366,10 @@ $dca = [
             'search' => true,
             'sorting' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'readonly' => true],
+            'eval' => [
+                'tl_class' => 'w50',
+                'readonly' => true,
+            ],
             'sql' => "varchar(4) NOT NULL default ''",
         ],
         'huhSub_optInTokenId' => [
@@ -330,16 +377,23 @@ $dca = [
             'filter' => false,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50 clr', 'readonly' => true, 'noSubmissionField' => true],
+            'eval' => [
+                'tl_class' => 'w50 clr',
+                'readonly' => true,
+                'noSubmissionField' => true,
+            ],
             'sql' => "varchar(32) NOT NULL default ''",
         ],
         'huhSub_optInCache' => [
             'exclude' => true,
             'filter' => false,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50 clr', 'noSubmissionField' => true],
-            'sql' => "blob NULL",
-        ]
+            'eval' => [
+                'tl_class' => 'w50 clr',
+                'noSubmissionField' => true,
+            ],
+            'sql' => 'blob NULL',
+        ],
     ],
 ];
 

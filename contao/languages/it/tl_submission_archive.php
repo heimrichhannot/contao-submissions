@@ -2,7 +2,7 @@
 
 $arrLang = &$GLOBALS['TL_LANG']['tl_submission_archive'];
 
-/**
+/*
  * Fields
  */
 $arrLang['title'] = ['Titolo', 'Inserire un titolo.'];
@@ -20,11 +20,10 @@ $arrLang['attachmentExtensions'] = ['Tipi di file permessi', 'Qui potete inserir
 $arrLang['attachmentFieldType'] = ['Tipo di campo per gli allegati', 'Selezionare il tipo di campo che devono avere gli allegati nel Backend.'];
 $arrLang['attachmentSubFolderPattern'] = ['Separare gli allegati in sottocartelle (Pattern)', 'Inserire un pattern di traduzione tra allegati e sottocartelle. Gli allegati verranno spostati nelle sottocartelle corrispondenti. Lasciare vuoto per raggruppare tutti gli allegati nella cartella di upload.'];
 
-
 $arrLang['nc_submission'] = ['Invio notifica', 'Selezionare una notifica che verrà spedita in caso di invio eseguito correttamente.'];
 $arrLang['nc_confirmation'] = ['Invio notifica di conferma', 'Selezionare qui una notifica che verrà inviata all\'autore del documento.'];
 
-/**
+/*
  * Legends
  */
 $arrLang['general_legend'] = 'Impostazioni generali';
@@ -32,7 +31,7 @@ $arrLang['fields_legend'] = 'Campi del documento';
 $arrLang['notification_legend'] = 'Campi della conferma';
 $arrLang['clean_legend'] = 'Ripulire';
 
-/**
+/*
  * Buttons
  */
 $arrLang['new'] = ['Nuovo archivio documenti', 'Creazione di un nuovo archivio documenti'];
@@ -42,7 +41,7 @@ $arrLang['copy'] = ['Duplica archivio documenti', 'Duplica l\'archivio documenti
 $arrLang['delete'] = ['Cancella archivio documenti', 'Cancella l\'archivio documenti con ID %s'];
 $arrLang['show'] = ['Dettagli archivio documenti', 'Mostra i dettagli dell\'archivio documenti con ID %s'];
 
-/**
+/*
  * References
  */
 $arrLang['reference']['attachmentFieldType']['checkbox'] = 'Checkbox';

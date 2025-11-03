@@ -34,7 +34,8 @@ class ExportController extends AbstractController
     {
         if (!$this->isGranted(
             ContaoCorePermissions::DC_PREFIX . SubmissionArchiveModel::getTable(),
-            new ReadAction(SubmissionArchiveModel::getTable(), $archive->row()))
+            new ReadAction(SubmissionArchiveModel::getTable(), $archive->row())
+        )
         ) {
             throw new AccessDeniedException('You are not allowed to access this submission archive.');
         }
@@ -59,8 +60,7 @@ class ExportController extends AbstractController
             $this->addRowToCsvHandle(
                 $handle,
                 array_map(
-                    fn ($field) =>
-                        $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['label'][0] ??
+                    fn ($field) => $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['label'][0] ??
                         $this->translator->trans('tl_submission.' . $field . '.0', [], 'contao_tl_submission'),
                     $fields
                 )

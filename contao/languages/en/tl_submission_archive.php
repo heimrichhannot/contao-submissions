@@ -2,7 +2,7 @@
 
 $arrLang = &$GLOBALS['TL_LANG']['tl_submission_archive'];
 
-/**
+/*
  * Fields
  */
 $arrLang['title'] = ['Title', 'Enter a title.'];
@@ -24,7 +24,7 @@ $arrLang['allowExport'] = ['Allow export', 'Here you can allow the export of sub
 $arrLang['nc_submission'] = ['Send notification', 'Select an notification to be sent after the successful sending.'];
 $arrLang['nc_confirmation'] = ['Send a confirmation notification', 'Select the notification that will be sent as an acknowledgment to the authors of the submission.'];
 
-/**
+/*
  * Legends
  */
 $arrLang['general_legend'] = 'General';
@@ -33,7 +33,7 @@ $arrLang['notification_legend'] = 'Notifications';
 $arrLang['clean_legend'] = 'Cleaning';
 $arrLang['advanced_legend'] = 'Advanced settings';
 
-/**
+/*
  * Buttons
  */
 $arrLang['new'] = ['New submission archive', 'Create a submission archive'];

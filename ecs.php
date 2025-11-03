@@ -11,7 +11,7 @@ use Symplify\EasyCodingStandard\Config\ECSConfig;
 return ECSConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
-        //        __DIR__ . '/contao',
+        __DIR__ . '/contao',
 
     ])
 
@@ -35,4 +35,5 @@ return ECSConfig::configure()
         MethodChainingIndentationFixer::class => [
             '*/DependencyInjection/Configuration.php',
         ],
-    ]);
+    ])
+;
