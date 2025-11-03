@@ -29,7 +29,7 @@ readonly class NotificationManager
         );
     }
 
-    public function generateTokens(array $submittedData): array
+    public function generateTokens(array $submittedData, array $labels): array
     {
         $submissibleFields = $this->dcaManager->getSubmissibleFields('tl_submission');
         $tokens = [];
@@ -84,7 +84,7 @@ readonly class NotificationManager
         $bulkyItemVouchers = [];
         $files = !\is_array($files) ? [] : $files; // In Contao 4.13, $files can be null
 
-        [$tokens, $rawData, $rawDataFilled] = $this->generateTokens($submittedData);
+        [$tokens, $rawData, $rawDataFilled] = $this->generateTokens($submittedData, $labels);
 
         if ($email = $tokens['form_email'] ?? null) {
             $tokens['email'] = $email;

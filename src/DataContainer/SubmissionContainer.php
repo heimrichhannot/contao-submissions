@@ -143,7 +143,7 @@ readonly class SubmissionContainer
         $dc->id = $submission->id;
         $dc->activeRecord = $submission;
 
-        $pregReplaceCallback = function ($matches) use ($submission, $dca, $dc) {
+        $pregReplaceCallback = function ($matches) use ($submission, $dc) {
             $fieldName = $matches[1];
             $value = $submission->{$fieldName} ?? null;
             return $this->utils->formatter()->formatDcaFieldValue($dc, $fieldName, $value);
