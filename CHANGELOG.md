@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.24.2] - 2026-01-27
+- Fixed: exception with multi select in backend for non admin users
+
 ## [1.24.1] - 2024-03-21
 - Fixed: warnings with php 8
 

@@ -10,10 +10,13 @@
 
 namespace HeimrichHannot\Submissions\Backend;
 
+use Contao\Config;
+use Contao\Date;
 use HeimrichHannot\Haste\Dca\DC_HastePlus;
 use HeimrichHannot\Haste\Util\Arrays;
 use HeimrichHannot\Haste\Util\Files;
 use HeimrichHannot\Haste\Util\FormSubmission;
+use HeimrichHannot\Submissions\SubmissionModel;
 use HeimrichHannot\Submissions\Util\Tokens;
 
 class SubmissionBackend extends \Backend
@@ -24,7 +27,7 @@ class SubmissionBackend extends \Backend
     {
         $strTitle = $arrRow['id'];
 
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($arrRow['id'])) !== null
+        if (($objSubmission = SubmissionModel::findByPk($arrRow['id'])) !== null
             && ($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null
         ) {
             $dca              = &$GLOBALS['TL_DCA']['tl_submission'];
@@ -46,15 +49,15 @@ class SubmissionBackend extends \Backend
             );
         }
 
-        return '<div class="tl_content_left">' . $strTitle . ' <span style="color:#b3b3b3; padding-left:3px">[' . \Date::parse(
-                \Config::get('datimFormat'),
+        return '<div class="tl_content_left">' . $strTitle . ' <span style="color:#b3b3b3; padding-left:3px">[' . Date::parse(
+                Config::get('datimFormat'),
                 trim($arrRow['dateAdded'])
             ) . ']</span></div>';
     }
 
     public function sendConfirmation($row, $href, $label, $title, $icon, $attributes)
     {
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($row['id'])) !== null) {
+        if (($objSubmission = SubmissionModel::findByPk($row['id'])) !== null) {
             if (($objSubmissionArchive = $objSubmission->getRelated('pid')) !== null && $objSubmissionArchive->nc_confirmation) {
                 $href = $this->addToUrl($href);
                 $href = \HeimrichHannot\Haste\Util\Url::addQueryString('id=' . $row['id'], $href);
@@ -163,7 +166,7 @@ class SubmissionBackend extends \Backend
                 }
 
                 $session                   = $objSession->getData();
-                $session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objArchive->fetchEach('id'));
+                $session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'] ?? [], $objArchive->fetchEach('id'));
                 $objSession->setData($session);
                 break;
 
@@ -243,7 +246,7 @@ class SubmissionBackend extends \Backend
         \Controller::loadDataContainer('tl_submission');
         $dca = &$GLOBALS['TL_DCA']['tl_submission'];
 
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null) {
+        if (($objSubmission = SubmissionModel::findByPk($objDc->id)) === null) {
             return false;
         }
 
@@ -312,7 +315,7 @@ class SubmissionBackend extends \Backend
 
     public function moveAttachments(\DataContainer $objDc)
     {
-        if (($objSubmission = \HeimrichHannot\Submissions\SubmissionModel::findByPk($objDc->id)) === null) {
+        if (($objSubmission = SubmissionModel::findByPk($objDc->id)) === null) {
             return false;
         }
 
