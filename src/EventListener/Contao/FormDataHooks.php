@@ -11,6 +11,7 @@ use Contao\FormModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Validator;
+use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use HeimrichHannot\Submissions\Config\OptInConfig;
 use HeimrichHannot\Submissions\FormType\SubmissionType;
 use HeimrichHannot\Submissions\Manager\NotificationManager;
@@ -28,6 +29,7 @@ readonly class FormDataHooks
         private RouterInterface $router,
         private SimpleTokensManager $simpleTokensManager,
         private Utils $utils,
+        private FormTypeCollection $formTypeCollection,
     ) {
     }
 
@@ -167,7 +169,13 @@ readonly class FormDataHooks
 
     private function preCheck(Form|FormModel $form): bool
     {
-        if (SubmissionType::TYPE === $form->formType) {
+        $type = $this->formTypeCollection->getType($form->formType);
+
+        if (!$type) {
+            return false;
+        }
+
+        if ($type instanceof SubmissionType) {
             return true;
         }
 
