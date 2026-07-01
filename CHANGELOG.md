@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 
 
+## [2.0.0] - 2026-07-01
+- Changed: allow extending submission form type
+- Fixed: saving files not worked in contao 5
+
 ## [2.0.0-beta.8] - 2025-11-03
 - Added: fieldset duplication support ([#9](https://github.com/heimrichhannot/contao-submissions/pull/9))
 - Changed: add quality ci pipeline

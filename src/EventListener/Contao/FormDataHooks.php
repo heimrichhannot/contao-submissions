@@ -21,20 +21,22 @@ use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-readonly class FormDataHooks
+class FormDataHooks
 {
+    private array $files = [];
+
     public function __construct(
-        private NotificationManager $notificationManager,
-        private OptIn $optIn,
-        private RouterInterface $router,
-        private SimpleTokensManager $simpleTokensManager,
-        private Utils $utils,
-        private FormTypeCollection $formTypeCollection,
+        private readonly NotificationManager $notificationManager,
+        private readonly OptIn $optIn,
+        private readonly RouterInterface $router,
+        private readonly SimpleTokensManager $simpleTokensManager,
+        private readonly Utils $utils,
+        private readonly FormTypeCollection $formTypeCollection,
     ) {
     }
 
     #[AsHook('prepareFormData')]
-    public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form): void
+    public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form, array &$files): void
     {
         if (!$this->preCheck($form)) {
             return;
@@ -44,6 +46,7 @@ readonly class FormDataHooks
         $form->targetTable = 'tl_submission';
 
         $submittedData['uuid'] ??= Database::getInstance()->getUuid();
+        $this->files[$form->id] = $files;
 
         // Prepare OPT-IN
         if (!$form->huhSub_optIn || !$form->huhSub_optInNotification) {
@@ -143,13 +146,13 @@ readonly class FormDataHooks
         // Remove fields that do not exist
         $data = \array_intersect_key($data, \array_flip(Database::getInstance()->getFieldNames('tl_submission')));
 
-        if (empty($_SESSION['FILES'])) {
+        if (empty($this->files[$form->id] ?? [])) {
             return $data;
         }
 
         Controller::loadDataContainer('tl_submission');
 
-        foreach ($_SESSION['FILES'] as $field => $fieldData) {
+        foreach ($this->files[$form->id] as $field => $fieldData) {
             if (empty($data[$field]) || empty($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
                 continue;
             }
