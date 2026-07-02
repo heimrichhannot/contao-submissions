@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-
+## [2.0.1] - 2026-07-02
+- Fixed: opt-in notification being sent before later data changes may be applied
 
 ## [2.0.0] - 2026-07-01
 - Changed: allow extending submission form type

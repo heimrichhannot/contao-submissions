@@ -82,6 +82,20 @@ class FormDataHooks
 
         $attachmentTokens = $this->simpleTokensManager->generateAttachmentTokens($files);
         $submittedData = \array_merge($submittedData, $attachmentTokens);
+    }
+
+    #[AsHook('processFormData', priority: -200)]
+    public function onProcessFormData_optIn(
+        array  &$submittedData,
+        array  &$formData,
+        ?array $files,
+        array  $labels,
+        Form   $form,
+    ): void
+    {
+        if (!$this->preCheck($form)) {
+            return;
+        }
 
         if (!$form->huhSub_optIn || !$form->huhSub_optInNotification) {
             return;
