@@ -1,5 +1,5 @@
 # Submissions
-A generic module to store form submissions in Contao. In contract to Leads the storage is dca based.
+A generic module to store form submissions in Contao. In contrast to Leads the storage is dca based.
 
 ## Features
 
