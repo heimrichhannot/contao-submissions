@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Terminal42\NotificationCenterBundle\EventListener\ProcessFormDataListener;
 
 class OptInController extends AbstractController
@@ -41,9 +41,7 @@ class OptInController extends AbstractController
         return $services;
     }
 
-    /**
-     * @Route("/_huh_submissions/opt-in/{formId}/{tokenIdentifier}", name="huh_submissions_opt_in")
-     */
+    #[Route('/_huh_submissions/opt-in/{formId}/{tokenIdentifier}', name: 'huh_submissions_opt_in')]
     public function confirm(int $formId, string $tokenIdentifier, Request $request): Response
     {
         $this->initializeContaoFramework();

@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2026-07-10
+- Fixed: compatiblity issus with contao 5.7 and symfony 7
+
 ## [2.0.1] - 2026-07-02
 - Fixed: opt-in notification being sent before later data changes may be applied
 
