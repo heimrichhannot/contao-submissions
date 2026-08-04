@@ -4,5 +4,13 @@
 .vscode
 .history
 *.code-workspace
+
+# agents
+.claude/
+.claude-flow/
+.swarm/
+ruvector.db
+
+# composer
 vendor
 composer.lock
