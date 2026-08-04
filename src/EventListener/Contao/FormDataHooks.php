@@ -41,7 +41,7 @@ class FormDataHooks
         array $labels,
         array $fields,
         Form  $form,
-        array &$files
+        array &$files,
     ): void {
         if (!$this->preCheck($form)) {
             return;
