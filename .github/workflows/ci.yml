@@ -3,15 +3,28 @@ on: [ push ]
 
 jobs:
   phpstan:
+    name: PHPStan (DBAL ${{ matrix.dbal }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # doctrine/dbal 4 requires Contao 5.6 or newer, which in turn requires PHP 8.3
+          - php-version: 8.2
+            dbal: "^3.10"
+          - php-version: 8.3
+            dbal: "^4.3"
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: ${{ matrix.php-version }}
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Select the Doctrine DBAL version
+        run: composer require --no-update --no-interaction doctrine/dbal:"${{ matrix.dbal }}"
 
       - name: Install the dependencies
         uses: ramsey/composer-install@v3

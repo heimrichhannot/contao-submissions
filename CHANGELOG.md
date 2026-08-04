@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3]
+- Added: support for doctrine/dbal 4 (in addition to doctrine/dbal 3), as used by Contao 5.6 and up
+
 ## [2.0.2] - 2026-07-10
 - Fixed: compatiblity issus with contao 5.7 and symfony 7
 
