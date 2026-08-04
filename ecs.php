@@ -6,6 +6,7 @@ use PhpCsFixer\Fixer\Basic\BracesPositionFixer;
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
+use PhpCsFixer\Fixer\Whitespace\TypeDeclarationSpacesFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
@@ -31,6 +32,7 @@ return ECSConfig::configure()
     )
     ->withPhpCsFixerSets(symfony: true)
     ->withSkip([
+        TypeDeclarationSpacesFixer::class,
         NotOperatorWithSuccessorSpaceFixer::class,
         MethodChainingIndentationFixer::class => [
             '*/DependencyInjection/Configuration.php',

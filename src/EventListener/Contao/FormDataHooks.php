@@ -36,8 +36,13 @@ class FormDataHooks
     }
 
     #[AsHook('prepareFormData')]
-    public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form, array &$files): void
-    {
+    public function onPrepareFormData(
+        array &$submittedData,
+        array $labels,
+        array $fields,
+        Form  $form,
+        array &$files
+    ): void {
         if (!$this->preCheck($form)) {
             return;
         }
@@ -66,11 +71,11 @@ class FormDataHooks
 
     #[AsHook('processFormData', priority: 200)]
     public function onProcessFormData(
-        array &$submittedData,
-        array &$formData,
+        array  &$submittedData,
+        array  &$formData,
         ?array $files,
-        array $labels,
-        Form $form,
+        array  $labels,
+        Form   $form,
     ): void {
         if (!$this->preCheck($form)) {
             return;
@@ -91,8 +96,7 @@ class FormDataHooks
         ?array $files,
         array  $labels,
         Form   $form,
-    ): void
-    {
+    ): void {
         if (!$this->preCheck($form)) {
             return;
         }
