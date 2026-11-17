@@ -13,7 +13,10 @@ return ECSConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
         __DIR__ . '/contao',
-
+        __DIR__ . '/tests',
+        __DIR__ . '/translations',
+        __DIR__ . '/rector.php',
+        __DIR__ . '/ecs.php',
     ])
 
     // add a single rule

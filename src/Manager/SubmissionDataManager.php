@@ -5,6 +5,9 @@ namespace HeimrichHannot\Submissions\Manager;
 use Contao\StringUtil;
 use Contao\Validator;
 
+/**
+ * @internal
+ */
 class SubmissionDataManager
 {
     public function prepareForStorage(array $data, array $fields): array

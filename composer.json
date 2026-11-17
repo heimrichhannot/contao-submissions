@@ -37,7 +37,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5 || ^11.5",
-        "rector/rector": "^2.2",
+        "rector/rector": "^2.8",
         "contao/contao-rector": "dev-main",
         "symplify/easy-coding-standard": "^12.6",
         "phpstan/phpstan": "^2.1",

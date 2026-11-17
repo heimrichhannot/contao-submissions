@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace HeimrichHannot\Submissions\Tests;
 
+use Contao\Controller;
 use Contao\CoreBundle\OptIn\OptIn;
 use Contao\Database;
 use Contao\Form;
+use Contao\FormSelect;
+use Contao\FormText;
 use Contao\System;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
@@ -104,7 +107,7 @@ class FormDataHooksTest extends TestCase
                     [],
                 ],
             ];
-            $select = new \Contao\FormSelect([
+            $select = new FormSelect([
                 'name' => 'question',
                 'type' => 'select',
                 'options' => [[
@@ -123,7 +126,7 @@ class FormDataHooksTest extends TestCase
                 'value' => 'other',
                 'label' => 'Nicht ausgewählt',
             ]];
-            $multiple = new \Contao\FormSelect([
+            $multiple = new FormSelect([
                 'name' => 'interests',
                 'type' => 'select',
                 'multiple' => true,
@@ -138,7 +141,7 @@ class FormDataHooksTest extends TestCase
             $submitted['interests'] = ['a', 'b'];
             $hook->onValidateFormField($multiple, 'auto_form_1', [], $form);
             $submitted['birthday'] = 1731854100;
-            $hook->onValidateFormField(new \Contao\FormText([
+            $hook->onValidateFormField(new FormText([
                 'name' => 'birthday',
                 'rgxp' => 'date',
             ]), 'auto_form_1', [], $form);
@@ -151,7 +154,7 @@ class FormDataHooksTest extends TestCase
                 'interests[]' => 'Interessen',
             ], [], $form, $files);
 
-            \Contao\Controller::loadDataContainer('tl_submission');
+            Controller::loadDataContainer('tl_submission');
             (new DateAddedFieldListener($container))->onLoadDataContainer('tl_submission');
             $GLOBALS['TL_DCA']['tl_submission']['fields']['document'] = [
                 'sql' => 'binary(16) NULL',

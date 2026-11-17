@@ -8,6 +8,9 @@ use Contao\StringUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
+/**
+ * @internal
+ */
 class AdditionalDataRenderer
 {
     public function __construct(

@@ -36,3 +36,5 @@ Row color follow-up (2026-11-17):
 - Both DDEV dependency suites pass again (20 tests / 74 assertions each). Existing submissions were only read.
 
 An additional full Claude Opus 5.5 high review and the subsequent validated fixes are documented in [claude-opus-followup.md](claude-opus-followup.md). The updated dependency suites each pass 22 tests / 85 assertions.
+
+The subsequent [CI tooling follow-up](ci-tools-followup.md) fixes the Rector configuration and verifies Rector, ECS, PHPStan and tests with the expanded permanent check paths.

@@ -4,8 +4,19 @@ declare(strict_types=1);
 
 namespace HeimrichHannot\Submissions\Tests\Backend;
 
+use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\DataContainer;
+use Contao\Date;
+use Contao\Input;
+use Contao\System;
+use HeimrichHannot\Submissions\EventListener\DataContainer\Submission\FieldsAdditionalDataViewInputFieldListener;
 use HeimrichHannot\Submissions\Manager\AdditionalDataRenderer;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
@@ -84,27 +95,27 @@ class AdditionalDataRendererTest extends TestCase
         self::assertStringNotContainsString('<input', $html);
     }
 
-    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
-    #[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testDisplaysRealContaoEncodedInputAsSafeReadableText(): void
     {
-        $stack = new \Symfony\Component\HttpFoundation\RequestStack();
-        $stack->push(new \Symfony\Component\HttpFoundation\Request([], [
+        $stack = new RequestStack();
+        $stack->push(new Request([], [
             'answer' => 'a < b {{foo}} <script>x</script>',
         ]));
-        $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+        $container = new ContainerBuilder();
         $container->set('request_stack', $stack);
-        $scope = $this->createStub(\Contao\CoreBundle\Routing\ScopeMatcher::class);
+        $scope = $this->createStub(ScopeMatcher::class);
         $scope->method('isBackendRequest')->willReturn(false);
         $container->set('contao.routing.scope_matcher', $scope);
-        \Contao\System::setContainer($container);
+        System::setContainer($container);
         $html = $this->renderer()->render([
-            'answer' => \Contao\Input::post('answer', true),
+            'answer' => Input::post('answer', true),
         ], null);
         self::assertStringContainsString('a &lt; b {{foo}}', $html);
         self::assertStringContainsString('&lt;script&gt;', $html);
         self::assertStringNotContainsString('<script>', $html);
-        $encoded = \Contao\Input::post('answer', true);
+        $encoded = Input::post('answer', true);
         $caption = $this->renderer()->render([
             'choice' => $encoded,
         ], [
@@ -119,27 +130,27 @@ class AdditionalDataRendererTest extends TestCase
 
     public function testCallbackRendersCurrentRecordAndBlankOptionsStayEmpty(): void
     {
-        $dc = $this->createStub(\Contao\DataContainer::class);
+        $dc = $this->createStub(DataContainer::class);
         $dc->method('getCurrentRecord')->willReturn([
             'additionalData' => '{"choice":""}',
             'additionalDataMeta' => '{"choice":{"label":"Auswahl","options":{"":"Bitte wählen"}}}',
         ]);
-        $callback = new \HeimrichHannot\Submissions\EventListener\DataContainer\Submission\FieldsAdditionalDataViewInputFieldListener($this->renderer());
+        $callback = new FieldsAdditionalDataViewInputFieldListener($this->renderer());
         $html = $callback($dc);
         self::assertStringContainsString('Auswahl', $html);
         self::assertStringContainsString('—', $html);
         self::assertStringNotContainsString('Bitte wählen', $html);
     }
 
-    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
-    #[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testFormatsDateSnapshotsThroughRealContaoAndTwig(): void
     {
         date_default_timezone_set('UTC');
         $GLOBALS['TL_CONFIG']['dateFormat'] = 'd.m.Y';
         $GLOBALS['TL_CONFIG']['timeFormat'] = 'H:i';
         $GLOBALS['TL_CONFIG']['datimFormat'] = 'd.m.Y H:i';
-        $timestamp = (new \Contao\Date('17.11.2024 14:35', 'd.m.Y H:i'))->tstamp;
+        $timestamp = (new Date('17.11.2024 14:35', 'd.m.Y H:i'))->tstamp;
         $data = [
             'birthday' => $timestamp,
             'arrival' => $timestamp,
