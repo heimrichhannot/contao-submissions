@@ -96,7 +96,7 @@ readonly class SubmissionContainer
         if (null !== $submission->additionalData && '' !== $submission->additionalData && [] !== json_decode((string) $submission->additionalData, true)) {
             PaletteManipulator::create()
                 ->addLegend('additional_data_legend', 'submission_legend', PaletteManipulator::POSITION_AFTER)
-                ->addField('additionalDataView', 'additional_data_legend', PaletteManipulator::POSITION_APPEND)
+                ->addField('additionalData', 'additional_data_legend', PaletteManipulator::POSITION_APPEND)
                 ->applyToPalette('default', 'tl_submission');
         }
 

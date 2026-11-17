@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace HeimrichHannot\Submissions\Tests\Backend;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\DataContainer;
 use Contao\Date;
+use Contao\DC_Table;
 use Contao\Input;
 use Contao\System;
-use HeimrichHannot\Submissions\EventListener\DataContainer\Submission\FieldsAdditionalDataViewInputFieldListener;
+use HeimrichHannot\Submissions\EventListener\DataContainer\Submission\FieldsAdditionalDataInputFieldListener;
 use HeimrichHannot\Submissions\Manager\AdditionalDataRenderer;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
@@ -17,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
@@ -135,11 +138,67 @@ class AdditionalDataRendererTest extends TestCase
             'additionalData' => '{"choice":""}',
             'additionalDataMeta' => '{"choice":{"label":"Auswahl","options":{"":"Bitte wählen"}}}',
         ]);
-        $callback = new FieldsAdditionalDataViewInputFieldListener($this->renderer());
+        $callback = new FieldsAdditionalDataInputFieldListener($this->renderer());
         $html = $callback($dc);
         self::assertStringContainsString('Auswahl', $html);
         self::assertStringContainsString('—', $html);
         self::assertStringNotContainsString('Bitte wählen', $html);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testStorageFieldCallbackIgnoresSubmittedJson(): void
+    {
+        $stack = new RequestStack();
+        $stack->push(new Request([], [
+            'FORM_SUBMIT' => 'tl_submission',
+            'additionalData' => '{"question":"Injected"}',
+        ], server: [
+            'REQUEST_METHOD' => 'POST',
+        ]));
+        $container = new ContainerBuilder();
+        $container->set('request_stack', $stack);
+        $security = $this->createStub(AuthorizationCheckerInterface::class);
+        $security->method('isGranted')->willReturn(true);
+        $container->set('security.helper', $security);
+        System::setContainer($container);
+        require \dirname(__DIR__, 2) . '/contao/dca/tl_submission.php';
+
+        $attribute = (new \ReflectionClass(FieldsAdditionalDataInputFieldListener::class))->getAttributes(AsCallback::class)[0];
+        self::assertSame('fields.additionalData.input_field', $attribute->getArguments()['target']);
+        $GLOBALS['TL_DCA']['tl_submission']['fields']['additionalData']['input_field_callback'] = new FieldsAdditionalDataInputFieldListener($this->renderer());
+        $dc = new class extends DC_Table {
+            public int $saveCalls = 0;
+
+            public function __construct()
+            {
+                $this->strTable = 'tl_submission';
+                $this->strField = $this->strInputName = 'additionalData';
+                $this->varValue = '{"question":"Original"}';
+            }
+
+            public function getCurrentRecord($id = null, $table = null): ?array
+            {
+                return [
+                    'additionalData' => $this->varValue,
+                ];
+            }
+
+            public function renderRow(): string
+            {
+                return parent::row();
+            }
+
+            protected function save($varValue): void
+            {
+                ++$this->saveCalls;
+            }
+        };
+        $html = $dc->renderRow();
+        self::assertStringContainsString('Original', $html);
+        self::assertStringNotContainsString('Injected', $html);
+        self::assertSame(0, $dc->saveCalls);
+        self::assertSame('{"question":"Original"}', $dc->value);
     }
 
     #[RunInSeparateProcess]

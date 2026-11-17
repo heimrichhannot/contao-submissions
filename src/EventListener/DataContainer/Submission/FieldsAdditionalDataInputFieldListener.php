@@ -6,8 +6,8 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use HeimrichHannot\Submissions\Manager\AdditionalDataRenderer;
 
-#[AsCallback(table: 'tl_submission', target: 'fields.additionalDataView.input_field')]
-readonly class FieldsAdditionalDataViewInputFieldListener
+#[AsCallback(table: 'tl_submission', target: 'fields.additionalData.input_field')]
+readonly class FieldsAdditionalDataInputFieldListener
 {
     public function __construct(
         private AdditionalDataRenderer $renderer,

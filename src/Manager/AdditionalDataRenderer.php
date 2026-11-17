@@ -136,6 +136,6 @@ class AdditionalDataRenderer
 
     private function text(string $key): string
     {
-        return $this->translator->trans('tl_submission.additionalDataView.' . $key, [], 'contao_tl_submission');
+        return $this->translator->trans('tl_submission.additionalData.' . $key, [], 'contao_tl_submission');
     }
 }

@@ -12,7 +12,7 @@ class SubmissionDataManager
 {
     public function prepareForStorage(array $data, array $fields): array
     {
-        unset($data['additionalData'], $data['additionalDataMeta'], $data['additionalDataView']);
+        unset($data['additionalData'], $data['additionalDataMeta']);
 
         $additionalData = array_diff_key($data, $fields);
         $data = array_intersect_key($data, $fields);

@@ -38,3 +38,5 @@ Row color follow-up (2026-11-17):
 An additional full Claude Opus 5.5 high review and the subsequent validated fixes are documented in [claude-opus-followup.md](claude-opus-followup.md). The updated dependency suites each pass 22 tests / 85 assertions.
 
 The subsequent [CI tooling follow-up](ci-tools-followup.md) fixes the Rector configuration and verifies Rector, ECS, PHPStan and tests with the expanded permanent check paths.
+
+The [direct data-field follow-up](direct-data-field.md) removes the extra display field and attaches the read-only callback directly to `additionalData`. The current dependency suites each pass 23 tests / 90 assertions.

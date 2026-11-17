@@ -49,7 +49,6 @@ class SubmissionDataManagerTest extends TestCase
                 'email' => 'test@example.org',
                 'additionalData' => '{"injected":true}',
                 'additionalDataMeta' => '{"fake":true}',
-                'additionalDataView' => 'fake',
             ],
             [
                 'email' => [],

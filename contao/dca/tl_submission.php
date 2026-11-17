@@ -63,6 +63,7 @@ $dca = [
     ],
     'fields' => [
         'additionalData' => [
+            'exclude' => true,
             'eval' => [
                 'noSubmissionField' => true,
                 'doNotShow' => true,
@@ -80,13 +81,6 @@ $dca = [
             'sql' => [
                 'type' => 'json',
                 'notnull' => false,
-            ],
-        ],
-        'additionalDataView' => [
-            'exclude' => true,
-            'eval' => [
-                'noSubmissionField' => true,
-                'doNotSave' => true,
             ],
         ],
         'id' => [
