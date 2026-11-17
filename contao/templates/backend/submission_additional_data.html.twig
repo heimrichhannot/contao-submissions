@@ -10,7 +10,7 @@
         <span style="white-space:pre-wrap;overflow-wrap:anywhere">{{ node.value }}</span>
     {% endif %}
 {% endmacro %}
-<div class="widget clr">
+<div class="widget clr" style="--table-odd:var(--nested-bg);--table-even:var(--panel-bg);--table-nb-odd:var(--nested-bg);--table-nb-even:var(--panel-bg)">
     {% if error %}<p class="tl_error">{{ error }}</p>{% else %}
         <table class="tl_listing with-border with-padding with-zebra" style="table-layout:fixed"><tbody>
         {% for row in rows %}<tr><th scope="row" style="width:28%;vertical-align:top;text-align:left;overflow-wrap:anywhere">{{ row.label }}</th><td>{{ _self.value(row.node) }}</td></tr>{% endfor %}

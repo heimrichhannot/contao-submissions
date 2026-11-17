@@ -29,3 +29,8 @@ Native table styling follow-up (2026-11-17):
 - Main and repeated-group tables now use Contao's tl_listing, with-border, with-padding and with-zebra styles instead of popup-detail table styling. These classes were verified in both Contao 5.3 and 5.7 sources; no stylesheet or dependency was added.
 - Authenticated Firefox screenshots verify the native cell spacing, separators and alternating row colors at 1280 × 960 and 390 × 844, plus the actual Contao dark theme via media emulation. At 390 pixels, section clientWidth and scrollWidth both measure 378 pixels. DOM inspection confirms zero editable controls or scripts, and the browser console reports no errors.
 - Both DDEV dependency suites were rerun with the final template: 20 tests / 74 assertions pass per suite. The temporary synthetic submission was removed afterwards (one matching row deleted, zero fixtures remaining); existing records were not saved.
+
+Row color follow-up (2026-11-17):
+- Reproduced the dark-theme issue in Firefox: odd value cells and the content background both computed to rgb(18, 20, 22).
+- Scoped the native zebra variables to Contao's nested/panel surface colors, including the older Contao 5.3 variable names. Firefox confirms alternating value cells now compute to rgb(30, 32, 36) / rgb(39, 42, 48) in dark mode and rgb(251, 251, 253) / rgb(243, 243, 245) in light mode; neither row color equals the content background. Row-header colors remain unchanged.
+- Both DDEV dependency suites pass again (20 tests / 74 assertions each). Existing submissions were only read.
