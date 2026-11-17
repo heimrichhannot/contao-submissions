@@ -11,11 +11,13 @@ use Contao\FormModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Validator;
+use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use HeimrichHannot\Submissions\Config\OptInConfig;
 use HeimrichHannot\Submissions\FormType\SubmissionType;
 use HeimrichHannot\Submissions\Manager\NotificationManager;
 use HeimrichHannot\Submissions\Manager\SimpleTokensManager;
+use HeimrichHannot\Submissions\Manager\SubmissionDataManager;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -24,6 +26,8 @@ use Symfony\Component\Routing\RouterInterface;
 class FormDataHooks
 {
     private array $files = [];
+    private array $widgets = [];
+    private array $labels = [];
 
     public function __construct(
         private readonly NotificationManager $notificationManager,
@@ -32,7 +36,18 @@ class FormDataHooks
         private readonly SimpleTokensManager $simpleTokensManager,
         private readonly Utils $utils,
         private readonly FormTypeCollection $formTypeCollection,
+        private readonly SubmissionDataManager $submissionDataManager,
     ) {
+    }
+
+    #[AsHook('validateFormField', priority: -4096)]
+    public function onValidateFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
+    {
+        if ($this->preCheck($form) && '' !== (string) $widget->name) {
+            $this->widgets[$form->id][$widget->name] = $widget;
+        }
+
+        return $widget;
     }
 
     #[AsHook('prepareFormData')]
@@ -52,6 +67,7 @@ class FormDataHooks
 
         $submittedData['uuid'] ??= Database::getInstance()->getUuid();
         $this->files[$form->id] = $files;
+        $this->labels[$form->id] = $labels;
 
         // Prepare OPT-IN
         if (!$form->huhSub_optIn || !$form->huhSub_optInNotification) {
@@ -161,17 +177,30 @@ class FormDataHooks
         $data['dateAdded'] = $data['tstamp'] = time();
         $data['huhSub_optInTokenId'] ??= '';
 
-        // Remove fields that do not exist
-        $data = \array_intersect_key($data, \array_flip(Database::getInstance()->getFieldNames('tl_submission')));
-
-        if (empty($this->files[$form->id] ?? [])) {
-            return $data;
-        }
-
         Controller::loadDataContainer('tl_submission');
 
-        foreach ($this->files[$form->id] as $field => $fieldData) {
-            if (empty($data[$field]) || empty($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
+        foreach ($this->files[$form->id] ?? [] as $field => $fieldData) {
+            if (empty($data[$field])) {
+                continue;
+            }
+
+            if (!isset($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
+                if (!empty($fieldData['uuid'])) {
+                    $data[$field] = StringUtil::uuidToBin($fieldData['uuid']);
+                } else {
+                    $values = StringUtil::deserialize($data[$field]);
+
+                    if (\is_array($values)) {
+                        foreach ($fieldData as $index => $upload) {
+                            if (!empty($upload['uuid']) && \array_key_exists($index, $values)) {
+                                $values[$index] = StringUtil::uuidToBin($upload['uuid']);
+                            }
+                        }
+
+                        $data[$field] = \is_string($data[$field]) ? serialize($values) : $values;
+                    }
+                }
+
                 continue;
             }
 
@@ -185,7 +214,11 @@ class FormDataHooks
             }
         }
 
-        return $data;
+        $metadata = $this->submissionDataManager->createMetadata($data, $this->labels[$form->id] ?? [], $this->widgets[$form->id] ?? [], $this->files[$form->id] ?? []);
+        $data = $this->submissionDataManager->prepareForStorage($data, $GLOBALS['TL_DCA']['tl_submission']['fields']);
+        $data['additionalDataMeta'] = $data['additionalData'] && $metadata ? json_encode((object) $metadata, JSON_THROW_ON_ERROR) : null;
+
+        return \array_intersect_key($data, \array_flip(Database::getInstance()->getFieldNames('tl_submission')));
     }
 
     private function preCheck(Form|FormModel $form): bool

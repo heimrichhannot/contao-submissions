@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [2.1.0] - 2026-11-17
+
+- Added: Additional form fields are saved automatically and displayed read-only in the backend with their original field and option labels.
+- Fixed: Repeated form groups preserve validated values when saving submissions.
+
 ## [2.0.3]
 - Added: support for doctrine/dbal 4 (in addition to doctrine/dbal 3), as used by Contao 5.6 and up
 

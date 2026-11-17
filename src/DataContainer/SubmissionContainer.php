@@ -93,6 +93,13 @@ readonly class SubmissionContainer
             ->addField($submissionFields, 'submission_legend', PaletteManipulator::POSITION_APPEND)
             ->applyToPalette('default', 'tl_submission');
 
+        if (null !== $submission->additionalData && '' !== $submission->additionalData && [] !== json_decode((string) $submission->additionalData, true)) {
+            PaletteManipulator::create()
+                ->addLegend('additional_data_legend', 'submission_legend', PaletteManipulator::POSITION_AFTER)
+                ->addField('additionalData', 'additional_data_legend', PaletteManipulator::POSITION_APPEND)
+                ->applyToPalette('default', 'tl_submission');
+        }
+
         // mandatory overrides
         $mandatoryOverrides = StringUtil::deserialize($archive->submissionFieldsMandatoryOverride, true);
 

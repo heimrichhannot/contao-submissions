@@ -14,3 +14,4 @@ ruvector.db
 # composer
 vendor
 composer.lock
+.phpunit.result.cache
