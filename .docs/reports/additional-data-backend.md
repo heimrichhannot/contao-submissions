@@ -24,3 +24,8 @@ Final review follow-up:
 - Final Codex review after these fixes: no actionable correctness issues. PHPStan both dependency combinations and ECS pass.
 - jzm still reports JSON normalization alongside pre-existing core schema diffs in migration dry-run. No full migration run or unrelated drops were applied.
 - CI run 44065448543 was checked after browser validation: both PHPStan/test matrix jobs and ECS pass; Rector still exits before analysis because the unchanged configuration references the missing DoctrineSetList::DOCTRINE_ORM_214 constant.
+
+Native table styling follow-up (2026-11-17):
+- Main and repeated-group tables now use Contao's tl_listing, with-border, with-padding and with-zebra styles instead of popup-detail table styling. These classes were verified in both Contao 5.3 and 5.7 sources; no stylesheet or dependency was added.
+- Authenticated Firefox screenshots verify the native cell spacing, separators and alternating row colors at 1280 × 960 and 390 × 844, plus the actual Contao dark theme via media emulation. At 390 pixels, section clientWidth and scrollWidth both measure 378 pixels. DOM inspection confirms zero editable controls or scripts, and the browser console reports no errors.
+- Both DDEV dependency suites were rerun with the final template: 20 tests / 74 assertions pass per suite. The temporary synthetic submission was removed afterwards (one matching row deleted, zero fixtures remaining); existing records were not saved.

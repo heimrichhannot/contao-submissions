@@ -1,6 +1,6 @@
 {% macro value(node) %}
     {% if node.kind == 'table' %}
-        <div style="overflow-x:auto"><table class="tl_show" style="width:100%">
+        <div style="overflow-x:auto"><table class="tl_listing with-border with-padding with-zebra">
             <thead><tr>{% for label in node.columns %}<th scope="col" style="text-align:left">{{ label }}</th>{% endfor %}</tr></thead>
             <tbody>{% for cells in node.rows %}<tr>{% for cell in cells %}<td>{{ _self.value(cell) }}</td>{% endfor %}</tr>{% endfor %}</tbody>
         </table></div>
@@ -12,7 +12,7 @@
 {% endmacro %}
 <div class="widget clr">
     {% if error %}<p class="tl_error">{{ error }}</p>{% else %}
-        <table class="tl_show" style="width:100%;table-layout:fixed"><tbody>
+        <table class="tl_listing with-border with-padding with-zebra" style="table-layout:fixed"><tbody>
         {% for row in rows %}<tr><th scope="row" style="width:28%;vertical-align:top;text-align:left;overflow-wrap:anywhere">{{ row.label }}</th><td>{{ _self.value(row.node) }}</td></tr>{% endfor %}
         </tbody></table>
     {% endif %}
