@@ -34,3 +34,5 @@ Row color follow-up (2026-11-17):
 - Reproduced the dark-theme issue in Firefox: odd value cells and the content background both computed to rgb(18, 20, 22).
 - Scoped the native zebra variables to Contao's nested/panel surface colors, including the older Contao 5.3 variable names. Firefox confirms alternating value cells now compute to rgb(30, 32, 36) / rgb(39, 42, 48) in dark mode and rgb(251, 251, 253) / rgb(243, 243, 245) in light mode; neither row color equals the content background. Row-header colors remain unchanged.
 - Both DDEV dependency suites pass again (20 tests / 74 assertions each). Existing submissions were only read.
+
+An additional full Claude Opus 5.5 high review and the subsequent validated fixes are documented in [claude-opus-followup.md](claude-opus-followup.md). The updated dependency suites each pass 22 tests / 85 assertions.

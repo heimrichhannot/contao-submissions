@@ -2,6 +2,8 @@
 
 namespace HeimrichHannot\Submissions\Manager;
 
+use Contao\Config;
+use Contao\Date;
 use Contao\StringUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -112,6 +114,8 @@ class AdditionalDataRenderer
             $value = $config['options'][(string) $value];
         } elseif (\is_bool($value)) {
             $value = $this->text($value ? 'yes' : 'no');
+        } elseif (\in_array($config['rgxp'] ?? null, ['date', 'time', 'datim'], true) && is_numeric($value)) {
+            $value = Date::parse((string) Config::get($config['rgxp'] . 'Format'), (int) $value);
         } elseif (\is_string($value)) {
             $value = StringUtil::decodeEntities($value);
         }

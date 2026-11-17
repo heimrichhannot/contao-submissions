@@ -2,6 +2,8 @@
 
 namespace HeimrichHannot\Submissions\EventListener\Integration;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
+use Contao\Form;
 use Doctrine\DBAL\Connection;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
@@ -14,6 +16,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class FieldsetDuplicationListener
 {
     private FieldHelper $fieldHelper;
+    private array $duplicateValues = [];
 
     public function __construct(
         private readonly RequestStack $requestStack,
@@ -77,6 +80,17 @@ class FieldsetDuplicationListener
         }
     }
 
+    #[AsHook('storeFormData', priority: 101)]
+    public function onStoreFormData(array $data, Form $form): array
+    {
+        if (isset($this->fieldHelper)) {
+            // The native duplication hook removes these fields at priority 100.
+            $this->duplicateValues[$form->id] = array_filter($data, static fn ($name) => str_contains((string) $name, '_duplicate_'), ARRAY_FILTER_USE_KEY);
+        }
+
+        return $data;
+    }
+
     #[AsEventListener('huh.form_type.huh_submission.store_form_data')]
     public function onStoreFormDataEvent(StoreFormDataEvent $event): void
     {
@@ -98,7 +112,8 @@ class FieldsetDuplicationListener
         );
 
         $duplicateFields = $this->getDuplicateFields($allFields);
-        $submittedData = $event->getData();
+        $submittedData = $event->getData() + ($this->duplicateValues[$event->getForm()->id] ?? []);
+        unset($this->duplicateValues[$event->getForm()->id]);
         $storeData = $event->getData();
 
         foreach ($duplicateFields as $fieldset) {

@@ -1,11 +1,16 @@
 {% macro value(node) %}
     {% if node.kind == 'table' %}
-        <div style="overflow-x:auto"><table class="tl_listing with-border with-padding with-zebra">
+        <div style="overflow-x:auto"><table class="tl_listing with-border with-padding">
             <thead><tr>{% for label in node.columns %}<th scope="col" style="text-align:left">{{ label }}</th>{% endfor %}</tr></thead>
-            <tbody>{% for cells in node.rows %}<tr>{% for cell in cells %}<td>{{ _self.value(cell) }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+            <tbody>
+            {% for cells in node.rows %}
+                {% set background = loop.index is odd ? 'var(--nested-bg)' : 'var(--panel-bg)' %}
+                <tr>{% for cell in cells %}<td style="background-color:{{ background }}">{{ _self.value(cell) }}</td>{% endfor %}</tr>
+            {% endfor %}
+            </tbody>
         </table></div>
     {% elseif node.kind == 'list' %}
-        {% if node.children %}<ul>{% for child in node.children %}<li>{% if child.label is not null %}<strong>{{ child.label }}:</strong> {% endif %}{{ _self.value(child.node) }}</li>{% endfor %}</ul>{% else %}—{% endif %}
+        {% if node.children %}<ul style="margin:0;padding-left:1.25em">{% for child in node.children %}<li style="display:list-item;list-style-type:disc">{% if child.label is not null %}<strong>{{ child.label }}:</strong> {% endif %}{{ _self.value(child.node) }}</li>{% endfor %}</ul>{% else %}—{% endif %}
     {% else %}
         <span style="white-space:pre-wrap;overflow-wrap:anywhere">{{ node.value }}</span>
     {% endif %}

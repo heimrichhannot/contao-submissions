@@ -76,7 +76,7 @@ class AdditionalDataRendererTest extends TestCase
             self::assertStringContainsString($text, $html);
         }
         self::assertStringContainsString('<thead>', $html);
-        self::assertStringContainsString('<ul>', $html);
+        self::assertStringContainsString('<ul ', $html);
         self::assertStringNotContainsString('<script>', $html);
         self::assertStringContainsString('&lt;script&gt;', $html);
         self::assertStringContainsString('{{danger}}', $html);
@@ -129,6 +129,39 @@ class AdditionalDataRendererTest extends TestCase
         self::assertStringContainsString('Auswahl', $html);
         self::assertStringContainsString('—', $html);
         self::assertStringNotContainsString('Bitte wählen', $html);
+    }
+
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    #[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
+    public function testFormatsDateSnapshotsThroughRealContaoAndTwig(): void
+    {
+        date_default_timezone_set('UTC');
+        $GLOBALS['TL_CONFIG']['dateFormat'] = 'd.m.Y';
+        $GLOBALS['TL_CONFIG']['timeFormat'] = 'H:i';
+        $GLOBALS['TL_CONFIG']['datimFormat'] = 'd.m.Y H:i';
+        $timestamp = (new \Contao\Date('17.11.2024 14:35', 'd.m.Y H:i'))->tstamp;
+        $data = [
+            'birthday' => $timestamp,
+            'arrival' => $timestamp,
+            'appointment' => $timestamp,
+            'number' => $timestamp,
+        ];
+        $metadata = [
+            'birthday' => [
+                'rgxp' => 'date',
+            ],
+            'arrival' => [
+                'rgxp' => 'time',
+            ],
+            'appointment' => [
+                'rgxp' => 'datim',
+            ],
+        ];
+        $html = $this->renderer()->render($data, $metadata);
+        self::assertStringContainsString('>17.11.2024</span>', $html);
+        self::assertStringContainsString('>14:35</span>', $html);
+        self::assertStringContainsString('>17.11.2024 14:35</span>', $html);
+        self::assertStringContainsString('>' . $timestamp . '</span>', $html);
     }
 
     public function testHandlesOldEmptyAndInvalidData(): void

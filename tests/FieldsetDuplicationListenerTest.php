@@ -12,11 +12,14 @@ use Contao\FormText;
 use Contao\Input;
 use Contao\System;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\Submissions\EventListener\Integration\FieldsetDuplicationListener;
 use HeimrichHannot\Submissions\Manager\SubmissionDataManager;
 use InspiredMinds\ContaoFieldsetDuplication\EventListener\FormHookListener;
 use InspiredMinds\ContaoFieldsetDuplication\Helper\FieldHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
@@ -29,8 +32,20 @@ class FieldsetDuplicationListenerTest extends TestCase
 {
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
-    public function testGroupsValidatedDuplicatedWidgetsInsteadOfRawRequestValues(): void
+    #[DataProvider('storagePipelines')]
+    public function testGroupsValidatedDuplicatedWidgetsInsteadOfRawRequestValues(bool $nativeStoreHook): void
     {
+        $database = null;
+        if ($nativeStoreHook) {
+            $url = getenv('SUBMISSIONS_TEST_DATABASE_URL');
+            if (!$url) {
+                self::markTestSkipped('Set SUBMISSIONS_TEST_DATABASE_URL to test the native fieldset storage hook.');
+            }
+            $database = DriverManager::getConnection((new DsnParser([
+                'mysql' => 'pdo_mysql',
+            ]))->parse($url));
+            $database->executeStatement('CREATE TEMPORARY TABLE tl_submission (id INT PRIMARY KEY)');
+        }
         $requestStack = new RequestStack();
         $requestStack->push(new Request([], [
             'FORM_SUBMIT' => 'auto_form_7',
@@ -46,6 +61,9 @@ class FieldsetDuplicationListenerTest extends TestCase
         $container->setParameter('kernel.cache_dir', $cache);
         $container->setParameter('kernel.debug', false);
         $container->set('request_stack', $requestStack);
+        if ($database) {
+            $container->set('database_connection', $database);
+        }
         $scopeMatcher = $this->createStub(ScopeMatcher::class);
         $scopeMatcher->method('isBackendRequest')->willReturn(false);
         $container->set('contao.routing.scope_matcher', $scopeMatcher);
@@ -85,6 +103,7 @@ class FieldsetDuplicationListenerTest extends TestCase
                 {
                     $this->arrData = [
                         'id' => 7,
+                        'targetTable' => 'tl_submission',
                     ];
                 }
             };
@@ -106,6 +125,11 @@ class FieldsetDuplicationListenerTest extends TestCase
             $connection->method('fetchAllAssociative')->willReturn($rows);
             $listener = new FieldsetDuplicationListener($requestStack, $connection, new EventDispatcher());
             $listener->setFieldHelper($helper);
+            if ($nativeStoreHook) {
+                $processed = $listener->onStoreFormData($processed, $form);
+                $processed = (new FormHookListener($requestStack, $helper))->onStoreFormData($processed, $form);
+                self::assertArrayNotHasKey('message_duplicate_1', $processed);
+            }
             $event = new StoreFormDataEvent($processed, $form, []);
             $listener->onStoreFormDataEvent($event);
 
@@ -120,10 +144,20 @@ class FieldsetDuplicationListenerTest extends TestCase
             $stored = (new SubmissionDataManager())->prepareForStorage($event->getData(), []);
             self::assertSame($event->getData(), json_decode($stored['additionalData'], true, flags: JSON_THROW_ON_ERROR));
         } finally {
+            if ($database) {
+                $database->executeStatement('DROP TEMPORARY TABLE tl_submission');
+                $database->close();
+            }
             unlink($cache . '/contao/config/config.php');
             rmdir($cache . '/contao/config');
             rmdir($cache . '/contao');
             rmdir($cache);
         }
+    }
+
+    public static function storagePipelines(): iterable
+    {
+        yield 'validated values' => [false];
+        yield 'native storage hook' => [true];
     }
 }

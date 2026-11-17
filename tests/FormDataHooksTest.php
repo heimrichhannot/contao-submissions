@@ -137,6 +137,11 @@ class FormDataHooksTest extends TestCase
             ]);
             $submitted['interests'] = ['a', 'b'];
             $hook->onValidateFormField($multiple, 'auto_form_1', [], $form);
+            $submitted['birthday'] = 1731854100;
+            $hook->onValidateFormField(new \Contao\FormText([
+                'name' => 'birthday',
+                'rgxp' => 'date',
+            ]), 'auto_form_1', [], $form);
             $duplicate = clone $select;
             $duplicate->name = 'question_duplicate_1';
             $duplicate->value = 'Antwort';
@@ -168,9 +173,11 @@ class FormDataHooksTest extends TestCase
                 'attachment' => $uuid,
                 'attachments' => serialize([$uuid, null]),
                 'interests' => ['a', 'b'],
+                'birthday' => 1731854100,
             ], json_decode($row['additionalData'], true, flags: JSON_THROW_ON_ERROR));
             self::assertSame('files/extra.pdf', $submitted['attachment']);
             $meta = json_decode($row['additionalDataMeta'], true, flags: JSON_THROW_ON_ERROR);
+            self::assertSame('date', $meta['birthday']['rgxp'] ?? null);
             self::assertSame('Meine Frage', $meta['question']['label']);
             self::assertSame([
                 'a' => 'Musik',

@@ -45,6 +45,7 @@ class SubmissionDataManager
             $metadata[$name] = [
                 'label' => strip_tags(StringUtil::decodeEntities((string) ($labels[$name] ?? $labels[$widgetName] ?? $widget->label ?? ''))),
                 'type' => (string) ($widget->type ?? ''),
+                'rgxp' => (string) $widget->rgxp,
                 'options' => (object) $options,
             ];
         }
