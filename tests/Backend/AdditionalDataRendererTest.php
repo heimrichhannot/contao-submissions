@@ -232,6 +232,62 @@ class AdditionalDataRendererTest extends TestCase
         self::assertStringContainsString('>14:35</span>', $html);
         self::assertStringContainsString('>17.11.2024 14:35</span>', $html);
         self::assertStringContainsString('>' . $timestamp . '</span>', $html);
+        $cells = $this->renderer()->exportCells($data, $metadata);
+        self::assertSame('17.11.2024', $cells['birthday']['value']);
+        self::assertSame('14:35', $cells['arrival']['value']);
+        self::assertSame('17.11.2024 14:35', $cells['appointment']['value']);
+        self::assertSame((string) $timestamp, $cells['number']['value']);
+    }
+
+    public function testExportsPlainTextWithSnapshotLabelsAndLegacyFallbacks(): void
+    {
+        $renderer = $this->renderer();
+        self::assertSame([], $renderer->exportCells(null, null));
+        self::assertSame([
+            'zero' => [
+                'label' => 'Zero',
+                'hasStoredLabel' => false,
+                'value' => '0',
+            ],
+            'boolean' => [
+                'label' => 'Boolean',
+                'hasStoredLabel' => false,
+                'value' => 'Nein',
+            ],
+            'text' => [
+                'label' => 'Text',
+                'hasStoredLabel' => false,
+                'value' => '<script>x</script> {{literal}}',
+            ],
+        ], $renderer->exportCells([
+            'zero' => '0',
+            'boolean' => false,
+            'text' => '&lt;script&gt;x&lt;/script&gt; {{literal}}',
+        ], 'broken'));
+        self::assertSame([
+            'upload' => [
+                'label' => 'Anhang',
+                'hasStoredLabel' => true,
+                'value' => 'Bewerbung.pdf',
+            ],
+        ], $renderer->exportCells([
+            'upload' => '00112233-4455-1677-8899-aabbccddeeff',
+        ], [
+            'upload' => [
+                'label' => 'Anhang',
+                'options' => [
+                    '00112233-4455-1677-8899-aabbccddeeff' => 'Bewerbung.pdf',
+                ],
+            ],
+        ]));
+        $empty = $renderer->exportCells([
+            'scalar' => '',
+            'list' => [],
+        ], null);
+        self::assertSame('—', $empty['scalar']['value']);
+        self::assertSame('—', $empty['list']['value']);
+        $this->expectException(\UnexpectedValueException::class);
+        $renderer->exportCells('invalid JSON', null);
     }
 
     public function testHandlesOldEmptyAndInvalidData(): void
