@@ -3,10 +3,11 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-- Added: Read-only additional form data in the submission editor, with field labels and selected option captions preserved at submission time.
-- Added: Automatically store form values without a DCA field in JSON, including readable UUIDs for file references.
-- Fixed: Repeated form groups retain all submitted rows and Contao's processed values instead of raw request input.
-- Fixed: Dates and times in additional form data are displayed in the configured Contao formats.
+
+## [2.1.0] - 2026-11-17
+
+- Added: Additional form fields are saved automatically and displayed read-only in the backend with their original field and option labels.
+- Fixed: Repeated form groups preserve validated values when saving submissions.
 
 ## [2.0.3]
 - Added: support for doctrine/dbal 4 (in addition to doctrine/dbal 3), as used by Contao 5.6 and up
