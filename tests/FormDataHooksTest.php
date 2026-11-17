@@ -53,7 +53,7 @@ class FormDataHooksTest extends TestCase
         $container->set('database_connection', $connection);
         System::setContainer($container);
 
-        $connection->executeStatement('CREATE TEMPORARY TABLE tl_submission (id INT AUTO_INCREMENT PRIMARY KEY, pid INT, dateAdded INT, tstamp INT, uuid BINARY(16), email VARCHAR(64), huhSub_optInTokenId VARCHAR(32), document BINARY(16), legacyColumn VARCHAR(64), additionalData JSON NULL)');
+        $connection->executeStatement('CREATE TEMPORARY TABLE tl_submission (id INT AUTO_INCREMENT PRIMARY KEY, pid INT, dateAdded INT, tstamp INT, uuid BINARY(16), email VARCHAR(64), huhSub_optInTokenId VARCHAR(32), document BINARY(16), legacyColumn VARCHAR(64), additionalData JSON NULL, additionalDataMeta JSON NULL)');
 
         try {
             $types = new FormTypeCollection($connection);
@@ -94,6 +94,7 @@ class FormDataHooksTest extends TestCase
                     'uuid' => $uuid,
                 ],
                 'attachment' => [
+                    'name' => 'Bewerbung.pdf',
                     'uuid' => $uuid,
                 ],
                 'attachments' => [
@@ -103,7 +104,47 @@ class FormDataHooksTest extends TestCase
                     [],
                 ],
             ];
-            $hook->onPrepareFormData($submitted, [], [], $form, $files);
+            $select = new \Contao\FormSelect([
+                'name' => 'question',
+                'type' => 'select',
+                'options' => [[
+                    'value' => 'Antwort',
+                    'label' => 'Dynamische Antwort',
+                ], [
+                    'value' => 'other',
+                    'label' => 'Nicht ausgewählt',
+                ]],
+            ]);
+            $hook->onValidateFormField($select, 'auto_form_1', [], $form);
+            $select->options = [[
+                'value' => 'Antwort',
+                'label' => 'Dynamische Antwort',
+            ], [
+                'value' => 'other',
+                'label' => 'Nicht ausgewählt',
+            ]];
+            $multiple = new \Contao\FormSelect([
+                'name' => 'interests',
+                'type' => 'select',
+                'multiple' => true,
+                'options' => [[
+                    'value' => 'a',
+                    'label' => 'Musik',
+                ], [
+                    'value' => 'b',
+                    'label' => 'Sport',
+                ]],
+            ]);
+            $submitted['interests'] = ['a', 'b'];
+            $hook->onValidateFormField($multiple, 'auto_form_1', [], $form);
+            $duplicate = clone $select;
+            $duplicate->name = 'question_duplicate_1';
+            $duplicate->value = 'Antwort';
+            $hook->onValidateFormField($duplicate, 'auto_form_1', [], $form);
+            $hook->onPrepareFormData($submitted, [
+                'question' => 'Meine Frage',
+                'interests[]' => 'Interessen',
+            ], [], $form, $files);
 
             \Contao\Controller::loadDataContainer('tl_submission');
             (new DateAddedFieldListener($container))->onLoadDataContainer('tl_submission');
@@ -126,8 +167,28 @@ class FormDataHooksTest extends TestCase
                 'legacyColumn' => 'without DCA',
                 'attachment' => $uuid,
                 'attachments' => serialize([$uuid, null]),
+                'interests' => ['a', 'b'],
             ], json_decode($row['additionalData'], true, flags: JSON_THROW_ON_ERROR));
             self::assertSame('files/extra.pdf', $submitted['attachment']);
+            $meta = json_decode($row['additionalDataMeta'], true, flags: JSON_THROW_ON_ERROR);
+            self::assertSame('Meine Frage', $meta['question']['label']);
+            self::assertSame([
+                'a' => 'Musik',
+                'b' => 'Sport',
+            ], $meta['interests']['options']);
+            self::assertSame('Interessen', $meta['interests']['label']);
+            self::assertSame([
+                'Antwort' => 'Dynamische Antwort',
+            ], $meta['question_duplicate_1']['options']);
+            self::assertSame('Bewerbung.pdf', $meta['attachment']['options'][$uuid]);
+            self::assertSame([
+                'Antwort' => 'Dynamische Antwort',
+            ], $meta['question']['options']);
+            $select->options = [[
+                'value' => 'Antwort',
+                'label' => 'Geändert',
+            ]];
+            self::assertSame('Dynamische Antwort', $meta['question']['options']['Antwort']);
 
             $form->formType = 'unrelated';
             self::assertSame($submitted, $hook->onStoreFormData($submitted, $form));

@@ -11,6 +11,7 @@ use Contao\FormModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Validator;
+use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use HeimrichHannot\Submissions\Config\OptInConfig;
 use HeimrichHannot\Submissions\FormType\SubmissionType;
@@ -25,6 +26,8 @@ use Symfony\Component\Routing\RouterInterface;
 class FormDataHooks
 {
     private array $files = [];
+    private array $widgets = [];
+    private array $labels = [];
 
     public function __construct(
         private readonly NotificationManager $notificationManager,
@@ -35,6 +38,16 @@ class FormDataHooks
         private readonly FormTypeCollection $formTypeCollection,
         private readonly SubmissionDataManager $submissionDataManager,
     ) {
+    }
+
+    #[AsHook('validateFormField', priority: -4096)]
+    public function onValidateFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
+    {
+        if ($this->preCheck($form) && '' !== (string) $widget->name) {
+            $this->widgets[$form->id][$widget->name] = $widget;
+        }
+
+        return $widget;
     }
 
     #[AsHook('prepareFormData')]
@@ -54,6 +67,7 @@ class FormDataHooks
 
         $submittedData['uuid'] ??= Database::getInstance()->getUuid();
         $this->files[$form->id] = $files;
+        $this->labels[$form->id] = $labels;
 
         // Prepare OPT-IN
         if (!$form->huhSub_optIn || !$form->huhSub_optInNotification) {
@@ -200,7 +214,9 @@ class FormDataHooks
             }
         }
 
+        $metadata = $this->submissionDataManager->createMetadata($data, $this->labels[$form->id] ?? [], $this->widgets[$form->id] ?? [], $this->files[$form->id] ?? []);
         $data = $this->submissionDataManager->prepareForStorage($data, $GLOBALS['TL_DCA']['tl_submission']['fields']);
+        $data['additionalDataMeta'] = $data['additionalData'] && $metadata ? json_encode((object) $metadata, JSON_THROW_ON_ERROR) : null;
 
         return \array_intersect_key($data, \array_flip(Database::getInstance()->getFieldNames('tl_submission')));
     }

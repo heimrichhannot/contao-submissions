@@ -35,9 +35,15 @@ Values without a matching DCA field are automatically stored as a JSON object in
 after installing this feature. Existing submissions have `NULL` in this column.
 
 Binary Contao UUIDs are converted to string UUIDs before JSON encoding, including values in nested and serialized arrays.
-Serialized widget values remain serialized. The name `additionalData` is reserved and cannot be used as a form field.
-The additional values are stored only; backend display, CSV export, title patterns and opt-in notifications still use
-the existing DCA fields. Fields defined in the DCA without a database column are not considered additional fields.
+Serialized widget values remain serialized. The names `additionalData`, `additionalDataMeta` and `additionalDataView` are reserved and cannot be used as form fields.
+Additional values appear in the read-only **Additional form data** section of the submission editor. Field labels, field
+types and selected option labels are snapshotted in `additionalDataMeta` when submitting, including dynamically provided
+options. Uploaded file names are also kept for readable file references, without exposing download URLs. Later changes to
+the form do not change these snapshots. Existing submissions without metadata display readable field names and stored values.
+Lists, repeated groups and serialized widget values are formatted for reading. Empty sections are hidden.
+Non-admin editors need the **Additional form data** field (`tl_submission::additionalDataView`) enabled in their user
+or user group's allowed fields, in addition to access to the submission archive.
+CSV export, title patterns and opt-in notifications still use the existing DCA fields. Fields defined in the DCA without a database column are not considered additional fields.
 
 Use `##form_attachment_*##` tokens in your notification center notifications to include attachments in your emails.
 

@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Added: Read-only additional form data in the submission editor, with field labels and selected option captions preserved at submission time.
 - Added: Automatically store form values without a DCA field in JSON, including readable UUIDs for file references.
 - Fixed: Duplicated submission fields retain Contao's processed values instead of raw request input.
 

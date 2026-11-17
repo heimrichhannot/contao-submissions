@@ -1,0 +1,19 @@
+{% macro value(node) %}
+    {% if node.kind == 'table' %}
+        <div style="overflow-x:auto"><table class="tl_show" style="width:100%">
+            <thead><tr>{% for label in node.columns %}<th scope="col" style="text-align:left">{{ label }}</th>{% endfor %}</tr></thead>
+            <tbody>{% for cells in node.rows %}<tr>{% for cell in cells %}<td>{{ _self.value(cell) }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+        </table></div>
+    {% elseif node.kind == 'list' %}
+        {% if node.children %}<ul>{% for child in node.children %}<li>{% if child.label is not null %}<strong>{{ child.label }}:</strong> {% endif %}{{ _self.value(child.node) }}</li>{% endfor %}</ul>{% else %}—{% endif %}
+    {% else %}
+        <span style="white-space:pre-wrap;overflow-wrap:anywhere">{{ node.value }}</span>
+    {% endif %}
+{% endmacro %}
+<div class="widget clr">
+    {% if error %}<p class="tl_error">{{ error }}</p>{% else %}
+        <table class="tl_show" style="width:100%;table-layout:fixed"><tbody>
+        {% for row in rows %}<tr><th scope="row" style="width:28%;vertical-align:top;text-align:left;overflow-wrap:anywhere">{{ row.label }}</th><td>{{ _self.value(row.node) }}</td></tr>{% endfor %}
+        </tbody></table>
+    {% endif %}
+</div>
