@@ -62,6 +62,15 @@ $dca = [
         'default' => '{submission_legend};{publish_legend},published;',
     ],
     'fields' => [
+        'additionalData' => [
+            'eval' => [
+                'noSubmissionField' => true,
+            ],
+            'sql' => [
+                'type' => 'json',
+                'notnull' => false,
+            ],
+        ],
         'id' => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment',
             'eval' => [

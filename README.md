@@ -1,5 +1,5 @@
 # Submissions
-A generic module to store form submissions in Contao. In contrast to Leads the storage is dca based.
+A generic module to store form submissions in Contao using DCA fields with a JSON fallback for freely named fields.
 
 ## Features
 
@@ -30,7 +30,14 @@ fields that should be contained in your submissions.
 
 ### Form generator
 You can save your form generator submissions directly as a submission. Simply activate "Save as submission" and select
-the submission archive. The names of the form fields must be the same as the field names of the saved entity.
+the submission archive. Form fields matching a DCA field on `tl_submission` are stored in their existing database columns.
+Values without a matching DCA field are automatically stored as a JSON object in `additionalData`. Update the database
+after installing this feature. Existing submissions have `NULL` in this column.
+
+Binary Contao UUIDs are converted to string UUIDs before JSON encoding, including values in nested and serialized arrays.
+Serialized widget values remain serialized. The name `additionalData` is reserved and cannot be used as a form field.
+The additional values are stored only; backend display, CSV export, title patterns and opt-in notifications still use
+the existing DCA fields. Fields defined in the DCA without a database column are not considered additional fields.
 
 Use `##form_attachment_*##` tokens in your notification center notifications to include attachments in your emails.
 
@@ -58,6 +65,11 @@ Afterwards you will find an "Export" button in the submission list view.
 ![export_operation.png](docs/img/export_operation.png)
 
 ## Development
+
+### Tests
+
+Run `composer test` for the regression tests. Set `SUBMISSIONS_TEST_DATABASE_URL` to a MariaDB/MySQL database URL to also
+run the database and Contao storage-hook integration tests. These tests use temporary tables on their own connections.
 
 ### Fields on tl_submission
 

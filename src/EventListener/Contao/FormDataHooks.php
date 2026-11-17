@@ -16,6 +16,7 @@ use HeimrichHannot\Submissions\Config\OptInConfig;
 use HeimrichHannot\Submissions\FormType\SubmissionType;
 use HeimrichHannot\Submissions\Manager\NotificationManager;
 use HeimrichHannot\Submissions\Manager\SimpleTokensManager;
+use HeimrichHannot\Submissions\Manager\SubmissionDataManager;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -32,6 +33,7 @@ class FormDataHooks
         private readonly SimpleTokensManager $simpleTokensManager,
         private readonly Utils $utils,
         private readonly FormTypeCollection $formTypeCollection,
+        private readonly SubmissionDataManager $submissionDataManager,
     ) {
     }
 
@@ -161,17 +163,30 @@ class FormDataHooks
         $data['dateAdded'] = $data['tstamp'] = time();
         $data['huhSub_optInTokenId'] ??= '';
 
-        // Remove fields that do not exist
-        $data = \array_intersect_key($data, \array_flip(Database::getInstance()->getFieldNames('tl_submission')));
-
-        if (empty($this->files[$form->id] ?? [])) {
-            return $data;
-        }
-
         Controller::loadDataContainer('tl_submission');
 
-        foreach ($this->files[$form->id] as $field => $fieldData) {
-            if (empty($data[$field]) || empty($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
+        foreach ($this->files[$form->id] ?? [] as $field => $fieldData) {
+            if (empty($data[$field])) {
+                continue;
+            }
+
+            if (!isset($GLOBALS['TL_DCA']['tl_submission']['fields'][$field])) {
+                if (!empty($fieldData['uuid'])) {
+                    $data[$field] = StringUtil::uuidToBin($fieldData['uuid']);
+                } else {
+                    $values = StringUtil::deserialize($data[$field]);
+
+                    if (\is_array($values)) {
+                        foreach ($fieldData as $index => $upload) {
+                            if (!empty($upload['uuid']) && \array_key_exists($index, $values)) {
+                                $values[$index] = StringUtil::uuidToBin($upload['uuid']);
+                            }
+                        }
+
+                        $data[$field] = \is_string($data[$field]) ? serialize($values) : $values;
+                    }
+                }
+
                 continue;
             }
 
@@ -185,7 +200,9 @@ class FormDataHooks
             }
         }
 
-        return $data;
+        $data = $this->submissionDataManager->prepareForStorage($data, $GLOBALS['TL_DCA']['tl_submission']['fields']);
+
+        return \array_intersect_key($data, \array_flip(Database::getInstance()->getFieldNames('tl_submission')));
     }
 
     private function preCheck(Form|FormModel $form): bool
