@@ -98,7 +98,7 @@ class FieldsetDuplicationListener
         );
 
         $duplicateFields = $this->getDuplicateFields($allFields);
-        $postData = $request->request->all();
+        $submittedData = $event->getData();
         $storeData = $event->getData();
 
         foreach ($duplicateFields as $fieldset) {
@@ -106,7 +106,7 @@ class FieldsetDuplicationListener
 
             // Collect the fields
             foreach ($fieldset['fields'] as $field) {
-                foreach ($postData as $name => $value) {
+                foreach ($submittedData as $name => $value) {
                     if (preg_match('/^(' . preg_quote((string) $field['name']) . ')(_duplicate_(\d+))?$/', (string) $name, $matches)) {
                         $index = (int) ($matches[3] ?? 0) + 1;
                         $fieldsetFields[$index][$field['name']] = $value;

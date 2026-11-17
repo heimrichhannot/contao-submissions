@@ -65,6 +65,7 @@ $dca = [
         'additionalData' => [
             'eval' => [
                 'noSubmissionField' => true,
+                'doNotShow' => true,
             ],
             'sql' => [
                 'type' => 'json',

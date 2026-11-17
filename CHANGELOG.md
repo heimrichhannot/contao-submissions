@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 - Added: Automatically store form values without a DCA field in JSON, including readable UUIDs for file references.
+- Fixed: Duplicated submission fields retain Contao's processed values instead of raw request input.
 
 ## [2.0.3]
 - Added: support for doctrine/dbal 4 (in addition to doctrine/dbal 3), as used by Contao 5.6 and up
