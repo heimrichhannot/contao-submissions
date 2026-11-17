@@ -63,7 +63,7 @@ $dca = [
     ],
     'fields' => [
         'additionalData' => [
-            'exclude' => true,
+            'exclude' => false,
             'eval' => [
                 'noSubmissionField' => true,
                 'doNotShow' => true,

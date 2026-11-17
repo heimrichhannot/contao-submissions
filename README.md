@@ -42,8 +42,7 @@ options. Uploaded file names are also kept for readable file references, without
 the form do not change these snapshots. Existing submissions without metadata display readable field names and stored values.
 Lists, repeated groups and serialized widget values are formatted for reading. Date and time field information is also
 preserved for new submissions, allowing timestamps to be displayed in the configured Contao formats. Empty sections are hidden.
-Non-admin editors need the **Additional form data** field (`tl_submission::additionalData`) enabled in their user
-or user group's allowed fields, in addition to access to the submission archive.
+Additional form data is visible to every editor with access to the submission. No separate field permission is required.
 CSV export, title patterns and opt-in notifications still use the existing DCA fields. Fields defined in the DCA without a database column are not considered additional fields.
 
 Use `##form_attachment_*##` tokens in your notification center notifications to include attachments in your emails.

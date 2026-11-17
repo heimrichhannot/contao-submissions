@@ -147,7 +147,7 @@ class AdditionalDataRendererTest extends TestCase
 
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
-    public function testStorageFieldCallbackIgnoresSubmittedJson(): void
+    public function testStorageFieldIsReadOnlyWithoutSeparateFieldPermission(): void
     {
         $stack = new RequestStack();
         $stack->push(new Request([], [
@@ -159,7 +159,7 @@ class AdditionalDataRendererTest extends TestCase
         $container = new ContainerBuilder();
         $container->set('request_stack', $stack);
         $security = $this->createStub(AuthorizationCheckerInterface::class);
-        $security->method('isGranted')->willReturn(true);
+        $security->method('isGranted')->willReturn(false);
         $container->set('security.helper', $security);
         System::setContainer($container);
         require \dirname(__DIR__, 2) . '/contao/dca/tl_submission.php';
