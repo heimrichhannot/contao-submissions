@@ -10,6 +10,7 @@ use Contao\CoreBundle\Security\DataContainer\ReadAction;
 use Contao\DC_Table;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
+use HeimrichHannot\Submissions\Manager\AdditionalDataRenderer;
 use HeimrichHannot\Submissions\Model\SubmissionArchiveModel;
 use HeimrichHannot\Submissions\Model\SubmissionModel;
 use HeimrichHannot\UtilsBundle\Util\Utils;
@@ -27,6 +28,7 @@ class ExportController extends AbstractController
         private readonly Connection $connection,
         private readonly Utils $utils,
         private readonly TranslatorInterface $translator,
+        private readonly AdditionalDataRenderer $additionalDataRenderer,
     ) {
     }
 
@@ -50,21 +52,46 @@ class ExportController extends AbstractController
 
         Controller::loadLanguageFile('tl_submission');
 
-        $submissions = $this->prepareExportData($archive, $fields);
+        $headers = array_map(
+            fn ($field) => $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['label'][0] ??
+                $this->translator->trans('tl_submission.' . $field . '.0', [], 'contao_tl_submission'),
+            $fields,
+        );
+        $additionalColumns = [];
+        $lastId = 0;
+        $result = $this->connection->executeQuery(
+            'SELECT id, additionalData, additionalDataMeta FROM tl_submission WHERE pid = :pid ORDER BY id',
+            [
+                'pid' => $archive->id,
+            ],
+        );
+        while ($row = $result->fetchAssociative()) {
+            $lastId = (int) $row['id'];
+            foreach ($this->additionalDataRenderer->exportCells($row['additionalData'], $row['additionalDataMeta']) as $name => $cell) {
+                if (!\array_key_exists($name, $additionalColumns) || (!$additionalColumns[$name]['hasStoredLabel'] && $cell['hasStoredLabel'])) {
+                    $additionalColumns[$name] = [
+                        'label' => $cell['label'],
+                        'hasStoredLabel' => $cell['hasStoredLabel'],
+                    ];
+                }
+            }
+        }
+        $result->free();
+        foreach ($additionalColumns as $name => $column) {
+            $label = $column['label'];
+            while (\in_array($label, $headers, true)) {
+                $label .= ' (' . $name . ')';
+            }
+            $headers[] = $label;
+        }
+        $submissions = $this->prepareExportData($archive, $fields, array_keys($additionalColumns), $lastId);
 
-        $response = new StreamedResponse(function () use ($submissions, $fields) {
+        $response = new StreamedResponse(function () use ($submissions, $headers) {
             $handle = fopen('php://output', 'w');
             fwrite($handle, "\xEF\xBB\xBF");
 
             // Header row
-            $this->addRowToCsvHandle(
-                $handle,
-                array_map(
-                    fn ($field) => $GLOBALS['TL_DCA']['tl_submission']['fields'][$field]['label'][0] ??
-                        $this->translator->trans('tl_submission.' . $field . '.0', [], 'contao_tl_submission'),
-                    $fields
-                )
-            );
+            $this->addRowToCsvHandle($handle, $headers);
 
             // Data rows
             foreach ($submissions() as $row) {
@@ -81,13 +108,14 @@ class ExportController extends AbstractController
         return $response;
     }
 
-    private function prepareExportData(SubmissionArchiveModel $archive, array $fields): \Closure
+    private function prepareExportData(SubmissionArchiveModel $archive, array $fields, array $additionalFields, int $lastId): \Closure
     {
-        return function () use ($archive, $fields) {
+        return function () use ($archive, $fields, $additionalFields, $lastId) {
             $result = $this->connection->executeQuery(
-                'SELECT * FROM tl_submission WHERE pid = :pid',
+                'SELECT * FROM tl_submission WHERE pid = :pid AND id <= :lastId ORDER BY id',
                 [
                     'pid' => $archive->id,
+                    'lastId' => $lastId,
                 ]
             );
 
@@ -110,6 +138,10 @@ class ExportController extends AbstractController
                 foreach ($fields as $key) {
                     $return[$key] = $this->utils->formatter()->formatDcaFieldValue($dc, $key, $row[$key]);
                 }
+                $additional = $this->additionalDataRenderer->exportCells($row['additionalData'], $row['additionalDataMeta']);
+                foreach ($additionalFields as $name) {
+                    $return[] = $additional[$name]['value'] ?? '';
+                }
                 yield $return;
             }
         };
@@ -119,10 +151,13 @@ class ExportController extends AbstractController
     {
         fputcsv(
             stream: $handle,
-            fields: $fields,
+            fields: array_map(
+                static fn ($value) => \is_string($value) && preg_match('/^[=+@\\-\\t\\r\\n]/', $value) ? "'" . $value : $value,
+                $fields,
+            ),
             separator: ';',
             enclosure: '"',
-            escape: '\\',
+            escape: '',
             eol: "\r\n",
         );
     }

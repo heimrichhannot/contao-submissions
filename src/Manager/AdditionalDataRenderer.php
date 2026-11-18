@@ -21,6 +21,60 @@ class AdditionalDataRenderer
 
     public function render(array|string|null $data, array|string|null $metadata): string
     {
+        $prepared = $this->prepareRows($data, $metadata);
+        if (!$prepared['rows'] && !$prepared['error']) {
+            return '';
+        }
+
+        return $this->twig->render('@Contao/backend/submission_additional_data.html.twig', $prepared);
+    }
+
+    /**
+     * @return array<int|string, array{label: string, hasStoredLabel: bool, value: string}>
+     */
+    public function exportCells(array|string|null $data, array|string|null $metadata): array
+    {
+        $prepared = $this->prepareRows($data, $metadata);
+        if ($prepared['error']) {
+            throw new \UnexpectedValueException('Cannot export invalid additional submission data.');
+        }
+        $cells = [];
+        foreach ($prepared['rows'] as $name => $row) {
+            $cells[$name] = [
+                'label' => $row['label'],
+                'hasStoredLabel' => $row['hasStoredLabel'],
+                'value' => $this->nodeText($row['node']),
+            ];
+        }
+
+        return $cells;
+    }
+
+    private function nodeText(array $node): string
+    {
+        if ('text' === $node['kind']) {
+            return $node['value'];
+        }
+        $lines = [];
+        if ('table' === $node['kind']) {
+            foreach ($node['rows'] as $index => $cells) {
+                $parts = [];
+                foreach (array_values($node['columns']) as $column => $label) {
+                    $parts[] = $label . ': ' . $this->nodeText($cells[$column]);
+                }
+                $lines[] = ($index + 1) . '. ' . implode('; ', $parts);
+            }
+        } else {
+            foreach ($node['children'] as $child) {
+                $lines[] = (null === $child['label'] ? '' : $child['label'] . ': ') . $this->nodeText($child['node']);
+            }
+        }
+
+        return $lines ? implode("\n", $lines) : '—';
+    }
+
+    private function prepareRows(array|string|null $data, array|string|null $metadata): array
+    {
         $error = false;
         try {
             $values = \is_array($data) ? $data : json_decode(null === $data || '' === $data ? '{}' : $data, true, flags: JSON_THROW_ON_ERROR);
@@ -44,23 +98,20 @@ class AdditionalDataRenderer
             $config['options'] = array_filter((array) ($config['options'] ?? []), 'is_scalar');
         }
         unset($config);
-        if (!$values && !$error) {
-            return '';
-        }
-
         $rows = [];
         foreach ($values as $name => $value) {
             $config = \is_array($meta[$name] ?? null) ? $meta[$name] : [];
-            $rows[] = [
-                'label' => ($config['label'] ?? '') ?: $this->humanize((string) $name),
+            $rows[$name] = [
+                'label' => '' !== ($config['label'] ?? '') ? $config['label'] : $this->humanize((string) $name),
+                'hasStoredLabel' => '' !== ($config['label'] ?? ''),
                 'node' => $this->node($value, $config, \is_array($meta) ? $meta : [], 0),
             ];
         }
 
-        return $this->twig->render('@Contao/backend/submission_additional_data.html.twig', [
+        return [
             'rows' => $rows,
             'error' => $error ? $this->text('error') : null,
-        ]);
+        ];
     }
 
     private function node(mixed $value, array $config, array $metadata, int $depth): array

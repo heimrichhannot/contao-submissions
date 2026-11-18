@@ -43,7 +43,10 @@ the form do not change these snapshots. Existing submissions without metadata di
 Lists, repeated groups and serialized widget values are formatted for reading. Date and time field information is also
 preserved for new submissions, allowing timestamps to be displayed in the configured Contao formats. Empty sections are hidden.
 Additional form data is visible to every editor with access to the submission. No separate field permission is required.
-CSV export, title patterns and opt-in notifications still use the existing DCA fields. Fields defined in the DCA without a database column are not considered additional fields.
+CSV exports include additional form fields as separate columns, using the first available saved field label and each submission's
+saved option labels. Missing fields remain empty; multiple selections and repeated groups are combined in multiline cells.
+Duplicate column labels are distinguished by the field name. Title patterns and opt-in notifications still use the existing
+DCA fields. Fields defined in the DCA without a database column are not considered additional fields.
 
 Use `##form_attachment_*##` tokens in your notification center notifications to include attachments in your emails.
 
