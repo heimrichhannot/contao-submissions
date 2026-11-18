@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-11-18
+
 - Added: CSV exports include additional form fields with their saved field and option labels.
 - Security: Formula-like CSV values are prefixed with an apostrophe to prevent spreadsheet formula execution.
 
